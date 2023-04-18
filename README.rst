@@ -47,7 +47,7 @@ Note
 
 This project has been set up using PyScaffold 4.4. For details and usage
 information on PyScaffold see https://pyscaffold.org/::
-    
+
     pip install pyscaffold
     putup nbnode_pyscaffold
     cd nbnode_pyscaffold
@@ -65,3 +65,6 @@ information on PyScaffold see https://pyscaffold.org/::
     which pip    
     pip install tox
     tox --help
+
+    # Have a clean git, then add gitlab-ci with pyscaffold
+    putup --update . --gitlab
