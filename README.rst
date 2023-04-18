@@ -68,3 +68,6 @@ information on PyScaffold see https://pyscaffold.org/::
 
     # Have a clean git, then add gitlab-ci with pyscaffold
     putup --update . --gitlab
+    pip install pre-commit
+    pre-commit autoupdate
+    
