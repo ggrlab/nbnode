@@ -82,7 +82,7 @@ build:
   script:
     - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes
     - pipx run coverage lcov -o coverage.lcov
-    - pipx run coveralls --submit coverage.lcov
+    # - pipx run coveralls --submit coverage.lcov
 
 py37:
   stage: test
@@ -116,14 +116,14 @@ py310:
   image: "python:3.10"
   <<: *test_script
 
-upload-coverage:
-  stage: finalize
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  image: "python:3.8"
-  script:
-    - pipx run coveralls --finish
+# upload-coverage:
+#   stage: finalize
+#   tags:
+#     # Then my local gitlab-runner "runner_docker" knows he should take it
+#     - container_user
+#   image: "python:3.8"
+#   script:
+#     - pipx run coveralls --finish
 # publish:
 #   stage: release
 #   dependencies: [build]
