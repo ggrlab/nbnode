@@ -9,7 +9,7 @@ stages:
 variables:
   # Change cache dirs to be inside the project (can only cache local items)
   PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
-  PIPX_HOME: $CI_PROJECT_DIR/.cache/pipx
+  # PIPX_HOME: $CI_PROJECT_DIR/.cache/pipx
   PRE_COMMIT_HOME: $CI_PROJECT_DIR/.cache/pre-commit
   # Coveralls configuration
   CI_NAME: gitlab-ci
