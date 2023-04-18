@@ -1,0 +1,49 @@
+.. These are examples of badges you might want to add to your README:
+   please update the URLs accordingly
+
+    .. image:: https://api.cirrus-ci.com/github/<USER>/nbnode_pyscaffold.svg?branch=main
+        :alt: Built Status
+        :target: https://cirrus-ci.com/github/<USER>/nbnode_pyscaffold
+    .. image:: https://readthedocs.org/projects/nbnode_pyscaffold/badge/?version=latest
+        :alt: ReadTheDocs
+        :target: https://nbnode_pyscaffold.readthedocs.io/en/stable/
+    .. image:: https://img.shields.io/coveralls/github/<USER>/nbnode_pyscaffold/main.svg
+        :alt: Coveralls
+        :target: https://coveralls.io/r/<USER>/nbnode_pyscaffold
+    .. image:: https://img.shields.io/pypi/v/nbnode_pyscaffold.svg
+        :alt: PyPI-Server
+        :target: https://pypi.org/project/nbnode_pyscaffold/
+    .. image:: https://img.shields.io/conda/vn/conda-forge/nbnode_pyscaffold.svg
+        :alt: Conda-Forge
+        :target: https://anaconda.org/conda-forge/nbnode_pyscaffold
+    .. image:: https://pepy.tech/badge/nbnode_pyscaffold/month
+        :alt: Monthly Downloads
+        :target: https://pepy.tech/project/nbnode_pyscaffold
+    .. image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter
+        :alt: Twitter
+        :target: https://twitter.com/nbnode_pyscaffold
+
+.. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
+    :alt: Project generated with PyScaffold
+    :target: https://pyscaffold.org/
+
+|
+
+=================
+nbnode_pyscaffold
+=================
+
+
+    Add a short description here!
+
+
+A longer description of your project goes here...
+
+
+.. _pyscaffold-notes:
+
+Note
+====
+
+This project has been set up using PyScaffold 4.4. For details and usage
+information on PyScaffold see https://pyscaffold.org/.
