@@ -121,14 +121,18 @@ build:
     # But gitlab needs xml files ("Cobertura XML" format)
     # https://docs.gitlab.com/ee/ci/testing/test_coverage_visualization.html
     - mkdir coverage
-    - pipx run coverage xml -o coverage/coverage.xml
+    - pipx run coverage xml -o coverage.xml
     # If we run into size limits of the report, see the following issue
     # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
   artifacts:
+    paths:
+      - coverage.xml
     reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage/coverage.xml
+      cobertura: coverage.xml
+    # reports:
+    #   coverage_report:
+    #     coverage_format: cobertura
+    #     path: coverage.xml
     untracked: false
     when: on_success
     expire_in: "30 days"
