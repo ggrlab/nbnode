@@ -85,7 +85,8 @@ check:
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
-  image: $LATEST_IMAGE
+  # image: $LATEST_IMAGE
+  image: "python:3.8"
   script:
     - pipx run pre-commit run --all-files --show-diff-on-failure
 
