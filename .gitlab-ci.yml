@@ -56,25 +56,15 @@ default:
     # Install dependencies for the testing environment
     - pip install -U pip tox pipx
 
-.setup_container_builddir:
-  before_script:
-    - mkdir container/tmp
-    - cp pyproject.toml container/tmp
-    - cp pyproject.toml container/tmp
-    - cd container
-
 ########### Build containers ##########
 latest_container:
   needs: []
   tags:
     - container_builder
   stage: build container
-  extends:
-    - .setup_container_builddir
   script:
     # Mind the "." at the end of docker build, it marks the context the image is built inside
     - |
-      ls -lath
       sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
       # build without cache
       DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
