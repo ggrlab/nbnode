@@ -66,3 +66,4 @@ RUN tox -e build
 # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:0.9 .
 # docker push registry.gunthergl.com/nbnode-cpu:0.9
 # docker push registry.gunthergl.com/nbnode-cpu:latest
+# docker run --rm -it --entrypoint bash registry.gunthergl.com/nbnode-cpu:latest
