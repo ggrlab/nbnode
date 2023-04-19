@@ -118,7 +118,7 @@ build:
     #   - runs the tests with pytest, all arguments after "--" are passed to pytest
     #     see tox.ini [testenv]: pytest {posargs}
     #     Everything after "--" goes to "posargs"
-    - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes --junitxml=junit_pytest.xml
+    - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes --junitxml=junit_pytest.xml --cov=src/
       # https://docs.pytest.org/en/latest/how-to/output.html
       # -r flag can be used to display a “short test summary info”
       # The -r options accepts a number of characters after it, with a used above meaning
