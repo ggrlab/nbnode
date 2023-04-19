@@ -7,6 +7,9 @@ stages:
   - release
 
 variables:
+  ### custom variables
+  MAIN_IMAGE: "python:3.8"
+  ### Pyscaffold variables 
   # Change cache dirs to be inside the project (can only cache local items)
   PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
   PIPX_HOME: $CI_PROJECT_DIR/.cache/pipx
@@ -56,7 +59,7 @@ check:
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
-  image: "python:3.8"
+  image: $MAIN_IMAGE
   script:
     - pipx run pre-commit run --all-files --show-diff-on-failure
 
@@ -65,7 +68,7 @@ build:
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
-  image: "python:3.8"
+  image: $MAIN_IMAGE
   script:
     - tox -e clean,build
   variables:
@@ -121,13 +124,13 @@ py310:
 #   tags:
 #     # Then my local gitlab-runner "runner_docker" knows he should take it
 #     - container_user
-#   image: "python:3.8"
+#   image: $MAIN_IMAGE
 #   script:
 #     - pipx run coveralls --finish
 # publish:
 #   stage: release
 #   dependencies: [build]
-#   image: "python:3.8"
+#   image: $MAIN_IMAGE
 #   rules: [if: $CI_COMMIT_TAG]
 #   variables:
 #     # See: https://pypi.org/help/#apitoken
@@ -141,6 +144,9 @@ py310:
 #     - tox -e publish
 
 pages:
+  needs: [build]
+  stage: release
+  image: $MAIN_IMAGE
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
