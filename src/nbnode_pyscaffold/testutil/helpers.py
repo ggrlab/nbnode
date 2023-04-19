@@ -2,43 +2,6 @@ import inspect  # to find the caller filename, see find_dirname_above_currentfil
 import os
 
 
-def find_tests_directory(
-    dirpath: str, max_iterations: int = 30, verbose: bool = False
-) -> str:
-    """
-    You want probably rather use :func:`find_dirname_above` as it can do the same, just better.
-
-    In many tests I need the tests/ directory first because the test might be dependent on data.
-
-    Args:
-        dirpath:
-            The directory where you start from searching
-        max_iterations:
-            Maximum number of upwards iterations until stop
-        verbose:
-
-
-    Returns:
-        The tests/ directory relative to the given dirpath.
-
-    """
-    TESTS_DIR = dirpath
-    i = 0
-    if verbose:
-        print(TESTS_DIR)
-    while not (
-        os.path.realpath(TESTS_DIR).endswith("\\tests")
-        or os.path.realpath(TESTS_DIR).endswith("/tests")
-    ):
-        TESTS_DIR = os.path.join(TESTS_DIR, os.pardir)
-        if verbose:
-            print(TESTS_DIR, os.path.realpath(TESTS_DIR))
-        i += 1
-        if i > max_iterations:
-            raise ValueError("There seems to be an error finding the test directory.")
-    return TESTS_DIR
-
-
 def find_dirname_above(
     dirpath: str,
     dirname: str = "tests",
@@ -53,7 +16,8 @@ def find_dirname_above(
     2)  If found
             Return the path
         If not found
-            current_directory = os.path.join(current_directory, '..')  # Ascend one directory, go to 1)
+            # Ascend one directory, go to 1)
+            current_directory = os.path.join(current_directory, '..')
 
     Args:
         dirpath:
@@ -77,7 +41,7 @@ def find_dirname_above(
     if verbose:
         print(TESTS_DIR)
 
-    while not dirname in os.listdir(TESTS_DIR):
+    while dirname not in os.listdir(TESTS_DIR):
         TESTS_DIR = os.path.join(TESTS_DIR, os.pardir)
         if verbose:
             print(TESTS_DIR)
