@@ -56,125 +56,125 @@ default:
     # Install dependencies for the testing environment
     - pip install -U pip tox pipx
 
-# .setup_container_builddir:
+# # .setup_container_builddir:
+# #   before_script:
+# #     - mkdir container/tmp
+# #     - cp pyproject.toml container/tmp
+# #     - cp pyproject.toml container/tmp
+# #     - cd container
+
+# ########### Build containers ##########
+# latest_container:
 #   before_script:
-#     - mkdir container/tmp
-#     - cp pyproject.toml container/tmp
-#     - cp pyproject.toml container/tmp
-#     - cd container
-
-########### Build containers ##########
-latest_container:
-  before_script:
-    # The following is an essentially irrelevant command but necessary to overwrite the default before_script
-    - docker --version  
-    # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
-    - mkdir -p $HOME/.docker
-    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+#     # The following is an essentially irrelevant command but necessary to overwrite the default before_script
+#     - docker --version  
+#     # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
+#     - mkdir -p $HOME/.docker
+#     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
   
-  needs: []
-  tags:
-    - container_builder
-  stage: build container
-  script:
-    # Mind the "." at the end of docker build, it marks the context the image is built inside
-    - |
-      ls -lath
-      sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
-      # build without cache
-      DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
-      # with cache, for interactive testing
-      # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
-    - docker push registry.gunthergl.com/nbnode-cpu:latest
+#   needs: []
+#   tags:
+#     - container_builder
+#   stage: build container
+#   script:
+#     # Mind the "." at the end of docker build, it marks the context the image is built inside
+#     - |
+#       ls -lath
+#       sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
+#       # build without cache
+#       DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
+#       # with cache, for interactive testing
+#       # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
+#     - docker push registry.gunthergl.com/nbnode-cpu:latest
 
-check:
-  stage: prepare
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  image: $LATEST_IMAGE
-  script:
-    - pipx run pre-commit run --all-files --show-diff-on-failure
-
-build:
-  stage: prepare
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  image: $LATEST_IMAGE
-  script:
-    - tox -e clean,build
-  variables:
-    GIT_DEPTH: "0" # deep-clone
-  artifacts:
-    expire_in: 1 day
-    paths: [dist]
-
-.test_script: &test_script
-  dependencies: [build]
-  variables:
-    COVERALLS_PARALLEL: "true"
-    COVERALLS_FLAG_NAME: $CI_JOB_NAME
-  script:
-    - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes
-    - pipx run coverage lcov -o coverage.lcov
-    # - pipx run coveralls --submit coverage.lcov
-
-py37:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  image: "python:3.7"
-  <<: *test_script
-
-py38:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  image: "python:3.8"
-  <<: *test_script
-
-py39:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  image: "python:3.9"
-  <<: *test_script
-
-py310:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  image: "python:3.10"
-  <<: *test_script
-
-# upload-coverage:
-#   stage: finalize
+# check:
+#   stage: prepare
 #   tags:
 #     # Then my local gitlab-runner "runner_docker" knows he should take it
 #     - container_user
 #   image: $LATEST_IMAGE
 #   script:
-#     - pipx run coveralls --finish
-# publish:
-#   stage: release
-#   dependencies: [build]
+#     - pipx run pre-commit run --all-files --show-diff-on-failure
+
+# build:
+#   stage: prepare
+#   tags:
+#     # Then my local gitlab-runner "runner_docker" knows he should take it
+#     - container_user
 #   image: $LATEST_IMAGE
-#   rules: [if: $CI_COMMIT_TAG]
-#   variables:
-#     # See: https://pypi.org/help/#apitoken
-#     # Needs a PYPI_TOKEN protected variable to be configured for `v*` tags, see:
-#     # https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project
-#     # https://docs.gitlab.com/ee/user/project/protected_tags.html
-#     TWINE_REPOSITORY: pypi
-#     TWINE_USERNAME: __token__
-#     TWINE_PASSWORD: $PYPI_TOKEN
 #   script:
-#     - tox -e publish
+#     - tox -e clean,build
+#   variables:
+#     GIT_DEPTH: "0" # deep-clone
+#   artifacts:
+#     expire_in: 1 day
+#     paths: [dist]
+
+# .test_script: &test_script
+#   dependencies: [build]
+#   variables:
+#     COVERALLS_PARALLEL: "true"
+#     COVERALLS_FLAG_NAME: $CI_JOB_NAME
+#   script:
+#     - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes
+#     - pipx run coverage lcov -o coverage.lcov
+#     # - pipx run coveralls --submit coverage.lcov
+
+# py37:
+#   stage: test
+#   tags:
+#     # Then my local gitlab-runner "runner_docker" knows he should take it
+#     - container_user
+#   image: "python:3.7"
+#   <<: *test_script
+
+# py38:
+#   stage: test
+#   tags:
+#     # Then my local gitlab-runner "runner_docker" knows he should take it
+#     - container_user
+#   image: "python:3.8"
+#   <<: *test_script
+
+# py39:
+#   stage: test
+#   tags:
+#     # Then my local gitlab-runner "runner_docker" knows he should take it
+#     - container_user
+#   image: "python:3.9"
+#   <<: *test_script
+
+# py310:
+#   stage: test
+#   tags:
+#     # Then my local gitlab-runner "runner_docker" knows he should take it
+#     - container_user
+#   image: "python:3.10"
+#   <<: *test_script
+
+# # upload-coverage:
+# #   stage: finalize
+# #   tags:
+# #     # Then my local gitlab-runner "runner_docker" knows he should take it
+# #     - container_user
+# #   image: $LATEST_IMAGE
+# #   script:
+# #     - pipx run coveralls --finish
+# # publish:
+# #   stage: release
+# #   dependencies: [build]
+# #   image: $LATEST_IMAGE
+# #   rules: [if: $CI_COMMIT_TAG]
+# #   variables:
+# #     # See: https://pypi.org/help/#apitoken
+# #     # Needs a PYPI_TOKEN protected variable to be configured for `v*` tags, see:
+# #     # https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project
+# #     # https://docs.gitlab.com/ee/user/project/protected_tags.html
+# #     TWINE_REPOSITORY: pypi
+# #     TWINE_USERNAME: __token__
+# #     TWINE_PASSWORD: $PYPI_TOKEN
+# #   script:
+# #     - tox -e publish
 
 pages:
   needs: [build]
@@ -185,7 +185,8 @@ pages:
     - container_user
   script:
     - tox -e docs
-    - mv docs/_build/html/ ../public/
+    - ls -lath
+    - mv docs/_build/html/ public/
   artifacts:
     paths:
       - public
