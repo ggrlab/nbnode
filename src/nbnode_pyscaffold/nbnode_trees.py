@@ -1,4 +1,5 @@
 import anytree
+
 from nbnode_pyscaffold.nbnode import NBNode
 
 
@@ -9,6 +10,7 @@ def tree_simple():
     a2 = NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
     a1a = NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
     return mytree
+
 
 def tree_simpleB():
     mytree = NBNode("a")
@@ -128,7 +130,7 @@ def tree_complete_cell():
 def tree_complete_aligned():
     # Betreff:	gates
     # Erstellt von:	James.Hutchinson@klinik.uni-regensburg.de
-    # Geplantes Datum:	
+    # Geplantes Datum:
     # Erstellungsdatum:	22.09.2022, 16:23
     # Von:	James Hutchinson
     # An: Gunther Glehr (Gunther.Glehr@klinik.uni-regensburg.de)
@@ -141,45 +143,97 @@ def tree_complete_aligned():
                 "DN",
                 decision_name=["CD4", "CD8"],
                 decision_value=[-1, -1],
-                decision_cutoff = [0.19, 0.2]
+                decision_cutoff=[0.19, 0.2],
             ),
             NBNode(
                 "DP",
                 decision_name=["CD4", "CD8"],
                 decision_value=[1, 1],
-                decision_cutoff = [0.19, 0.2]
+                decision_cutoff=[0.19, 0.2],
             ),
             NBNode(
                 "CD4-/CD8+",
                 decision_name=["CD4", "CD8"],
                 decision_value=[-1, 1],
-                decision_cutoff = [0.19, 0.2]
+                decision_cutoff=[0.19, 0.2],
             ),
             NBNode(
                 "CD4+/CD8-",
                 decision_name=["CD4", "CD8"],
                 decision_value=[1, -1],
-                decision_cutoff = [0.19, 0.2]
+                decision_cutoff=[0.19, 0.2],
             ),
         ],
     )
 
     temra_part = [
-        NBNode("naive", decision_name=["CCR7", "CD45RA"], decision_value=[1, 1],  decision_cutoff = [0.24, 0.12]),
-        NBNode("Tcm",   decision_name=["CCR7", "CD45RA"], decision_value=[1, -1], decision_cutoff = [0.24, 0.12]),
-        NBNode("Temra", decision_name=["CCR7", "CD45RA"], decision_value=[-1, 1], decision_cutoff = [0.24, 0.12]),
-        NBNode("Tem",   decision_name=["CCR7", "CD45RA"], decision_value=[-1, -1],decision_cutoff = [0.24, 0.12]),
+        NBNode(
+            "naive",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[1, 1],
+            decision_cutoff=[0.24, 0.12],
+        ),
+        NBNode(
+            "Tcm",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[1, -1],
+            decision_cutoff=[0.24, 0.12],
+        ),
+        NBNode(
+            "Temra",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[-1, 1],
+            decision_cutoff=[0.24, 0.12],
+        ),
+        NBNode(
+            "Tem",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[-1, -1],
+            decision_cutoff=[0.24, 0.12],
+        ),
     ]
     post_temra_1_part = [
-        NBNode("CD27+/CD28+", decision_name=["CD27", "CD28"], decision_value=[1, 1]  ,decision_cutoff=[0.36, 0.30]),
-        NBNode("CD27+/CD28-", decision_name=["CD27", "CD28"], decision_value=[1, -1] ,decision_cutoff=[0.36, 0.30]),
-        NBNode("CD27-/CD28+", decision_name=["CD27", "CD28"], decision_value=[-1, 1] ,decision_cutoff=[0.36, 0.30]),
-        NBNode("CD27-/CD28-", decision_name=["CD27", "CD28"], decision_value=[-1, -1],decision_cutoff=[0.36, 0.30]),
+        NBNode(
+            "CD27+/CD28+",
+            decision_name=["CD27", "CD28"],
+            decision_value=[1, 1],
+            decision_cutoff=[0.36, 0.30],
+        ),
+        NBNode(
+            "CD27+/CD28-",
+            decision_name=["CD27", "CD28"],
+            decision_value=[1, -1],
+            decision_cutoff=[0.36, 0.30],
+        ),
+        NBNode(
+            "CD27-/CD28+",
+            decision_name=["CD27", "CD28"],
+            decision_value=[-1, 1],
+            decision_cutoff=[0.36, 0.30],
+        ),
+        NBNode(
+            "CD27-/CD28-",
+            decision_name=["CD27", "CD28"],
+            decision_value=[-1, -1],
+            decision_cutoff=[0.36, 0.30],
+        ),
     ]
     post_temra_2_part = [
-        NBNode("CD57+/PD1+", decision_name=["CD57", "PD1"], decision_value=[1, 1]  , decision_cutoff=[0.23, 0.52]),
-        NBNode("CD57+/PD1-", decision_name=["CD57", "PD1"], decision_value=[1, -1] , decision_cutoff=[0.23, 0.52]),
-        NBNode("CD57-", decision_name=["CD57"], decision_value=[-1] , decision_cutoff=[0.23]),
+        NBNode(
+            "CD57+/PD1+",
+            decision_name=["CD57", "PD1"],
+            decision_value=[1, 1],
+            decision_cutoff=[0.23, 0.52],
+        ),
+        NBNode(
+            "CD57+/PD1-",
+            decision_name=["CD57", "PD1"],
+            decision_value=[1, -1],
+            decision_cutoff=[0.23, 0.52],
+        ),
+        NBNode(
+            "CD57-", decision_name=["CD57"], decision_value=[-1], decision_cutoff=[0.23]
+        ),
     ]
 
     for post1_node in post_temra_1_part:
@@ -211,40 +265,100 @@ def tree_complete_aligned_v2():
         "AllCells",
         children=[
             NBNode(
-                "DN",           decision_name=["CD4", "CD8"], decision_value=[-1, -1],
-                decision_cutoff = [0.19, 0.2]
+                "DN",
+                decision_name=["CD4", "CD8"],
+                decision_value=[-1, -1],
+                decision_cutoff=[0.19, 0.2],
             ),
             NBNode(
-                "DP",           decision_name=["CD4", "CD8"], decision_value=[1, 1],
-                decision_cutoff = [0.19, 0.2]
+                "DP",
+                decision_name=["CD4", "CD8"],
+                decision_value=[1, 1],
+                decision_cutoff=[0.19, 0.2],
             ),
             NBNode(
-                "CD4-/CD8+",    decision_name=["CD4", "CD8"], decision_value=[-1, 1],
-                decision_cutoff = [0.19, 0.2]
+                "CD4-/CD8+",
+                decision_name=["CD4", "CD8"],
+                decision_value=[-1, 1],
+                decision_cutoff=[0.19, 0.2],
             ),
             NBNode(
-                "CD4+/CD8-",    decision_name=["CD4", "CD8"], decision_value=[1, -1],
-                decision_cutoff = [0.19, 0.2]
+                "CD4+/CD8-",
+                decision_name=["CD4", "CD8"],
+                decision_value=[1, -1],
+                decision_cutoff=[0.19, 0.2],
             ),
         ],
     )
 
     temra_part = [
-        NBNode("naive", decision_name=["CCR7", "CD45RA"], decision_value=[1, 1],  decision_cutoff = [0.15, 0.20]),
-        NBNode("Tcm",   decision_name=["CCR7", "CD45RA"], decision_value=[1, -1], decision_cutoff = [0.15, 0.20]),
-        NBNode("Temra", decision_name=["CCR7", "CD45RA"], decision_value=[-1, 1], decision_cutoff = [0.15, 0.20]),
-        NBNode("Tem",   decision_name=["CCR7", "CD45RA"], decision_value=[-1, -1],decision_cutoff = [0.15, 0.20]),
+        NBNode(
+            "naive",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[1, 1],
+            decision_cutoff=[0.15, 0.20],
+        ),
+        NBNode(
+            "Tcm",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[1, -1],
+            decision_cutoff=[0.15, 0.20],
+        ),
+        NBNode(
+            "Temra",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[-1, 1],
+            decision_cutoff=[0.15, 0.20],
+        ),
+        NBNode(
+            "Tem",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[-1, -1],
+            decision_cutoff=[0.15, 0.20],
+        ),
     ]
     post_temra_1_part = [
-        NBNode("CD27+/CD28+", decision_name=["CD27", "CD28"], decision_value=[1, 1]  ,decision_cutoff=[0.30, 0.30]),
-        NBNode("CD27+/CD28-", decision_name=["CD27", "CD28"], decision_value=[1, -1] ,decision_cutoff=[0.30, 0.30]),
-        NBNode("CD27-/CD28+", decision_name=["CD27", "CD28"], decision_value=[-1, 1] ,decision_cutoff=[0.30, 0.30]),
-        NBNode("CD27-/CD28-", decision_name=["CD27", "CD28"], decision_value=[-1, -1],decision_cutoff=[0.30, 0.30]),
+        NBNode(
+            "CD27+/CD28+",
+            decision_name=["CD27", "CD28"],
+            decision_value=[1, 1],
+            decision_cutoff=[0.30, 0.30],
+        ),
+        NBNode(
+            "CD27+/CD28-",
+            decision_name=["CD27", "CD28"],
+            decision_value=[1, -1],
+            decision_cutoff=[0.30, 0.30],
+        ),
+        NBNode(
+            "CD27-/CD28+",
+            decision_name=["CD27", "CD28"],
+            decision_value=[-1, 1],
+            decision_cutoff=[0.30, 0.30],
+        ),
+        NBNode(
+            "CD27-/CD28-",
+            decision_name=["CD27", "CD28"],
+            decision_value=[-1, -1],
+            decision_cutoff=[0.30, 0.30],
+        ),
     ]
     post_temra_2_part = [
-        NBNode("CD57+/PD1+", decision_name=["CD57", "PD1"], decision_value=[1, 1]  , decision_cutoff=[0.23, 0.52]),
-        NBNode("CD57+/PD1-", decision_name=["CD57", "PD1"], decision_value=[1, -1] , decision_cutoff=[0.23, 0.52]),
-        NBNode("CD57-", decision_name=["CD57"], decision_value=[-1] , decision_cutoff=[0.23]),
+        NBNode(
+            "CD57+/PD1+",
+            decision_name=["CD57", "PD1"],
+            decision_value=[1, 1],
+            decision_cutoff=[0.23, 0.52],
+        ),
+        NBNode(
+            "CD57+/PD1-",
+            decision_name=["CD57", "PD1"],
+            decision_value=[1, -1],
+            decision_cutoff=[0.23, 0.52],
+        ),
+        NBNode(
+            "CD57-", decision_name=["CD57"], decision_value=[-1], decision_cutoff=[0.23]
+        ),
     ]
 
     for post1_node in post_temra_1_part:

@@ -1,22 +1,20 @@
+import copy
 import inspect
-from typing import Tuple, Union, List, Dict, Optional, Any
+import re
+import warnings
+from collections import Counter
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import anytree
-from anytree.exporter import UniqueDotExporter
-import copy
-import warnings
-
-import pandas as pd
 import datatable
-from collections import Counter
-
-import pydotplus
-import re
 import matplotlib
+import pandas as pd
+import pydotplus
+from anytree.exporter import UniqueDotExporter
 
 matplotlib.use("AGG")
-from matplotlib.colors import to_hex
 import numpy as np
+from matplotlib.colors import to_hex
 
 from nbnode_pyscaffold.utils.shifted_colormap import shifted_colormap
 
