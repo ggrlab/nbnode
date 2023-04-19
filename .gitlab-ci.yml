@@ -115,8 +115,20 @@ build:
     # original commands
     # The following tox:
     #   - takes all elements in dist/*.whl and installs them (created by build stage)
-    #   - runs the tests with pytest
-    - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes
+    #   - runs the tests with pytest, all arguments after "--" are passed to pytest
+    #     see tox.ini [testenv]: pytest {posargs}
+    #     Everything after "--" goes to "posargs"
+    - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes --junitxml=junit_pytest.xml
+      # https://docs.pytest.org/en/latest/how-to/output.html
+      # -r flag can be used to display a “short test summary info”
+      # The -r options accepts a number of characters after it, with a used above meaning 
+      # "all except passes". The characters have the following meaning:
+      #   -E: errors
+      #   -F: ?? failed?
+      #   -x: xfailed
+      # --durations: show slowest tests
+      # --color: show colors
+
     # - pipx run coverage lcov -o coverage.lcov   # this is the original command
     # But gitlab needs xml files ("Cobertura XML" format)
     # https://docs.gitlab.com/ee/ci/testing/test_coverage_visualization.html
@@ -129,6 +141,8 @@ build:
       coverage_report:
         coverage_format: cobertura
         path: coverage.xml
+      junit:
+        - junit_pytest.xml
     untracked: false
     when: on_success
     expire_in: "30 days"
