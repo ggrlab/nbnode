@@ -4,8 +4,15 @@ import re
 
 import pandas as pd
 
-gated_cells_dir = "/data/shared/rhskl1/01_raw/01_FlowCytometryData/UKR_Hutchinson/2020-12-17_GatedCells"
-
+gated_cells_dir = os.path.join(
+    "data",
+    "shared",
+    "rhskl1",
+    "01_raw",
+    "01_FlowCytometryData",
+    "UKR_Hutchinson",
+    "2020-12-17_GatedCells",
+)
 # 1. Loading the data:
 # 1.1 Cell subtype classification
 loaded_dict_gated = {}
