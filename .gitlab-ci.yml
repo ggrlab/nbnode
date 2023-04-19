@@ -73,7 +73,9 @@ latest_container:
     - .setup_container_builddir
   script:
     # Mind the "." at the end of docker build, it marks the context the image is built inside
-    - sed -i "1s/.*/FROM $MAIN_IMAGE/" ./container/nbnode_py38_cpu.dockerfile
+    - |
+      sed -i "1s/.*/FROM $MAIN_IMAGE/" ./container/nbnode_py38_cpu.dockerfile
+      # build without cache
       DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
       # with cache, for interactive testing
       # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
