@@ -105,11 +105,12 @@ build:
     paths:
       - dist
 
-.test_script: &test_script
+.general_test:
   dependencies: [build]
-  variables:
-    COVERALLS_PARALLEL: "true"
-    COVERALLS_FLAG_NAME: $CI_JOB_NAME
+  stage: test
+  tags:
+    # Then my local gitlab-runner "runner_docker" knows he should take it
+    - container_user
   script:
     # original commands
     # The following tox:
@@ -122,13 +123,6 @@ build:
     - pipx run coverage xml -o coverage.xml
     # If we run into size limits of the report, see the following issue
     # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
-
-.general_test:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
-  <<: *test_script
   artifacts:
     reports:
       coverage_report:
