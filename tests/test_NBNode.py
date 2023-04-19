@@ -155,7 +155,9 @@ class TestNBNode(TestCase):
         single_prediction = mytree.predict(
             values=[1, "test", 0], names=["m1", "m2", "m3"]
         )
-        reverse_path_nodes = [x for x in single_prediction.iter_path_reverse()]
+        # reverse_path_nodes =
+        [x for x in single_prediction.iter_path_reverse()]
+
         # print([x.name for x in reverse_path_nodes])
 
         # Finding parts
@@ -194,7 +196,9 @@ class TestNBNode(TestCase):
             # check if 'm3'=='another'.
             # But the value for 'm3' is not defined, therefore an exception
             # must be raised.
-            single_prediction = mytree.predict(values=[-1], names=["m1"])
+
+            # single_prediction =
+            mytree.predict(values=[-1], names=["m1"])
 
     def test_non_binary_branch(self):
         celltree = nbtree.tree_complex()
@@ -331,7 +335,8 @@ class TestNBNode(TestCase):
             celltree.predict(values=yternary.iloc[0, :], names=list(yternary.columns))
         )
         print(celltree.predict(values=yternary))
-        tmp = celltree.predict(values=yternary)
+        # tmp =
+        celltree.predict(values=yternary)
 
     def test_apply_NBNode_tree_to_nparray(self):
         import pandas as pd
@@ -455,8 +460,8 @@ class TestNBNode(TestCase):
         assert len(celltree.children[0].data.columns) == 11
 
     def test_id_based_data_child(self):
-        # Even when setting the data property for a child, the data is always stored in the ROOT node
-        # and accessed from the children via the predicted ids.
+        # Even when setting the data property for a child, the data is always stored
+        # in the ROOT node and accessed from the children via the predicted ids.
         import pandas as pd
 
         yternary = pd.read_csv(
@@ -483,7 +488,8 @@ class TestNBNode(TestCase):
         )
         celltree = nbtree.tree_complete_cell()
         celltree.data = yternary
-        # The len is 0 because I cannot select any samples for any node (because the ids are all empty lists [] per initialization)
+        # The len is 0 because I cannot select any samples for any node
+        # (because the ids are all empty lists [] per initialization)
         assert len(celltree.data) == 0
 
     def test_data_summary(self):
@@ -502,7 +508,8 @@ class TestNBNode(TestCase):
         def testfun(df: pd.DataFrame):
             return list(df.apply(sum, axis=0))
 
-        no_attribute_result = celltree.apply(fun=testfun)
+        # no_attribute_result =
+        celltree.apply(fun=testfun)
         with self.assertRaises(AttributeError):
             # for key, value in no_attribute_result.items():
             #     print(value)
@@ -541,7 +548,8 @@ class TestNBNode(TestCase):
 
     def test_graph_from_dot(self):
         mytree = nbtree.tree_simple()
-        dotexported = mytree.export_dot()
+        # dotexported =
+        mytree.export_dot()
         graph = mytree.graph_from_dot(mytree)
         from nbnode_pyscaffold.plot.utils import plot_save_unified
 
@@ -753,10 +761,12 @@ class TestNBNode(TestCase):
         assert len(mytree) == 2
         a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
         assert len(mytree) == 3
-        a2 = NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
+        # a2 = 
+        NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
         assert len(mytree) == 4
         assert len(a1) == 1
-        a1a = NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+        # a1a = 
+        NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
         assert len(a1) == 2
         assert len(mytree) == 5
 
