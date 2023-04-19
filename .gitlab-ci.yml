@@ -139,3 +139,16 @@ py310:
 #     TWINE_PASSWORD: $PYPI_TOKEN
 #   script:
 #     - tox -e publish
+
+pages:
+  tags:
+    # Then my local gitlab-runner "runner_docker" knows he should take it
+    - container_user
+  script:
+    - tox -e docs
+    - mv docs/_build/html/ ../public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
