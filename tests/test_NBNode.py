@@ -761,11 +761,11 @@ class TestNBNode(TestCase):
         assert len(mytree) == 2
         a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
         assert len(mytree) == 3
-        # a2 = 
+        # a2 =
         NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
         assert len(mytree) == 4
         assert len(a1) == 1
-        # a1a = 
+        # a1a =
         NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
         assert len(a1) == 2
         assert len(mytree) == 5
@@ -814,32 +814,6 @@ class TestNBNode(TestCase):
         with self.assertRaises(ZeroDivisionError):
             mytree / mytree
         mytree.pretty_print()
-
-    def test_sum(self):
-        mytree = nbtree.tree_simple()
-        mytree.counter = 1
-        newtree = sum([mytree, mytree, mytree, mytree])
-        # mytree.pretty_print()
-        assert mytree.counter == 1
-        assert newtree.counter == 4
-
-        mytree = nbtree.tree_simple()
-        mytree.counter = 1
-        mytree = sum([mytree, mytree])
-        assert mytree.counter == 2
-
-        mytree = nbtree.tree_simple()
-        mytree.counter = 1
-        mytree = mytree * 2
-        mytree.pretty_print()
-        assert mytree.counter == 2
-        # mytree.pretty_print()
-
-        mytree = nbtree.tree_simple()
-        mytree.counter = 1
-        mytree = 2 * mytree
-        # mytree.pretty_print()
-        assert mytree.counter == 2
 
     def test_sum_inplace(self):
         mytree = nbtree.tree_simple()
@@ -903,7 +877,7 @@ class TestNBNode(TestCase):
         assert mytree.counter == 1
         assert newtree.counter == 2
 
-    def test_reduce_inplace(self):
+    def test_reduce_inplace_2(self):
         import operator
         from functools import reduce
 
