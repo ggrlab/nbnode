@@ -117,6 +117,20 @@ build:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
   script:
+    # If graphviz is not installed, install it. It assumes that you are root
+    # which is the case for the standard python:x.x docker images
+    # In my cases, I assume graphviz is already installed (and you are non-root)
+    - |
+      # https://stackoverflow.com/questions/1298066/how-can-i-check-if-a-package-is-installed-and-install-it-if-not
+      REQUIRED_PKG="graphviz"
+      PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
+      echo Checking for $REQUIRED_PKG: $PKG_OK
+      if [ "" = "$PKG_OK" ]; then
+        echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
+        apt-get update
+        apt-get --yes install $REQUIRED_PKG
+      fi
+
     # original commands
     # The following tox:
     #   - takes all elements in dist/*.whl and installs them (created by build stage)
