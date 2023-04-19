@@ -6,9 +6,9 @@ import anytree
 # from anytree.exporter import a_exp.DotExporter
 import anytree.exporter as a_exp
 
-from nbnode.nbnode import NBNode
-import nbnode.nbnode_trees as nbtree
-from nbnode.testutil.helpers import find_dirname_above_currentfile
+import nbnode_pyscaffold.nbnode_trees as nbtree
+from nbnode_pyscaffold.nbnode import NBNode
+from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
 
 TESTS_DIR = find_dirname_above_currentfile()
 
@@ -71,12 +71,12 @@ class TestNBNode(TestCase):
         assert single_prediction.name == "a1a"
         single_prediction = mytree.prediction_str("a/a1/a1a")
         assert single_prediction.name == "a1a"
-        
-        with self.assertRaises(ValueError): 
+
+        with self.assertRaises(ValueError):
             # Try to predict a hierarchy without the root node (must fail)
             single_prediction = mytree.prediction_str("a1/a1a")
-        
-        # If the same (failed) prediction done is on the "correct" part of the tree, it works! 
+
+        # If the same (failed) prediction done is on the "correct" part of the tree, it works!
         # ("predict" only with the subpart starting from a1)
         single_prediction = mytree.children[1].prediction_str("a1/a1a")
         assert single_prediction.name == "a1a"
@@ -125,7 +125,10 @@ class TestNBNode(TestCase):
     def test_repr(self):
         # What if we want only part of the predictions, not the end-nodes?
         mytree = nbtree.tree_simple()
-        assert mytree.__repr__() == "NBNode('/a', counter=0, decision_name=None, decision_value=None)"
+        assert (
+            mytree.__repr__()
+            == "NBNode('/a', counter=0, decision_name=None, decision_value=None)"
+        )
 
     def test_part_prediction(self):
         # What if we want only part of the predictions, not the end-nodes?
@@ -271,8 +274,9 @@ class TestNBNode(TestCase):
         )  # doctest: +SKIP
 
     def test_plot_NBNode_tree_coloring(self):
-        from nbnode.plot.utils import plot_save_unified
         import pydotplus
+
+        from nbnode_pyscaffold.plot.utils import plot_save_unified
 
         simpletree = nbtree.tree_simple()
         dot_data = a_exp.UniqueDotExporter(
@@ -384,20 +388,20 @@ class TestNBNode(TestCase):
             )
         )
         celltree = nbtree.tree_complete_cell()
-        assert len(celltree.ids)== 0
+        assert len(celltree.ids) == 0
         assert len(celltree.children[0].ids) == 0
         yternary_preds = celltree.predict(values=yternary)
-        assert len(celltree.ids)== 0
+        assert len(celltree.ids) == 0
         assert len(celltree.children[0].ids) == 0
         celltree.count(yternary_preds, reset_counts=True)
-        assert len(celltree.ids)== 0
+        assert len(celltree.ids) == 0
         assert len(celltree.children[0].ids) == 0
         assert celltree.counter == 999
         celltree.id_preds(yternary_preds)
-        assert len(celltree.ids)== 999
+        assert len(celltree.ids) == 999
         assert len(celltree.children[0].ids) == 301
         celltree.reset_ids()
-        assert len(celltree.ids)== 0
+        assert len(celltree.ids) == 0
         assert len(celltree.children[0].ids) == 0
 
     def test_counting_on_ids(self):
@@ -501,8 +505,8 @@ class TestNBNode(TestCase):
         print(celltree.new_test_attribute)
 
     def test_data_summary_plotting(self):
-        import pandas as pd
         import numpy as np
+        import pandas as pd
 
         yternary = pd.read_csv(
             os.path.join(
@@ -530,13 +534,13 @@ class TestNBNode(TestCase):
         mytree = nbtree.tree_simple()
         dotexported = mytree.export_dot()
         graph = mytree.graph_from_dot(mytree)
-        from nbnode.plot.utils import plot_save_unified
+        from nbnode_pyscaffold.plot.utils import plot_save_unified
 
         plot_save_unified(any_plot=graph, file="graph_from_dot_colored.pdf")
 
     def test_graph_from_dot_summary_color(self):
-        import pandas as pd
         import numpy as np
+        import pandas as pd
 
         yternary = pd.read_csv(
             os.path.join(
@@ -554,18 +558,20 @@ class TestNBNode(TestCase):
             return df["fake_activations"].mean()
 
         # with setting the attribute
-        celltree.apply(fun=mean_activation, result_attribute_name="fake_activation_mean")
+        celltree.apply(
+            fun=mean_activation, result_attribute_name="fake_activation_mean"
+        )
 
         graph = celltree.graph_from_dot(
             celltree, fillcolor_node_attribute="fake_activation_mean"
         )
-        from nbnode.plot.utils import plot_save_unified
+        from nbnode_pyscaffold.plot.utils import plot_save_unified
 
         plot_save_unified(any_plot=graph, file="fake_activation_mean.pdf")
 
     def test_graph_apply_fun_args(self):
-        import pandas as pd
         import numpy as np
+        import pandas as pd
 
         yternary = pd.read_csv(
             os.path.join(
@@ -590,8 +596,8 @@ class TestNBNode(TestCase):
         )
 
     def test_node_text_attributes(self):
-        import pandas as pd
         import numpy as np
+        import pandas as pd
 
         yternary = pd.read_csv(
             os.path.join(
@@ -609,10 +615,13 @@ class TestNBNode(TestCase):
             return df["fake_activations"].mean()
 
         celltree.apply(
-            fun=mean_activation, result_attribute_name="mean_act", test_id=1, test_id_2=2
+            fun=mean_activation,
+            result_attribute_name="mean_act",
+            test_id=1,
+            test_id_2=2,
         )
         graph = celltree.graph_from_dot(celltree, fillcolor_node_attribute="mean_act")
-        from nbnode.plot.utils import plot_save_unified
+        from nbnode_pyscaffold.plot.utils import plot_save_unified
 
         plot_save_unified(any_plot=graph, file="graph_text_attributes_default.pdf")
 
@@ -632,8 +641,8 @@ class TestNBNode(TestCase):
         )
 
     def test_celltree_princple_explained(self):
-        import pandas as pd
         import numpy as np
+        import pandas as pd
 
         yternary = pd.read_csv(
             os.path.join(
@@ -701,7 +710,7 @@ class TestNBNode(TestCase):
             fillcolor_node_attribute="mean_act",
             node_text_attributes={"name": "{}", "mean_act": "{:.2f}"},
         )
-        from nbnode.plot.utils import plot_save_unified
+        from nbnode_pyscaffold.plot.utils import plot_save_unified
 
         plot_save_unified(any_plot=graph_stump, file="graph_stump.pdf")
         plot_save_unified(any_plot=graph_full_with_edgelabels, file="graph_full.pdf")
@@ -871,8 +880,8 @@ class TestNBNode(TestCase):
         assert newtree.counter == 2
 
     def test_reduce_inplace(self):
-        from functools import reduce
         import operator
+        from functools import reduce
 
         mytree = nbtree.tree_simple()
         mytree.math_inplace = True
@@ -906,8 +915,8 @@ class TestNBNode(TestCase):
         assert newtree.counter == 4
 
     def test_reduce_inplace(self):
-        from functools import reduce
         import operator
+        from functools import reduce
 
         mytree = nbtree.tree_simple()
         mytree.counter = 2
@@ -938,8 +947,9 @@ class TestNBNode(TestCase):
         assert newtree.counter == 2 * 3 * 1
 
     def test_join_trees(self):
-        import pandas as pd
         import copy
+
+        import pandas as pd
 
         yternary = pd.read_csv(
             os.path.join(
@@ -966,8 +976,9 @@ class TestNBNode(TestCase):
         assert len(celltree_2.ids) == len(celltree.ids)
 
     def test_join_trees_addsource(self):
-        import pandas as pd
         import copy
+
+        import pandas as pd
 
         yternary = pd.read_csv(
             os.path.join(
@@ -1004,14 +1015,15 @@ class TestNBNode(TestCase):
         print(newtree.data)
 
     def test_get_name_full(self):
-        
         mytree = nbtree.tree_simple()
         assert mytree.get_name_full() == "/a"
-        assert mytree.children[1].children[0].get_name_full()=="/a/a1/a1a"
+        assert mytree.children[1].children[0].get_name_full() == "/a/a1/a1a"
 
     def test_decision_cutoff(self):
-        import pandas as pd
         import re
+
+        import pandas as pd
+
         cellmat = pd.read_csv(
             os.path.join(
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
@@ -1039,6 +1051,6 @@ class TestNBNode(TestCase):
         new_tree = celltree.copy_structure()
         assert id(new_tree) != id(celltree)
         assert celltree.eq_structure(new_tree)
-        assert new_tree.data.shape == (0,0)
+        assert new_tree.data.shape == (0, 0)
         for node in anytree.PreOrderIter(new_tree):
             assert node.counter == 0
