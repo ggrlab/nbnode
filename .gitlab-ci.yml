@@ -190,7 +190,7 @@ pages:
   artifacts:
     paths:
       - public
-  # rules:
-  #   # The following ensures that the documentation is only run when a commit to the default ("main")
-  #   # branch is done
-  #   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  rules:
+    # The following ensures that the documentation is only run when a commit to the default ("main")
+    # branch is done
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
