@@ -179,6 +179,9 @@ default:
 pages:
   # To locally build the documentation, run
   #   tox -e docs
+  # Finally, the documentation is accessible from 
+  #   https://ccc_verse.git-pages.uni-regensburg.de/nbnode_pyscaffold
+  # (found by going to https://git.uni-regensburg.de/ccc_verse/nbnode_pyscaffold/pages)
 
   # needs: [build]
   stage: release
