@@ -67,11 +67,11 @@ default:
 # latest_container:
 #   before_script:
 #     # The following is an essentially irrelevant command but necessary to overwrite the default before_script
-#     - docker --version  
+#     - docker --version
 #     # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
 #     - mkdir -p $HOME/.docker
 #     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-  
+
 #   needs: []
 #   tags:
 #     - container_builder
@@ -177,6 +177,9 @@ default:
 # #     - tox -e publish
 
 pages:
+  # To locally build the documentation, run
+  #   tox -e docs
+
   # needs: [build]
   stage: release
   image: $LATEST_IMAGE
