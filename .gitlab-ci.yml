@@ -90,8 +90,8 @@ latest_container:
 check:
   stage: prepare
   tags:
-    # Then my local gitlab-runner "container_builder" knows he should take it
-    - container_builder
+    # Then my local gitlab-runner "runner_docker" knows he should take it
+    - container_user
   image: $LATEST_IMAGE
   script:
     - pipx run pre-commit run --all-files --show-diff-on-failure
