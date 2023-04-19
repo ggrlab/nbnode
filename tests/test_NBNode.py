@@ -86,8 +86,10 @@ class TestNBNode(TestCase):
 
     def test_unfitting_data(self):
         mytree = NBNode("a")
-        a0 = NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
-        a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
+        # a0 =
+        NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
+        # a1 =
+        NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
 
         single_prediction = mytree.predict(values=[-1], names=["m1"])
         assert single_prediction.name == "a0"
