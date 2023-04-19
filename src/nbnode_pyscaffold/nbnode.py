@@ -8,15 +8,16 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import anytree
 import datatable
 import matplotlib
+import numpy as np
 import pandas as pd
 import pydotplus
 from anytree.exporter import UniqueDotExporter
-
-matplotlib.use("AGG")
-import numpy as np
 from matplotlib.colors import to_hex
 
 from nbnode_pyscaffold.utils.shifted_colormap import shifted_colormap
+
+# Set matplotlib backend to "AGG"
+matplotlib.use("AGG")
 
 
 class NBNode(anytree.Node):
