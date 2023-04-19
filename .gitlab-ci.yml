@@ -177,7 +177,7 @@ default:
 # #     - tox -e publish
 
 pages:
-  needs: [build]
+  # needs: [build]
   stage: release
   image: $LATEST_IMAGE
   tags:
