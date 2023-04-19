@@ -56,29 +56,34 @@ default:
     # Install dependencies for the testing environment
     - pip install -U pip tox pipx
 
-# ########### Build containers ##########
-# latest_container:
-#   before_script:
-#     # The following is an essentially irrelevant command but necessary to overwrite the default before_script
-#     - docker --version
-#     # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
-#     - mkdir -p $HOME/.docker
-#     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+########### Build containers ##########
+latest_container:
+  before_script:
+    # The following is an essentially irrelevant command but necessary to overwrite the default before_script
+    - docker --version
+    # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
 
-#   needs: []
-#   tags:
-#     - container_builder
-#   stage: build container
-#   script:
-#     # Mind the "." at the end of docker build, it marks the context the image is built inside
-#     - |
-#       ls -lath
-#       sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
-#       # build without cache
-#       DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
-#       # with cache, for interactive testing
-#       # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
-#     - docker push registry.gunthergl.com/nbnode-cpu:latest
+  needs: []
+  tags:
+    - container_builder
+  stage: build container
+  script:
+    # Mind the "." at the end of docker build, it marks the context the image is built inside
+    - |
+      ls -lath
+      sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
+      # build without cache
+      DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
+      # with cache, for interactive testing
+      # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
+
+      # https://stackoverflow.com/questions/13210880/replace-one-substring-for-another-string-in-shell-script
+      current_container_name="${LATEST_IMAGE/latest/"$CI_COMMIT_SHA"}"
+      DOCKER_BUILDKIT=1 docker build --file ./container/nbnode_py38_cpu.dockerfile -t $current_container_name .
+    - docker push registry.gunthergl.com/nbnode-cpu:latest
+    - docker push $current_container_name
 
 check:
   stage: prepare
