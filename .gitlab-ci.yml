@@ -121,7 +121,7 @@ build:
     - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes --junitxml=junit_pytest.xml
       # https://docs.pytest.org/en/latest/how-to/output.html
       # -r flag can be used to display a “short test summary info”
-      # The -r options accepts a number of characters after it, with a used above meaning 
+      # The -r options accepts a number of characters after it, with a used above meaning
       # "all except passes". The characters have the following meaning:
       #   -E: errors
       #   -F: ?? failed?
