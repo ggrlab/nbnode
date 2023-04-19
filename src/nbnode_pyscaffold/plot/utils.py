@@ -1,13 +1,14 @@
+import os
 from typing import List
-from matplotlib.colors import LinearSegmentedColormap, Colormap
+
 import matplotlib
 import matplotlib.cm
-
-import numpy as np
-from pydotplus.graphviz import Dot
-from dtreeviz.trees import DTreeVizAPI
 import matplotlib.pyplot as plt
-import os
+import numpy as np
+from dtreeviz.trees import DTreeVizAPI
+from matplotlib.colors import Colormap, LinearSegmentedColormap
+from pydotplus.graphviz import Dot
+
 from nbnode_pyscaffold.plot.shifted_colormap import shifted_colormap
 
 matplotlib.use("AGG")
