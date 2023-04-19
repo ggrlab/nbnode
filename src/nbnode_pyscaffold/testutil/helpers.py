@@ -1,5 +1,5 @@
-import os
 import inspect  # to find the caller filename, see find_dirname_above_currentfile()
+import os
 
 
 def find_tests_directory(
