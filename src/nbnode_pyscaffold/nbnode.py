@@ -49,7 +49,8 @@ class NBNode(anytree.Node):
         self.ids = []
         self._data = None
         self.id_unique_dot_exporter = None
-        # Set math_node_attribute to whatever you want to add when using (usual) mathematics.
+        # Set math_node_attribute to whatever you want to add when using
+        # (usual) mathematics.
         self.math_node_attribute = "counter"
         self.math_inplace = False
         self._long_print_attributes = ["counter", "decision_name", "decision_value"]
@@ -65,7 +66,8 @@ class NBNode(anytree.Node):
 
         if split_names[0] != self.name:
             raise ValueError(
-                "self.name != split_names[0]. Did you start at (=supply) the right node?"
+                "self.name != split_names[0]. Did you "
+                + "start at (=supply) the right node?"
             )
         if len(self.children) != 0 and len(split_names) > 1:
             for child in self.children:
@@ -97,10 +99,14 @@ class NBNode(anytree.Node):
             values:
             names:
             allow_unfitting_data:
-            False:  If the data you gave was not possible to fit in the tree raises a ValueError.
-            True:   If the data you gave was not possible to fit in the tree returns None.
+            False:
+                If the data you gave was not possible to fit in the tree raises a
+                ValueError.
+            True:
+                If the data you gave was not possible to fit in the tree returns None.
         Returns:
-            Either a single WNode instance (the leaf node) or if multiple leaf nodes fit, all of them as a list.
+            Either a single WNode instance (the leaf node) or if multiple leaf nodes
+            fit, all of them as a list.
         """
         if isinstance(values, dict):
             names = list(values.keys())
@@ -164,7 +170,9 @@ class NBNode(anytree.Node):
             else:  # Then only allow_unfitting_data was True
                 return leaf_nodes_list
         # if leaf_node is None and not allow_unfitting_data:
-        #     raise ValueError('Could not find a fitting endnode for the data you gave.')
+        #     raise ValueError(
+        #         "Could not find a fitting endnode for the data you gave."
+        #         )
         else:
             if len(leaf_nodes_list) == 1:
                 leaf_nodes_list = leaf_nodes_list[0]
@@ -178,7 +186,8 @@ class NBNode(anytree.Node):
         allow_part_predictions: bool = False,
     ) -> Union["NBNode", List["NBNode"], pd.Series]:
         """
-        See single_prediction, but you can put in dataframes or ndarrays instead of only dict + value/key paired lists.
+        See single_prediction, but you can put in dataframes or ndarrays instead of
+        only dict + value/key paired lists.
 
         Returns a list of nodes.
         """
@@ -188,7 +197,8 @@ class NBNode(anytree.Node):
         if isinstance(values, np.ndarray):
             if names is None:
                 raise ValueError(
-                    "You supplied a numpy array but no names. Names are necessary with np.ndarray"
+                    "You supplied a numpy array but no names. "
+                    + "Names are necessary with np.ndarray"
                 )
             if len(values.shape) == 1:
                 values.shape = (1, len(values))
@@ -238,7 +248,8 @@ class NBNode(anytree.Node):
             reset_counts:
                 Should all .counter be set to 0?
             use_ids:
-                If use_ids==True, do not use node_list to count but just access the length of the node.ids
+                If use_ids==True, do not use node_list to count but just access the
+                length of the node.ids
 
         Returns:
 
@@ -266,8 +277,8 @@ class NBNode(anytree.Node):
     def id_preds(self, node_list: List["NBNode"], reset_ids: bool = True):
         """Predict node ids
 
-        Given a list of nodes, enumerate through them and assign this (`enumerate(node_list)`)
-        number to self.ids.
+        Given a list of nodes, enumerate through them and assign this
+        (`enumerate(node_list)`) number to self.ids.
 
         This is then used to subset self.data for each node.
 
@@ -287,7 +298,9 @@ class NBNode(anytree.Node):
     def data(self) -> pd.DataFrame:
         if self.ids == []:
             warnings.warn(
-                "self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells."
+                "self.ids was an empty list, subset an empty dataframe. Did you call "
+                + "celltree.id_preds(predicted_nodes)?"
+                + " Can also be a node with no cells."
             )
         return self.root._data.iloc[self.ids, :]
 
@@ -314,7 +327,8 @@ class NBNode(anytree.Node):
         Args:
             fun:
             result_attribute_name:
-                If result_attribute_name is given, the return value of `fun(node.data)` is set to the node's `result_attribute_name`-attribute
+                If result_attribute_name is given, the return value of `fun(node.data)`
+                is set to the node's `result_attribute_name`-attribute
             iterator:
                 How to iterate over the nodes.
         Returns:
@@ -373,8 +387,8 @@ class NBNode(anytree.Node):
         graph: pydotplus.Dot = pydotplus.graph_from_dot_data(exported_dot_graph)
         nodes = graph.get_node_list()
 
-        # pydotplus seems to add an additional "node-like" element which is no node but a
-        # new line which has just "\\n" inside. I dont know why.
+        # pydotplus seems to add an additional "node-like" element which is no node
+        # but a new line which has just "\\n" inside. I dont know why.
         nodes = [node for node in nodes if node.get_name() != '"\\n"']
 
         if title is not None:
@@ -386,7 +400,8 @@ class NBNode(anytree.Node):
             # identify the first node
             node_zero = [node for node in nodes if node.get_name() == "0"]
             # add an edge between the plottitle and the first node
-            # make it white https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
+            # make it white
+            # https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
             myedge = pydotplus.Edge(titlenode, node_zero[0])
             # add the edge to the graph
             graph.add_edge(myedge)
@@ -412,9 +427,11 @@ class NBNode(anytree.Node):
             all_values_concat = all_values_concat[
                 np.logical_not(np.isnan(all_values_concat))
             ]
-            # all_values_concat = all_values_concat[~np.isnan(all_values_concat)]  # same, just shorthand
+            # the following command is the same, just shorthand
+            # all_values_concat = all_values_concat[~np.isnan(all_values_concat)]
             if minmax == "equal":
-                # then take the maximum of the absolute values and use it as positive and negative colorbar
+                # then take the maximum of the absolute values and use it as positive
+                # and negative colorbar
                 all_values_concat_abs = np.abs(all_values_concat)
                 vminmax = {
                     "min": -np.max(np.max(all_values_concat_abs), 0),
@@ -479,10 +496,12 @@ class NBNode(anytree.Node):
 
         Args:
             node_list:
-                A list of nodes. All of these nodes get the parent set to the current node
+                A list of nodes. All of these nodes get the parent set to the current
+                node
             copy_list:
-                If you reuse a list of nodes, e.g. twice, the nodes will not be assigned to both insertion nodes but
-                RE-assigned to ONE of them. To omit this, copy the nodes first.
+                If you reuse a list of nodes, e.g. twice, the nodes will not be assigned
+                to both insertion nodes but RE-assigned to ONE of them.
+                To omit this, copy the nodes first.
 
         Returns:
 
@@ -495,14 +514,14 @@ class NBNode(anytree.Node):
                     "The parent of the "
                     + str(node_i)
                     + ". node is not None, did you reuse the list "
-                    + "without copy_list=True? The nodes would get RE-assigned, not additionally!"
+                    + "without copy_list=True? The nodes would get RE-assigned, "
+                    + "not additionally!"
                 )
             node_x.parent = self
 
     def export_counts(predicted_celltree: "NBNode", only_leafnodes: bool = False):
         predicted_celltree.count(use_ids=True)
 
-        # leaf_nodes = [x for x in anytree.PostOrderIter(celltree_decision) if x.is_leaf]
         leaf_nodes_dict = {}
         all_nodes_dict = {}
         for x in anytree.PostOrderIter(predicted_celltree):
@@ -812,6 +831,7 @@ class NBNode(anytree.Node):
             return self
         if not isinstance(nbnode_full_name, str):
             raise ValueError(
-                "The selector must be a string with a full name from some node (created by `node.get_name_full()`)"
+                "The selector must be a string with a full name from some node "
+                + "(created by `node.get_name_full()`)"
             )
         return anytree.find(self, lambda node: node.get_name_full() == nbnode_full_name)
