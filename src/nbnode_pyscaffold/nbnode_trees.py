@@ -129,11 +129,11 @@ def tree_complete_cell():
 
 def tree_complete_aligned():
     # Betreff:	gates
-    # Erstellt von:	James.Hutchinson@klinik.uni-regensburg.de
+    # Erstellt von:	Jxxx.Hxxx@ukr.de
     # Geplantes Datum:
     # Erstellungsdatum:	22.09.2022, 16:23
-    # Von:	James Hutchinson
-    # An: Gunther Glehr (Gunther.Glehr@klinik.uni-regensburg.de)
+    # Von:	JH
+    # An: G G (Gxx.Gxx@ukr.de)
     celltree = tree_complex()
 
     celltree = NBNode(
@@ -249,7 +249,8 @@ def tree_complete_aligned():
 
 def tree_complete_aligned_v2():
     # Given to GG by JH per paper.
-    # Essentially the exact same gating hierarchy as tree_complete_aligned_v2 with really minor changes
+    # Essentially the exact same gating hierarchy as tree_complete_aligned_v2 with
+    # really minor changes
     # CD4, CD8 cutoffs remain
     # CD4:      0.20 --> 0.20   UNCHANGED
     # CD8:      0.19 --> 0.19   UNCHANGED
