@@ -137,39 +137,23 @@ py37:
   image: "python:3.7"
 
 py38:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
+  extends: .general_test
   image: "python:3.8"
-  <<: *test_script
 
 py39:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
+  extends: .general_test
   image: "python:3.9"
-  <<: *test_script
 
-# For now, python 3.10 makes issues, potentially the following (closed?) issue
-# https://github.com/lisphilar/covid19-sir/issues/1159
-# https://github.com/python-poetry/poetry/issues/2828
+# # For now, python 3.10 makes issues, potentially the following (closed?) issue
+# # https://github.com/lisphilar/covid19-sir/issues/1159
+# # https://github.com/python-poetry/poetry/issues/2828
 # py310:
-#   stage: test
-#   tags:
-#     # Then my local gitlab-runner "runner_docker" knows he should take it
-#     - container_user
+#   extends: .general_test
 #   image: "python:3.10"
-#   <<: *test_script
 
 latest:
-  stage: test
-  tags:
-    # Then my local gitlab-runner "runner_docker" knows he should take it
-    - container_user
+  extends: .general_test
   image: $LATEST_IMAGE
-  <<: *test_script
 
 # upload-coverage:
 #   stage: finalize
