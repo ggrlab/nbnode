@@ -158,7 +158,7 @@ py39:
   image: "python:3.9"
   <<: *test_script
 
-# For now, python 3.10 makes issues, potentially the following (closed?) issue 
+# For now, python 3.10 makes issues, potentially the following (closed?) issue
 # https://github.com/lisphilar/covid19-sir/issues/1159
 # https://github.com/python-poetry/poetry/issues/2828
 # py310:
