@@ -26,7 +26,8 @@ class TestNBNode(TestCase):
             nodenamefunc=lambda node: node.name,
             edgeattrfunc=lambda parent, child: 'label="%s: %s"'
             % (child.decision_name, str(child.decision_value))
-            # edgeattrfunc=lambda parent, child: "style=bold,label=%s" % (child.decision_name or 'NA')
+            # edgeattrfunc=lambda parent, child: "style=bold,label=%s"
+            # % (child.decision_name or "NA"),
         ).to_picture(
             "tree_simple.pdf"
         )  # doctest: +SKIP
@@ -35,7 +36,8 @@ class TestNBNode(TestCase):
             nodenamefunc=lambda node: node.name,
             edgeattrfunc=lambda parent, child: 'label="%s: %s"'
             % (child.decision_name, str(child.decision_value))
-            # edgeattrfunc=lambda parent, child: "style=bold,label=%s" % (child.decision_name or 'NA')
+            # edgeattrfunc=lambda parent, child: "style=bold,label=%s"
+            # % (child.decision_name or "NA"),
         ).to_dotfile(
             "tree_simple.txt"
         )  # doctest: +SKIP
@@ -76,7 +78,8 @@ class TestNBNode(TestCase):
             # Try to predict a hierarchy without the root node (must fail)
             single_prediction = mytree.prediction_str("a1/a1a")
 
-        # If the same (failed) prediction done is on the "correct" part of the tree, it works!
+        # If the same (failed) prediction done is on the "correct" part of the tree,
+        # it works!
         # ("predict" only with the subpart starting from a1)
         single_prediction = mytree.children[1].prediction_str("a1/a1a")
         assert single_prediction.name == "a1a"
@@ -90,7 +93,8 @@ class TestNBNode(TestCase):
         assert single_prediction.name == "a0"
         single_prediction = mytree.predict(values=[1], names=["m1"])
         assert single_prediction.name == "a1"
-        # Now try to predict an unknown value, raises error because no fitting endnote can be found.
+        # Now try to predict an unknown value, raises error because
+        # no fitting endnote can be found.
         with self.assertRaises(ValueError):
             single_prediction = mytree.predict(values=[-999], names=["m1"])
         single_prediction = mytree.predict(
@@ -108,7 +112,8 @@ class TestNBNode(TestCase):
             # 1.1 Check if m1=-1 (no)
             # 2.1 Check if m1=1 (yes)
             # 2.2 Check if m2='test' (no), no endnode!
-            #   raise exception because in this path no proper endnode was able to be found with the given values
+            #   raise exception because in this path no proper endnode was able to be
+            #   found with the given values
             # 3.1 Check if m3='another' (yes) -> return this node
             single_prediction = mytree.predict(
                 values={"m1": 1, "m2": -1, "m3": "another"}
@@ -183,8 +188,10 @@ class TestNBNode(TestCase):
         mytree = nbtree.tree_simple()
 
         with self.assertRaises(ValueError):
-            # m1==-1 is a valid branch. But the tree would also like to check if 'm3'=='another'.
-            # But the value for 'm3' is not defined, therefore an exception must be raised.
+            # m1==-1 is a valid branch. But the tree would also like to
+            # check if 'm3'=='another'.
+            # But the value for 'm3' is not defined, therefore an exception
+            # must be raised.
             single_prediction = mytree.predict(values=[-1], names=["m1"])
 
     def test_non_binary_branch(self):
@@ -315,7 +322,6 @@ class TestNBNode(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        # yternary_full = pd.read_csv('D:/04_Data/02_processed/01_FlowCytometryData/UKR_Hutchinson/2020-12-17_GatedCells/HKP_Combined_Tree_csv/yternary_HKP03_P35.csv')
         print(yternary)
 
         celltree = nbtree.tree_complete_cell()
@@ -520,7 +526,8 @@ class TestNBNode(TestCase):
         celltree.data = yternary
 
         def mean_activation(df: pd.DataFrame):
-            # print(len(df), df['fake_activations'].mean())  # from this I saw that NaN only happen for df of lenght 0
+            # from the following I saw that NaN only happen for df of length 0
+            # print(len(df), df['fake_activations'].mean())
             return df["fake_activations"].mean()
 
         no_attribute_result = celltree.apply(fun=mean_activation)
@@ -554,7 +561,8 @@ class TestNBNode(TestCase):
         celltree.data = yternary
 
         def mean_activation(df: pd.DataFrame):
-            # print(len(df), df['fake_activations'].mean())  # from this I saw that NaN only happen for df of lenght 0
+            # from the following I saw that NaN only happen for df of length 0
+            # print(len(df), df['fake_activations'].mean())
             return df["fake_activations"].mean()
 
         # with setting the attribute
@@ -585,7 +593,8 @@ class TestNBNode(TestCase):
         celltree.data = yternary
 
         def mean_activation(df: pd.DataFrame, test_id, test_id_2):
-            # print(len(df), df['fake_activations'].mean())  # from this I saw that NaN only happen for df of lenght 0
+            # from the following I saw that NaN only happen for df of length 0
+            # print(len(df), df['fake_activations'].mean())
             return df["fake_activations"].mean()
 
         celltree.apply(
@@ -611,7 +620,8 @@ class TestNBNode(TestCase):
         celltree.data = yternary
 
         def mean_activation(df: pd.DataFrame, test_id, test_id_2):
-            # print(len(df), df['fake_activations'].mean())  # from this I saw that NaN only happen for df of lenght 0
+            # from the following I saw that NaN only happen for df of length 0
+            # print(len(df), df['fake_activations'].mean())
             return df["fake_activations"].mean()
 
         celltree.apply(
@@ -657,7 +667,8 @@ class TestNBNode(TestCase):
         celltree.data = yternary
 
         def mean_activation(df: pd.DataFrame):
-            # print(len(df), df['fake_activations'].mean())  # from this I saw that NaN only happen for df of lenght 0
+            # from the following I saw that NaN only happen for df of length 0
+            # print(len(df), df['fake_activations'].mean())
             return df["fake_activations"].mean()
 
         celltree.apply(fun=mean_activation, result_attribute_name="mean_act")
@@ -690,7 +701,8 @@ class TestNBNode(TestCase):
         celltree_stump.data = yternary
 
         def mean_activation(df: pd.DataFrame):
-            # print(len(df), df['fake_activations'].mean())  # from this I saw that NaN only happen for df of lenght 0
+            # from the following I saw that NaN only happen for df of length 0
+            # print(len(df), df['fake_activations'].mean())
             return df["fake_activations"].mean()
 
         celltree_stump.apply(fun=mean_activation, result_attribute_name="mean_act")
@@ -823,8 +835,8 @@ class TestNBNode(TestCase):
         mytree.counter = 1
         newtree = sum([mytree, mytree, mytree, mytree])
         # mytree.pretty_print()
-        # Result is 8 because ever time the trees get added, their counter is updated, so every new
-        # addition, the added elements are new:
+        # Result is 8 because ever time the trees get added, their counter
+        # is updated, so every new addition, the added elements are new:
         # 1+1 = 2
         # 2+2 = 4
         # 4+4 0 8
