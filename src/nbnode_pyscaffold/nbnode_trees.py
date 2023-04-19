@@ -5,19 +5,26 @@ from nbnode_pyscaffold.nbnode import NBNode
 
 def tree_simple():
     mytree = NBNode("a")
-    a0 = NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
+    # a0 =
+    NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
     a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
-    a2 = NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
-    a1a = NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+    # a2 =
+    NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
+    # a1a =
+    NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+    # a0, a1, a2, a1a = a0, a1, a2, a1a  # make flake happy
     return mytree
 
 
 def tree_simpleB():
     mytree = NBNode("a")
-    a0 = NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
+    # a0 =
+    NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
     a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
-    a2 = NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
-    a1a = NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+    # a2 =
+    NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
+    # a1a =
+    NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
     NBNode("a1b", parent=mytree["/a/a1"], decision_value="tmp", decision_name="m2")
     return mytree
 
