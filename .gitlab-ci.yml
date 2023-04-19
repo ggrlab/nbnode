@@ -138,11 +138,8 @@ build:
     # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
   artifacts:
     reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
-      junit:
-        - junit_pytest.xml
+      junit: junit_pytest.xml
+      cobertura: coverage.xml
     untracked: false
     when: on_success
     expire_in: "30 days"
