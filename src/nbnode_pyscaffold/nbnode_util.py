@@ -1,6 +1,7 @@
 import datatable
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 
 def frame_cov(dt_frame: datatable.Frame):
     f_cols = dt_frame.export_names()
@@ -15,6 +16,7 @@ def frame_cov(dt_frame: datatable.Frame):
     # double np.diag to create a matrix from the diagonal again.
     cov_array = cov_array + cov_array.T - np.diag(np.diag(cov_array))
     return pd.DataFrame(cov_array, columns=f_cols_names, index=f_cols_names)
+
 
 def per_node_data_fun(
     x: pd.DataFrame, include_features, fun_name, *fun_args, **fun_kwargs

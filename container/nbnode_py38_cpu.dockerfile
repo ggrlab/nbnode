@@ -18,7 +18,7 @@ RUN mkdir /nbnode_pyscaffold
 WORKDIR /nbnode_pyscaffold
 
 # Create a non-root user and switch to it
-RUN adduser --disabled-password --gecos '' --shell /bin/bash nbnode_user 
+RUN adduser --disabled-password --gecos '' --shell /bin/bash nbnode_user
 
 ### Add relevant code sources
 #       Add directories to the container
