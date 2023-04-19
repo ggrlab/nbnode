@@ -3,10 +3,7 @@ from typing import List
 
 import matplotlib
 import matplotlib.cm
-import matplotlib.pyplot as plt
-import numpy as np
 from dtreeviz.trees import DTreeVizAPI
-from matplotlib.colors import Colormap, LinearSegmentedColormap
 from pydotplus.graphviz import Dot
 
 from nbnode_pyscaffold.plot.shifted_colormap import shifted_colormap
