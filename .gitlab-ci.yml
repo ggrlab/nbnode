@@ -122,8 +122,10 @@ build:
     # In my cases, I assume graphviz is already installed (and you are non-root)
     #
     # "dot" comes from the package "graphviz".
-    # The following command tries to run dot and if it fails ("$?"), it installs graphviz
-    -  dot --version; if [[ $? != 0 ]]; then apt-get update; apt-get install graphviz; fi
+    # The following command
+    #   Locates the command dot
+    #   If not found, install it
+    - if [[ $(which dot) == "" ]]; then apt-get update; apt-get install graphviz; fi
     # original commands
     # The following tox:
     #   - takes all elements in dist/*.whl and installs them (created by build stage)
