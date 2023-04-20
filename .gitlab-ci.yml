@@ -1,6 +1,6 @@
 stages:
   - Build container
-  - prepare
+  - Pre-commit and build package
   - Test
   - Release package and documentation
 
@@ -86,7 +86,7 @@ latest_container:
     - docker push $current_container_name
 
 check:
-  stage: prepare
+  stage: Pre-commit and build package
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
@@ -96,7 +96,7 @@ check:
     - pipx run pre-commit run --all-files --show-diff-on-failure
 
 build:
-  stage: prepare
+  stage: Pre-commit and build package
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
