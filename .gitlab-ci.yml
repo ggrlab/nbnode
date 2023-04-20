@@ -120,7 +120,7 @@ build:
     # If graphviz is not installed, install it. It assumes that you are root
     # which is the case for the standard python:x.x docker images
     # In my cases, I assume graphviz is already installed (and you are non-root)
-    - apt-get --yes install graphviz
+    - apt-get update; apt-get --yes install graphviz
     # - |
     #   # https://stackoverflow.com/questions/1298066/how-can-i-check-if-a-package-is-installed-and-install-it-if-not
     #   REQUIRED_PKG="graphviz"
