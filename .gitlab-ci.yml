@@ -125,7 +125,7 @@ build:
     # The following command
     #   Locates the command dot
     #   If not found, install it
-    - if [[ $(which dot) == "" ]]; then apt-get update; apt-get install graphviz; fi
+    - if [[ $(which dot) == "" ]]; then apt-get update; apt-get -y install graphviz; fi
     # original commands
     # The following tox:
     #   - takes all elements in dist/*.whl and installs them (created by build stage)
