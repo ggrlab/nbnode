@@ -120,23 +120,16 @@ build:
     # If graphviz is not installed, install it. It assumes that you are root
     # which is the case for the standard python:x.x docker images
     # In my cases, I assume graphviz is already installed (and you are non-root)
-    - apt-get update; apt-get --yes install graphviz
-    # - |
-    #   # https://stackoverflow.com/questions/1298066/how-can-i-check-if-a-package-is-installed-and-install-it-if-not
-    #   REQUIRED_PKG="graphviz"
-    #   PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
-    #   echo Checking for $REQUIRED_PKG: $PKG_OK
-    #   if [[ "" == "$PKG_OK" ]]; then
-    #     echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
-    #     apt-get update
-    #     apt-get --yes install $REQUIRED_PKG
-    #   fi
-    # # original commands
-    # # The following tox:
-    # #   - takes all elements in dist/*.whl and installs them (created by build stage)
-    # #   - runs the tests with pytest, all arguments after "--" are passed to pytest
-    # #     see tox.ini [testenv]: pytest {posargs}
-    # #     Everything after "--" goes to "posargs"
+    # 
+    # "dot" comes from the package "graphviz". 
+    # The following command tries to run dot and if it fails ("$?"), it installs graphviz
+    -  dot --version; if [[ $? != 0 ]]; then apt-get update; apt-get install graphviz; fi
+    # original commands
+    # The following tox:
+    #   - takes all elements in dist/*.whl and installs them (created by build stage)
+    #   - runs the tests with pytest, all arguments after "--" are passed to pytest
+    #     see tox.ini [testenv]: pytest {posargs}
+    #     Everything after "--" goes to "posargs"
     - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes --junitxml=junit_pytest.xml --cov=src/
       # https://docs.pytest.org/en/latest/how-to/output.html
       # -r flag can be used to display a “short test summary info”
