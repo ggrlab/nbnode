@@ -1,7 +1,7 @@
 stages:
   - Build container
   - prepare
-  - test
+  - Test
   - Release package and documentation
 
 variables:
@@ -112,7 +112,7 @@ build:
 
 .general_test:
   dependencies: [build]
-  stage: test
+  stage: Test
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
