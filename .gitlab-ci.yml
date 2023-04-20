@@ -125,12 +125,11 @@ build:
       REQUIRED_PKG="graphviz"
       PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
       echo Checking for $REQUIRED_PKG: $PKG_OK
-      if [ "" = "$PKG_OK" ]; then
+      if [[ "" == "$PKG_OK" ]]; then
         echo "No $REQUIRED_PKG. Setting up $REQUIRED_PKG."
         apt-get update
         apt-get --yes install $REQUIRED_PKG
       fi
-
     # original commands
     # The following tox:
     #   - takes all elements in dist/*.whl and installs them (created by build stage)
@@ -155,6 +154,8 @@ build:
     - pipx run coverage xml -o coverage.xml
     # If we run into size limits of the report, see the following issue
     # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
+
+
   artifacts:
     reports:
       coverage_report:
