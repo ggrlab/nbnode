@@ -2,7 +2,6 @@ stages:
   - Build container
   - prepare
   - test
-  - finalize
   - Release package and documentation
 
 variables:
@@ -186,15 +185,6 @@ py39:
 latest:
   extends: .general_test
   image: $LATEST_IMAGE
-
-# upload-coverage:
-#   stage: finalize
-#   tags:
-#     # Then my local gitlab-runner "runner_docker" knows he should take it
-#     - container_user
-#   image: $LATEST_IMAGE
-#   script:
-#     - pipx run coveralls --finish
 
 # publish:
 #   stage: Release package and documentation
