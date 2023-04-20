@@ -1,0 +1,228 @@
+stages:
+  - Build container
+  - Pre-commit and build package
+  - Test
+  - Release package and documentation
+
+variables:
+  ### custom variables
+  MAIN_IMAGE: "python:3.8.13" # will be used to build the "LATEST_IMAGE" container
+  LATEST_IMAGE: "registry.gunthergl.com/nbnode-cpu:latest"
+  ### Pyscaffold variables
+  # Change cache dirs to be inside the project (can only cache local items)
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+  PIPX_HOME: $CI_PROJECT_DIR/.cache/pipx
+  PRE_COMMIT_HOME: $CI_PROJECT_DIR/.cache/pre-commit
+  # Coveralls configuration
+  CI_NAME: gitlab-ci
+  CI_BRANCH: $CI_COMMIT_REF_NAME
+  CI_BUILD_NUMBER: $CI_PIPELINE_ID
+  CI_BUILD_URL: $CI_PIPELINE_URL
+  # TODO: You will also need to set `COVERALLS_REPO_TOKEN` to work with coveralls.
+  #       We recommend that you do that via GitLab CI web interface.
+  # - https://coveralls-python.readthedocs.io/en/latest/usage/index.html
+  # - https://docs.gitlab.com/ee/ci/variables/
+
+workflow:
+  rules:
+    # Restrict the number of times the pipeline runs to save resources/limits
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      variables:
+        # Specific merge request configurations for coveralls
+        CI_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+        CI_PULL_REQUEST: $CI_MERGE_REQUEST_IID
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == 'push'
+      when: never # Avoid running the pipeline twice (push + merge request)
+    - if: $CI_COMMIT_BRANCH || $CI_COMMIT_TAG
+    # You can also set recurring execution of the pipeline, see:
+    # https://docs.gitlab.com/ee/ci/pipelines/schedules.html
+
+cache:
+  key: pip-pipx-pre-commit-$CI_JOB_IMAGE
+  paths:
+    - .cache/pip
+    - .cache/pipx
+    - .cache/pre-commit
+
+default:
+  before_script:
+    - python --version # useful for debugging
+    # Setup git (used for setuptools-scm)
+    - git config --global user.email "gunthergl@gmx.net"
+    - git config --global user.name "gunthergl"
+    # Install dependencies for the testing environment
+    - pip install -U pip tox pipx
+
+########### Build containers ##########
+latest_container:
+  rules:
+    # The following ensures that the documentation is only run when a commit to the default ("main")
+    # branch is done
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  before_script:
+    # The following is an essentially irrelevant command but necessary to overwrite the default before_script
+    - docker --version
+    # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  needs: []
+  tags:
+    - container_builder
+  stage: Build container
+  script:
+    # Mind the "." at the end of docker build, it marks the context the image is built inside
+    - |
+      ls -lath
+      sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
+      # build without cache
+      DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
+      # with cache, for interactive testing
+      # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
+
+      # https://stackoverflow.com/questions/13210880/replace-one-substring-for-another-string-in-shell-script
+      current_container_name="${LATEST_IMAGE/latest/"$CI_COMMIT_SHA"}"
+      DOCKER_BUILDKIT=1 docker build --file ./container/nbnode_py38_cpu.dockerfile -t $current_container_name .
+    - docker push registry.gunthergl.com/nbnode-cpu:latest
+    - docker push $current_container_name
+
+check:
+  stage: Pre-commit and build package
+  tags:
+    # Then my local gitlab-runner "runner_docker" knows he should take it
+    - container_user
+  # image: $LATEST_IMAGE  # that did not work for some reason
+  image: "python:3.8"
+  script:
+    - pipx run pre-commit run --all-files --show-diff-on-failure
+
+build:
+  stage: Pre-commit and build package
+  tags:
+    # Then my local gitlab-runner "runner_docker" knows he should take it
+    - container_user
+  image: $LATEST_IMAGE
+  script:
+    - tox -e clean,build
+  variables:
+    GIT_DEPTH: "0" # deep-clone
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist
+
+.general_test:
+  dependencies: [build]
+  stage: Test
+  tags:
+    # Then my local gitlab-runner "runner_docker" knows he should take it
+    - container_user
+  script:
+    # If graphviz is not installed, install it. It assumes that you are root
+    # which is the case for the standard python:x.x docker images
+    # In my cases, I assume graphviz is already installed (and you are non-root)
+    #
+    # "dot" comes from the package "graphviz".
+    # The following command
+    #   Locates the command dot
+    #   If not found, install it
+    - if [[ $(which dot) == "" ]]; then apt-get update; apt-get -y install graphviz; fi
+    # original commands
+    # The following tox:
+    #   - takes all elements in dist/*.whl and installs them (created by build stage)
+    #   - runs the tests with pytest, all arguments after "--" are passed to pytest
+    #     see tox.ini [testenv]: pytest {posargs}
+    #     Everything after "--" goes to "posargs"
+    - tox --installpkg dist/*.whl -- -rFEx --durations 10 --color yes --junitxml=junit_pytest.xml --cov=src/
+      # https://docs.pytest.org/en/latest/how-to/output.html
+      # -r flag can be used to display a “short test summary info”
+      # The -r options accepts a number of characters after it, with a used above meaning
+      # "all except passes". The characters have the following meaning:
+      #   -E: errors
+      #   -F: ?? failed?
+      #   -x: xfailed
+      # --durations: show slowest tests
+      # --color: show colors
+
+    # - pipx run coverage lcov -o coverage.lcov   # this is the original command
+    # But gitlab needs xml files ("Cobertura XML" format)
+    # https://docs.gitlab.com/ee/ci/testing/test_coverage_visualization.html
+    - mkdir coverage
+    - pipx run coverage xml -o coverage.xml
+    # If we run into size limits of the report, see the following issue
+    # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
+
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+      junit:
+        - junit_pytest.xml
+    untracked: false
+    when: on_success
+    expire_in: "30 days"
+  coverage: /(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/
+
+py37:
+  extends: .general_test
+  image: "python:3.7"
+
+py38:
+  extends: .general_test
+  image: "python:3.8"
+
+py39:
+  extends: .general_test
+  image: "python:3.9"
+
+# # For now, python 3.10 makes issues, potentially the following (closed?) issue
+# # https://github.com/lisphilar/covid19-sir/issues/1159
+# # https://github.com/python-poetry/poetry/issues/2828
+# py310:
+#   extends: .general_test
+#   image: "python:3.10"
+
+latest:
+  extends: .general_test
+  image: $LATEST_IMAGE
+
+# publish:
+#   stage: Release package and documentation
+#   dependencies: [build]
+#   image: $LATEST_IMAGE
+#   rules: [if: $CI_COMMIT_TAG]
+#   variables:
+#     # See: https://pypi.org/help/#apitoken
+#     # Needs a PYPI_TOKEN protected variable to be configured for `v*` tags, see:
+#     # https://docs.gitlab.com/ee/ci/variables/#add-a-cicd-variable-to-a-project
+#     # https://docs.gitlab.com/ee/user/project/protected_tags.html
+#     TWINE_REPOSITORY: pypi
+#     TWINE_USERNAME: __token__
+#     TWINE_PASSWORD: $PYPI_TOKEN
+#   script:
+#     - tox -e publish
+
+pages:
+  # To locally build the documentation, run
+  #   tox -e docs
+  # Finally, the documentation is accessible from
+  #   https://ccc_verse.git-pages.uni-regensburg.de/nbnode_pyscaffold
+  # (found by going to https://git.uni-regensburg.de/ccc_verse/nbnode_pyscaffold/pages)
+
+  rules:
+    # The following ensures that the documentation is only run when a commit to the default ("main")
+    # branch is done
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  # needs: [build]
+  stage: Release package and documentation
+  image: $LATEST_IMAGE
+  tags:
+    # Then my local gitlab-runner "runner_docker" knows he should take it
+    - container_user
+  script:
+    - tox -e docs
+    - ls -lath
+    - mv docs/_build/html/ public/
+  artifacts:
+    paths:
+      - public
