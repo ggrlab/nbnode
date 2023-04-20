@@ -56,34 +56,37 @@ default:
     # Install dependencies for the testing environment
     - pip install -U pip tox pipx
 
-# ########### Build containers ##########
-# latest_container:
-#   before_script:
-#     # The following is an essentially irrelevant command but necessary to overwrite the default before_script
-#     - docker --version
-#     # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
-#     - mkdir -p $HOME/.docker
-#     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+########### Build containers ##########
+latest_container:
+  rules:
+    # The following ensures that the documentation is only run when a commit to the default ("main")
+    # branch is done
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  before_script:
+    # The following is an essentially irrelevant command but necessary to overwrite the default before_script
+    - docker --version
+    # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  needs: []
+  tags:
+    - container_builder
+  stage: build container
+  script:
+    # Mind the "." at the end of docker build, it marks the context the image is built inside
+    - |
+      ls -lath
+      sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
+      # build without cache
+      DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
+      # with cache, for interactive testing
+      # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
 
-#   needs: []
-#   tags:
-#     - container_builder
-#   stage: build container
-#   script:
-#     # Mind the "." at the end of docker build, it marks the context the image is built inside
-#     - |
-#       ls -lath
-#       sed -i "1s/.*/FROM $MAIN_IMAGE/" container/nbnode_py38_cpu.dockerfile
-#       # build without cache
-#       DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --no-cache --file ./container/nbnode_py38_cpu.dockerfile -t $LATEST_IMAGE .
-#       # with cache, for interactive testing
-#       # DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build --file ./container/nbnode_py38_cpu.dockerfile -t registry.gunthergl.com/nbnode-cpu:latest .
-
-#       # https://stackoverflow.com/questions/13210880/replace-one-substring-for-another-string-in-shell-script
-#       current_container_name="${LATEST_IMAGE/latest/"$CI_COMMIT_SHA"}"
-#       DOCKER_BUILDKIT=1 docker build --file ./container/nbnode_py38_cpu.dockerfile -t $current_container_name .
-#     - docker push registry.gunthergl.com/nbnode-cpu:latest
-#     - docker push $current_container_name
+      # https://stackoverflow.com/questions/13210880/replace-one-substring-for-another-string-in-shell-script
+      current_container_name="${LATEST_IMAGE/latest/"$CI_COMMIT_SHA"}"
+      DOCKER_BUILDKIT=1 docker build --file ./container/nbnode_py38_cpu.dockerfile -t $current_container_name .
+    - docker push registry.gunthergl.com/nbnode-cpu:latest
+    - docker push $current_container_name
 
 check:
   stage: prepare
@@ -150,7 +153,6 @@ build:
     - pipx run coverage xml -o coverage.xml
     # If we run into size limits of the report, see the following issue
     # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
-
 
   artifacts:
     reports:
@@ -219,6 +221,10 @@ pages:
   #   https://ccc_verse.git-pages.uni-regensburg.de/nbnode_pyscaffold
   # (found by going to https://git.uni-regensburg.de/ccc_verse/nbnode_pyscaffold/pages)
 
+  rules:
+    # The following ensures that the documentation is only run when a commit to the default ("main")
+    # branch is done
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   # needs: [build]
   stage: release
   image: $LATEST_IMAGE
@@ -232,7 +238,3 @@ pages:
   artifacts:
     paths:
       - public
-  rules:
-    # The following ensures that the documentation is only run when a commit to the default ("main")
-    # branch is done
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
