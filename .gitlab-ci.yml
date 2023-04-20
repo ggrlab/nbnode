@@ -120,8 +120,8 @@ build:
     # If graphviz is not installed, install it. It assumes that you are root
     # which is the case for the standard python:x.x docker images
     # In my cases, I assume graphviz is already installed (and you are non-root)
-    # 
-    # "dot" comes from the package "graphviz". 
+    #
+    # "dot" comes from the package "graphviz".
     # The following command tries to run dot and if it fails ("$?"), it installs graphviz
     -  dot --version; if [[ $? != 0 ]]; then apt-get update; apt-get install graphviz; fi
     # original commands
