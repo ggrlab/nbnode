@@ -1,4 +1,5 @@
-# from https://stackoverflow.com/questions/19086030/can-pip-or-setuptools-distribute-etc-list-the-license-used-by-each-install
+# from
+# https://stackoverflow.com/questions/19086030/can-pip-or-setuptools-distribute-etc-list-the-license-used-by-each-install
 
 import pkg_resources
 import prettytable
@@ -7,7 +8,7 @@ import prettytable
 def get_pkg_license(pkg):
     try:
         lines = pkg.get_metadata_lines("METADATA")
-    except:
+    except KeyError:
         lines = pkg.get_metadata_lines("PKG-INFO")
 
     for line in lines:
