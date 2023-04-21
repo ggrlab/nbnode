@@ -30,8 +30,7 @@ def print_packages_and_licenses(pkgs=None):
 if __name__ == "__main__":
     # print_packages_and_licenses()
     print_packages_and_licenses(
-        pkgs=
-        [
+        pkgs=[
             "importlib-metadata",
             "pandas",
             "pydotplus",
