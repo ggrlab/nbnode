@@ -14,6 +14,14 @@ TESTS_DIR = find_dirname_above_currentfile()
 
 
 class TestNBNode(TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        # https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass
+        # setUpClass is only called once for the whole class in contrast to setUp which
+        # is called before every test.
+
+        os.makedirs("tests_output", exist_ok=True)
+
     def test_create_tree_simple(self):
         mytree = nbtree.tree_simple()
         for pre, _, node in anytree.RenderTree(mytree):
@@ -29,7 +37,7 @@ class TestNBNode(TestCase):
             # edgeattrfunc=lambda parent, child: "style=bold,label=%s"
             # % (child.decision_name or "NA"),
         ).to_picture(
-            "tree_simple.pdf"
+            "tests_output/tree_simple.pdf"
         )  # doctest: +SKIP
         a_exp.DotExporter(
             mytree,
@@ -39,7 +47,7 @@ class TestNBNode(TestCase):
             # edgeattrfunc=lambda parent, child: "style=bold,label=%s"
             # % (child.decision_name or "NA"),
         ).to_dotfile(
-            "tree_simple.txt"
+            "tests_output/tree_simple.txt"
         )  # doctest: +SKIP
 
     def test_tree_simple_predict(self):
@@ -270,20 +278,20 @@ class TestNBNode(TestCase):
             edgeattrfunc=lambda parent, child: 'label="%s: %s"'
             % (child.decision_name, child.decision_value),
         ).to_picture(
-            "celltree.pdf"
+            "tests_output/celltree.pdf"
         )  # doctest: +SKIP
 
         a_exp.DotExporter(
             celltree,
             nodeattrfunc=lambda node: 'label="{}"'.format(node.name),
         ).to_picture(
-            "celltree_no_unique_labels.pdf"
+            "tests_output/celltree_no_unique_labels.pdf"
         )  # doctest: +SKIP
         a_exp.UniqueDotExporter(
             celltree,
             nodeattrfunc=lambda node: 'label="{}"'.format(node.name),
         ).to_picture(
-            "celltree_unique_dotexporter.pdf"
+            "tests_output/celltree_unique_dotexporter.pdf"
         )  # doctest: +SKIP
 
     def test_plot_NBNode_tree_coloring(self):
@@ -302,12 +310,14 @@ class TestNBNode(TestCase):
         graph: pydotplus.Dot = pydotplus.graph_from_dot_data(dotdata_str)
         nodes = graph.get_node_list()
 
-        plot_save_unified(any_plot=graph, file="pydotplus_graph_nocolor.pdf")
+        plot_save_unified(
+            any_plot=graph, file="tests_output/pydotplus_graph_nocolor.pdf"
+        )
         for node in nodes:
             if node.get_name() not in ("node", "edge", "plottitle"):
                 node.set_fillcolor("#ff5a00")
         # print(graph.to_string())
-        plot_save_unified(any_plot=graph, file="pydotplus_graph_color.pdf")
+        plot_save_unified(any_plot=graph, file="tests_output/pydotplus_graph_color.pdf")
 
     def test_dotexport(self):
         simpletree = nbtree.tree_simple()
@@ -553,7 +563,9 @@ class TestNBNode(TestCase):
         graph = mytree.graph_from_dot(mytree)
         from nbnode_pyscaffold.plot.utils import plot_save_unified
 
-        plot_save_unified(any_plot=graph, file="graph_from_dot_colored.pdf")
+        plot_save_unified(
+            any_plot=graph, file="tests_output/graph_from_dot_colored.pdf"
+        )
 
     def test_graph_from_dot_summary_color(self):
         import numpy as np
@@ -585,7 +597,7 @@ class TestNBNode(TestCase):
         )
         from nbnode_pyscaffold.plot.utils import plot_save_unified
 
-        plot_save_unified(any_plot=graph, file="fake_activation_mean.pdf")
+        plot_save_unified(any_plot=graph, file="tests_output/fake_activation_mean.pdf")
 
     def test_graph_apply_fun_args(self):
         import numpy as np
@@ -643,21 +655,25 @@ class TestNBNode(TestCase):
         graph = celltree.graph_from_dot(celltree, fillcolor_node_attribute="mean_act")
         from nbnode_pyscaffold.plot.utils import plot_save_unified
 
-        plot_save_unified(any_plot=graph, file="graph_text_attributes_default.pdf")
+        plot_save_unified(
+            any_plot=graph, file="tests_output/graph_text_attributes_default.pdf"
+        )
 
         graph = celltree.graph_from_dot(
             celltree,
             fillcolor_node_attribute="mean_act",
             node_text_attributes=["name", "mean_act"],
         )
-        plot_save_unified(any_plot=graph, file="graph_text_attributes_act.pdf")
+        plot_save_unified(
+            any_plot=graph, file="tests_output/graph_text_attributes_act.pdf"
+        )
         graph = celltree.graph_from_dot(
             celltree,
             fillcolor_node_attribute="mean_act",
             node_text_attributes={"name": "{}", "mean_act": "{:.2f}"},
         )
         plot_save_unified(
-            any_plot=graph, file="graph_text_attributes_act_fmtstring.pdf"
+            any_plot=graph, file="tests_output/graph_text_attributes_act_fmtstring.pdf"
         )
 
     def test_celltree_princple_explained(self):
@@ -734,9 +750,11 @@ class TestNBNode(TestCase):
         )
         from nbnode_pyscaffold.plot.utils import plot_save_unified
 
-        plot_save_unified(any_plot=graph_stump, file="graph_stump.pdf")
-        plot_save_unified(any_plot=graph_full_with_edgelabels, file="graph_full.pdf")
-        plot_save_unified(any_plot=graph, file="graph_celltree.pdf")
+        plot_save_unified(any_plot=graph_stump, file="tests_output/graph_stump.pdf")
+        plot_save_unified(
+            any_plot=graph_full_with_edgelabels, file="tests_output/graph_full.pdf"
+        )
+        plot_save_unified(any_plot=graph, file="tests_output/graph_celltree.pdf")
 
     def test_pretty_print(self):
         mytree = nbtree.tree_simple()
