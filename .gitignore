@@ -1,6 +1,5 @@
 # Custom ignores:
-**.pdf
-tree_simple.txt
+tests_output/
 
 # Temporary and binary files
 *~
