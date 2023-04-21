@@ -1,5 +1,7 @@
 # Custom ignores:
 tests_output/
+**removeme**
+.testmondata
 
 # Temporary and binary files
 *~
