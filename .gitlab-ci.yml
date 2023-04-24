@@ -151,7 +151,7 @@ build:
     - pipx run coverage html
     # If we run into size limits of the report, see the following issue
     # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
-    - docstr-coverage src/nbnode_pyscaffold --config .docstr.yaml --badge docstr_coverage.svg
+    - pipx run docstr-coverage src/nbnode_pyscaffold --config .docstr.yaml --badge docstr_coverage.svg
 
   artifacts:
     paths:
