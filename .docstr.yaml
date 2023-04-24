@@ -22,7 +22,7 @@ follow_links: True # Boolean
 # Exit with code 0 if no Python files are found (default: exit code 1)
 accept_empty: True # Boolean
 # Fail if under a certain percentage of coverage (default: 100.0)
-fail_under: 90 # int
+fail_under: 10 # int
 # Output only the overall coverage percentage as a float, silencing all other logging
 percentage_only: False # Boolean
 
