@@ -1,4 +1,4 @@
-# The following is equivalent to 
+# The following is equivalent to
 # docstr-coverage docstr_coverage -e ".*/test" --skip-magic --skip-init --badge="docs" --skip-class-def etc...
 
 # paths: # list or string
