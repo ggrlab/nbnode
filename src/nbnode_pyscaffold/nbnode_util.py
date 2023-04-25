@@ -1,3 +1,5 @@
+from typing import Any, List, Union
+
 import datatable
 import numpy as np
 import pandas as pd
@@ -5,19 +7,19 @@ import pandas as pd
 
 def frame_cov(dt_frame: datatable.Frame) -> pd.DataFrame:
     """
-    Compute the covariance matrix of a datatable frame from all columns similar to 
+    Compute the covariance matrix of a datatable frame from all columns similar to
     pd.DataFrame.cov().
 
     Args:
-        dt_frame (datatable.Frame): 
+        dt_frame (datatable.Frame):
             The datatable frame to compute the covariance matrix from
 
     Returns:
-        _type_: 
+        _type_:
             pd.DataFrame of the covariance matrix
 
     """
-    
+
     f_cols = dt_frame.export_names()
     f_cols_names = dt_frame.names
     cov_array = np.zeros((len(f_cols), len(f_cols)))
@@ -33,8 +35,55 @@ def frame_cov(dt_frame: datatable.Frame) -> pd.DataFrame:
 
 
 def per_node_data_fun(
-    x: pd.DataFrame, include_features, fun_name, *fun_args, **fun_kwargs
-):
+    x: pd.DataFrame,
+    include_features: Union[List[Union[str, int]], slice],
+    fun_name: str,
+    *fun_args,
+    **fun_kwargs
+) -> Union[pd.DataFrame, Any]:
+    """_summary_
+
+    Args:
+        x (pd.DataFrame): _description_
+        include_features (Union[List[Union[str, int]], slice]): _description_
+        fun_name (str): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    """
+    To be used in NBnode.node.apply() to apply a function to the data of each node.
+    Similar to R's apply(x, 1, fun) where x is a data.frame and fun is a function.
+
+
+    Args:
+        x (pd.DataFrame):
+            A dataframe, usually the NBnode.data attribute
+        include_features (Union[List[Union[str, int]], slice]):
+            the given function ``fun_name`` will be applied to only these features
+        fun_name (str):
+            Name of the function, is usually retrieved by getattr(x, fun_name).
+            Therefore, if x is e.g. an instance of datatable.Frame, fun_name can be any
+            function applicable to a datatable.Frame, e.g. "mean", "sum".
+            If x is e.g. an instance of pd.DataFrame, fun_name can be any function
+            applicable to a pd.DataFrame, e.g. "mean", "sum", "cov".
+
+            Special cases:
+
+                "cov": compute the covariance matrix of the given features
+
+    Returns:
+        pd.DataFrame:
+            Usually, but not necessarily a pd.DataFrame. Depends on the function.
+
+    Examples:
+        node.apply(
+            lambda x: per_node_data_fun(
+                x=x, include_features=include_features, fun_name="mean"
+            ),
+            result_attribute_name="mean",
+        )
+    """
     x = datatable.Frame(x)[:, include_features]
     if fun_name == "cov":
         return frame_cov(x)
