@@ -10,3 +10,8 @@ def test_frame_cov():
     pd_covmat = pd.DataFrame(dt_frame.to_numpy()).cov()
     dt_covmat = frame_cov(dt_frame)
     assert np.allclose(pd_covmat.to_numpy(), dt_covmat.to_numpy())
+
+
+def test_per_node_data_fun():
+    pass
+    # See test_NBnode.py
