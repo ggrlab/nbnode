@@ -4,6 +4,7 @@ import pandas as pd
 
 from nbnode_pyscaffold.nbnode_util import frame_cov
 
+
 def test_frame_cov():
     dt_frame = dt.Frame(np.random.rand(10, 5))
     pd_covmat = pd.DataFrame(dt_frame.to_numpy()).cov()
