@@ -3,7 +3,21 @@ import numpy as np
 import pandas as pd
 
 
-def frame_cov(dt_frame: datatable.Frame):
+def frame_cov(dt_frame: datatable.Frame) -> pd.DataFrame:
+    """
+    Compute the covariance matrix of a datatable frame from all columns similar to 
+    pd.DataFrame.cov().
+
+    Args:
+        dt_frame (datatable.Frame): 
+            The datatable frame to compute the covariance matrix from
+
+    Returns:
+        _type_: 
+            pd.DataFrame of the covariance matrix
+
+    """
+    
     f_cols = dt_frame.export_names()
     f_cols_names = dt_frame.names
     cov_array = np.zeros((len(f_cols), len(f_cols)))
