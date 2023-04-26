@@ -6,6 +6,7 @@ def test_flatten():
         [[1], [2, 3], [4, [5, [6, [7, [8]]]]]]
     )  # multiple nested list
     assert [1, 2, 3, "4", {5: 5}] == flatten([[1, [[2]], [[[3]]]], [["4"], {5: 5}]])
+    assert flatten([[1, 2, 3, 4, 5, 6, 7, 8]]) == [1, 2, 3, 4, 5, 6, 7, 8]
 
 def test_plot_save_unified():
     # Is used all around in test_NBNode.py
