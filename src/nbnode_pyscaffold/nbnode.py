@@ -78,7 +78,9 @@ class NBNode(anytree.Node):
             return self
 
     @staticmethod
-    def do_cutoff(value: Union[float, Any], cutoff:Union[float, None]) -> Union[Literal[1, -1], Any]:
+    def do_cutoff(
+        value: Union[float, Any], cutoff: Union[float, None]
+    ) -> Union[Literal[1, -1], Any]:
         """
         If cutoff is not None, cut the value into 1 or -1. Otherwise return the value
 
@@ -87,13 +89,13 @@ class NBNode(anytree.Node):
             cutoff (Union[float, None]): The value to cut at. If None, return value
 
         Returns:
-            Union[Literal[1, -1], Any]: 
+            Union[Literal[1, -1], Any]:
                 1       if value >= cutoff
                 -1      if value < cutoff
                 value   if cutoff is None
         """
         # ">= --> 1" from https://en.wikipedia.org/wiki/Decision_tree_learning
-        if cutoff is None: 
+        if cutoff is None:
             return value
         elif value >= cutoff:
             return 1
@@ -412,14 +414,21 @@ class NBNode(anytree.Node):
             titlenode.set_fillcolor("white")
             # add that node to the graph (No connections until now!)
             graph.add_node(titlenode)
+            nodes = [
+                node for node in graph.get_node_list() if node.get_name() != '"\\n"'
+            ]
             # identify the first node
-            node_zero = [node for node in nodes if node.get_name() == "0"]
-            # add an edge between the plottitle and the first node
-            # make it white
-            # https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
-            myedge = pydotplus.Edge(titlenode, node_zero[0])
-            # add the edge to the graph
-            graph.add_edge(myedge)
+            node_zero = [node for node in nodes if node.get_name() == '"' + hex(id(tree)) + '"']
+            if len(node_zero) != 0:
+                # Then the node_zero could be found and the edge is created
+                # Otherwise the edge is not created
+
+                # add an edge between the plottitle and the first node
+                # make it white
+                # https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot
+                myedge = pydotplus.Edge(titlenode, node_zero[0])
+                # add the edge to the graph
+                graph.add_edge(myedge)
 
         # get the predicted (regression!) values from each node in the tree
         node_values = []
@@ -427,7 +436,7 @@ class NBNode(anytree.Node):
             current_node_name = node.get_name()
             current_node_name = re.sub(r'"$', "", current_node_name)
             current_node_name = re.sub(r'^"', "", current_node_name)
-            if current_node_name not in ("node", "edge"):
+            if current_node_name not in ("node", "edge", "plottitle"):
                 current_matching_tree_node = anytree.search.find_by_attr(
                     node=tree, value=current_node_name, name="id_unique_dot_exporter"
                 )

@@ -67,6 +67,63 @@ class TestNBNode(TestCase):
         )
         assert [x.name for x in single_prediction.iter_path_reverse()] == ["a0", "a"]
 
+    def test_tree_simple_predict_inputs(self):
+        mytree = nbtree.tree_simple()
+
+        single_prediction = mytree.predict(
+            values=[1, "test", 2], names=["m1", "m2", "m3"]
+        )
+        assert [x.name for x in single_prediction.iter_path_reverse()] == [
+            "a1a",
+            "a1",
+            "a",
+        ]
+        
+        import pandas as pd
+        single_prediction = mytree.predict(
+            pd.DataFrame([[1, "test", 2], [1, "test", 2]], columns=["m1", "m2", "m3"])
+        )
+        assert isinstance(single_prediction, pd.Series)
+        assert [x.name for x in single_prediction[0].iter_path_reverse()] == [
+            "a1a",
+            "a1",
+            "a",
+        ]
+
+        import datatable as dt
+        single_prediction = mytree.predict(
+            dt.Frame({"m1": [1], "m2": ["test"], "m3": [2]})
+        )
+        assert isinstance(single_prediction, pd.Series)
+        assert [x.name for x in single_prediction[0].iter_path_reverse()] == [
+            "a1a",
+            "a1",
+            "a",
+        ]
+
+        import numpy as np
+        with self.assertRaises(ValueError):
+            # Cannot predict with a numpy array because it does not have column names
+            single_prediction = mytree.predict(
+                np.array([[-1, 0,0]])
+            )
+        # Giving names to predict() for the numpy array works
+        single_prediction = mytree.predict(
+                np.array([[-1, 0,0]]), names=["m1", "m2", "m3"]
+            )
+        assert isinstance(single_prediction, pd.Series)
+        assert [x.name for x in single_prediction[0].iter_path_reverse()] == [
+            "a0",
+            "a",
+        ]
+        with self.assertRaises(ValueError):
+            # Test a random nonworking input
+            # ValueError: I do not know how to fit the given inputdata.
+            single_prediction = mytree.predict(
+                1
+            )
+
+
     def test_tree_predict_cutoff_defaulttests(self):
         mytree = nbtree.tree_simple_cutoff()
         mytree.pretty_print("__long__")
@@ -110,7 +167,7 @@ class TestNBNode(TestCase):
             values=[131, "test", 124, 3], names=["m1", "m2", "m3", "m4"]
         )
         assert [x.name for x in single_prediction.iter_path_reverse()] == ["a3", "a"]
-        
+
     def test_tree_simple_predict_str(self):
         mytree = nbtree.tree_simple()
         mytree.pretty_print()
@@ -607,8 +664,9 @@ class TestNBNode(TestCase):
         graph = mytree.graph_from_dot(mytree)
         from nbnode_pyscaffold.plot.utils import plot_save_unified
 
+        graph = mytree.graph_from_dot(mytree, title="My Title")
         plot_save_unified(
-            any_plot=graph, file="tests_output/graph_from_dot_colored.pdf"
+            any_plot=graph, file="tests_output/graph_from_dot_colored_title.pdf"
         )
 
     def test_graph_from_dot_summary_color(self):
