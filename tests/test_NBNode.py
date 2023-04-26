@@ -67,6 +67,50 @@ class TestNBNode(TestCase):
         )
         assert [x.name for x in single_prediction.iter_path_reverse()] == ["a0", "a"]
 
+    def test_tree_predict_cutoff_defaulttests(self):
+        mytree = nbtree.tree_simple_cutoff()
+        mytree.pretty_print("__long__")
+
+        single_prediction = mytree.predict(
+            values=[1, "test", 2, 10], names=["m1", "m2", "m3", "m4"]
+        )
+        assert [x.name for x in single_prediction.iter_path_reverse()] == [
+            "a1a",
+            "a1",
+            "a",
+        ]
+        single_prediction = mytree.predict(
+            values=[-1, "test", 2, 1], names=["m1", "m2", "m3", "m4"]
+        )
+        assert [x.name for x in single_prediction.iter_path_reverse()] == ["a0", "a"]
+
+    def test_tree_predict_cutoff_notworking(self):
+        mytree = nbtree.tree_simple_cutoff_NOTWORKING()
+        with self.assertRaises(ValueError):
+            # Try to predict a3 but gets "catched" by a1 because m1 = 0
+            # Then does not find a proper end node.
+            single_prediction = mytree.predict(
+                values=[0, "adfg", 124, 10], names=["m1", "m2", "m3", "m4"]
+            )
+
+    def test_tree_predict_cutoff(self):
+        mytree = nbtree.tree_simple_cutoff()
+        single_prediction = mytree.predict(
+            values=[1, "test", 124, 10], names=["m1", "m2", "m3", "m4"]
+        )
+        assert [x.name for x in single_prediction.iter_path_reverse()] == [
+            "a1a",
+            "a1",
+            "a",
+        ]
+
+    def test_tree_predict_cutoff_mixed(self):
+        mytree = nbtree.tree_simple_cutoff_mixed()
+        single_prediction = mytree.predict(
+            values=[131, "test", 124, 3], names=["m1", "m2", "m3", "m4"]
+        )
+        assert [x.name for x in single_prediction.iter_path_reverse()] == ["a3", "a"]
+        
     def test_tree_simple_predict_str(self):
         mytree = nbtree.tree_simple()
         mytree.pretty_print()
