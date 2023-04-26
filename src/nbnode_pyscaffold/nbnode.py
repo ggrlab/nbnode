@@ -3,7 +3,7 @@ import inspect
 import re
 import warnings
 from collections import Counter
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Literal, Optional, Tuple, Union
 
 import anytree
 import datatable
@@ -78,9 +78,24 @@ class NBNode(anytree.Node):
             return self
 
     @staticmethod
-    def do_cutoff(value, cutoff):
+    def do_cutoff(value: Union[float, Any], cutoff:Union[float, None]) -> Union[Literal[1, -1], Any]:
+        """
+        If cutoff is not None, cut the value into 1 or -1. Otherwise return the value
+
+        Args:
+            value (float): The value to be cut
+            cutoff (Union[float, None]): The value to cut at. If None, return value
+
+        Returns:
+            Union[Literal[1, -1], Any]: 
+                1       if value >= cutoff
+                -1      if value < cutoff
+                value   if cutoff is None
+        """
         # ">= --> 1" from https://en.wikipedia.org/wiki/Decision_tree_learning
-        if value >= cutoff:
+        if cutoff is None: 
+            return value
+        elif value >= cutoff:
             return 1
         else:
             return -1
