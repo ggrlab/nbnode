@@ -134,6 +134,67 @@ def tree_complete_cell():
     return celltree
 
 
+def tree_simple_cutoff_NOTWORKING():
+    mytree = NBNode("a")
+    # a0 =
+    NBNode(
+        "a0", parent=mytree, decision_value=-1, decision_cutoff=0, decision_name="m1"
+    )
+    a1 = NBNode(
+        "a1", parent=mytree, decision_value=1, decision_cutoff=0, decision_name="m1"
+    )
+    # a2 =
+    NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
+    # a1a =
+    NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+    NBNode(
+        "a3",
+        parent=mytree,
+        decision_value=[0, 1],
+        decision_name=["m1", "m4"],
+        decision_cutoff=[0, 0],
+    )
+    return mytree
+
+def tree_simple_cutoff():
+    mytree = NBNode("a")
+    # a0 =
+    NBNode(
+        "a0", parent=mytree, decision_value=-1, decision_cutoff=0, decision_name="m1"
+    )
+    a1 = NBNode(
+        "a1", parent=mytree, decision_value=1, decision_cutoff=0, decision_name="m1"
+    )
+    # a2 =
+    NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
+    # a1a =
+    NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+    return mytree
+
+
+def tree_simple_cutoff_mixed():
+    mytree = NBNode("a")
+    # a0 =
+    NBNode(
+        "a0", parent=mytree, decision_value=-1, decision_name="m1"
+    )
+    a1 = NBNode(
+        "a1", parent=mytree, decision_value=1, decision_name="m1"
+    )
+    # a2 =
+    NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
+    # a1a =
+    NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+    NBNode(
+        "a3",
+        parent=mytree,
+        decision_value=["test", 1],
+        decision_name=["m2", "m4"],
+        decision_cutoff=[None, 0],
+    )
+    return mytree
+
+
 def tree_complete_aligned():
     # Betreff:	gates
     # Erstellt von:	Jxxx.Hxxx@ukr.de
