@@ -36,8 +36,8 @@ def frame_cov(dt_frame: datatable.Frame) -> pd.DataFrame:
 
 def per_node_data_fun(
     x: pd.DataFrame,
-    include_features: Union[List[Union[str, int]], slice],
     fun_name: str,
+    include_features: Union[List[Union[str, int]], slice] = None,
     *fun_args,
     **fun_kwargs
 ) -> Union[pd.DataFrame, Any]:
@@ -84,7 +84,10 @@ def per_node_data_fun(
             result_attribute_name="mean",
         )
     """
-    x = datatable.Frame(x)[:, include_features]
+    x = datatable.Frame(x)
+    if include_features is not None:
+        x = x[:, include_features]
+        
     if fun_name == "cov":
         return frame_cov(x)
     else:
