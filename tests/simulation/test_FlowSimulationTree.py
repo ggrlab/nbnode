@@ -5,14 +5,14 @@ import numpy as np
 import pandas as pd
 import anytree
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode.nbnode import NBNode
-from nbnode.nbnode_trees import (
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.nbnode import NBNode
+from nbnode_pyscaffold.nbnode_trees import (
     tree_simple,
     tree_complex,
     tree_simpleB,
 )
-from nbnode.testutil.helpers import find_dirname_above_currentfile
+from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
 
 
 TESTS_DIR = find_dirname_above_currentfile()
