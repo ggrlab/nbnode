@@ -4,7 +4,7 @@ import copy
 import warnings
 import pandas as pd
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 
 
 def sim_proportional(

@@ -5,8 +5,8 @@ from typing import Any, Dict, List, Tuple, Union
 import pandas as pd
 import torch.distributions as D
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode.simulation.sim_target import sim_target
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.simulation.sim_target import sim_target
 
 
 def mean_dist_fun(original_mean: float) -> D.Distribution:

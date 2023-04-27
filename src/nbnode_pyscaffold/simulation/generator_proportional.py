@@ -4,8 +4,8 @@ from typing import Any, Dict, List, Tuple, Union
 
 import pandas as pd
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode.simulation.sim_proportional import sim_proportional
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.simulation.sim_proportional import sim_proportional
 
 
 class GenerateProportional:
