@@ -3,17 +3,17 @@ from matplotlib.colors import Colormap, LinearSegmentedColormap
 
 
 def shifted_colormap(cmap, min_val, max_val, name) -> Colormap:
-    """
-    Function to offset the "center" of a colormap. Useful for data with a negative min
-    and positive max and you want the middle of the colormap's dynamic range to
-    be at zero.
+    """Function to offset the "center" of a colormap.
+    
+    Useful for data with a negative min and positive max and you want the middle of the 
+    colormap's dynamic range to be at zero.
 
     Adapted from
     https://stackoverflow.com/questions/7404116/defining-the-midpoint-of-a-colormap-in-matplotlib
     Post of DaveTheScientist
 
-    Input
-    -----
+
+    Args:
       cmap :
         The matplotlib colormap to be altered.
       start :
@@ -32,8 +32,9 @@ def shifted_colormap(cmap, min_val, max_val, name) -> Colormap:
         Defaults to 1.0 (no upper ofset). Should be between
         `midpoint` and 1.0.
 
+    Returns:
+        Colormap: _description_
     """
-
     epsilon = 0.001
     start, stop = 0.0, 1.0
     min_val, max_val = min(0.0, min_val), max(0.0, max_val)  # Edit #2

@@ -4,11 +4,11 @@ from nbnode_pyscaffold.nbnode import NBNode
 
 
 def tree_simple() -> NBNode:
-    """Simple tree for testing
-
+    """Simple tree for testing.
 
     Returns:
-        NBNode:
+        NBNode::
+
             a (counter:0, decision_name:None, decision_value:None)
             ├── a0 (counter:0, decision_name:m1, decision_value:-1)
             ├── a1 (counter:0, decision_name:m1, decision_value:1)
@@ -29,16 +29,17 @@ def tree_simple() -> NBNode:
 
 
 def tree_simpleB() -> NBNode:
-    """Another simple tree for testing
+    """Another simple tree for testing.
 
     Returns:
-        NBNode:
-        a (counter:0, decision_name:None, decision_value:None)
-        ├── a0 (counter:0, decision_name:m1, decision_value:-1)
-        ├── a1 (counter:0, decision_name:m1, decision_value:1)
-        │   ├── a1a (counter:0, decision_name:m2, decision_value:test)
-        │   └── a1b (counter:0, decision_name:m2, decision_value:tmp)
-        └── a2 (counter:0, decision_name:m3, decision_value:another)
+        NBNode::
+            
+            a (counter:0, decision_name:None, decision_value:None)
+            ├── a0 (counter:0, decision_name:m1, decision_value:-1)
+            ├── a1 (counter:0, decision_name:m1, decision_value:1)
+            │   ├── a1a (counter:0, decision_name:m2, decision_value:test)
+            │   └── a1b (counter:0, decision_name:m2, decision_value:tmp)
+            └── a2 (counter:0, decision_name:m3, decision_value:another)
     """
     mytree = NBNode("a")
     # a0 =
@@ -53,28 +54,28 @@ def tree_simpleB() -> NBNode:
 
 
 def tree_complex() -> NBNode:
-    """Complex tree to use with yternary
+    """Complex tree to use with yternary.
 
     Returns:
-        NBNode:
+        NBNode::
 
-        AllCells (counter:0, decision_name:None, decision_value:None)
-        ├── not CD45 (counter:0, decision_name:CD45, decision_value:-1)
-        └── CD45+ (counter:0, decision_name:CD45, decision_value:1)
-            ├── not CD3 (counter:0, decision_name:CD3, decision_value:-1)
-            │   ├── not MNC (counter:0, decision_name:MNC, decision_value:-1)
-            │   └── MNCs (counter:0, decision_name:MNC, decision_value:1)
-            │       ├── other (counter:0, decision_name:CD4, decision_value:-1)
-            │       └── Monocytes (counter:0, decision_name:CD4, decision_value:1)
-            └── CD3+ (counter:0, decision_name:CD3, decision_value:1)
-                ├── DN (counter:0, decision_name:['CD4', 'CD8'],
-                        decision_value:[-1, -1])
-                ├── DP (counter:0, decision_name:['CD4', 'CD8'],
-                        decision_value:[1, 1])
-                ├── CD4-/CD8+ (counter:0, decision_name:['CD4', 'CD8'],
-                                decision_value:[-1, 1])
-                └── CD4+/CD8- (counter:0, decision_name:['CD4', 'CD8'],
-                                decision_value:[1, -1])
+            AllCells (counter:0, decision_name:None, decision_value:None)
+            ├── not CD45 (counter:0, decision_name:CD45, decision_value:-1)
+            └── CD45+ (counter:0, decision_name:CD45, decision_value:1)
+                ├── not CD3 (counter:0, decision_name:CD3, decision_value:-1)
+                │   ├── not MNC (counter:0, decision_name:MNC, decision_value:-1)
+                │   └── MNCs (counter:0, decision_name:MNC, decision_value:1)
+                │       ├── other (counter:0, decision_name:CD4, decision_value:-1)
+                │       └── Monocytes (counter:0, decision_name:CD4, decision_value:1)
+                └── CD3+ (counter:0, decision_name:CD3, decision_value:1)
+                    ├── DN (counter:0, decision_name:['CD4', 'CD8'],
+                            decision_value:[-1, -1])
+                    ├── DP (counter:0, decision_name:['CD4', 'CD8'],
+                            decision_value:[1, 1])
+                    ├── CD4-/CD8+ (counter:0, decision_name:['CD4', 'CD8'],
+                                    decision_value:[-1, 1])
+                    └── CD4+/CD8- (counter:0, decision_name:['CD4', 'CD8'],
+                                    decision_value:[1, -1])
     """
     celltree = NBNode(
         "AllCells",
@@ -148,191 +149,192 @@ def tree_complex() -> NBNode:
 
 
 def tree_complete_cell() -> NBNode:
-    """Complete tree for T-cell panel of Beckman Coulter
+    """Complete tree for T-cell panel of Beckman Coulter.
 
     Returns:
-        NBNode:
-        AllCells ()
-        ├── not CD45 ()
-        └── CD45+ ()
-            ├── not CD3 ()
-            │   ├── not MNC ()
-            │   └── MNCs ()
-            │       ├── other ()
-            │       └── Monocytes ()
-            └── CD3+ ()
-                ├── DN ()
-                ├── DP ()
-                ├── CD4-/CD8+ ()
-                │   ├── naive ()
-                │   │   ├── CD27+/CD28+ ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   ├── CD27+/CD28- ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   ├── CD27-/CD28+ ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   └── CD27-/CD28- ()
-                │   │       ├── CD57+/PD1+ ()
-                │   │       ├── CD57+/PD1- ()
-                │   │       ├── CD57-/PD1+ ()
-                │   │       └── CD57-/PD1- ()
-                │   ├── Tcm ()
-                │   │   ├── CD27+/CD28+ ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   ├── CD27+/CD28- ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   ├── CD27-/CD28+ ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   └── CD27-/CD28- ()
-                │   │       ├── CD57+/PD1+ ()
-                │   │       ├── CD57+/PD1- ()
-                │   │       ├── CD57-/PD1+ ()
-                │   │       └── CD57-/PD1- ()
-                │   ├── Temra ()
-                │   │   ├── CD27+/CD28+ ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   ├── CD27+/CD28- ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   ├── CD27-/CD28+ ()
-                │   │   │   ├── CD57+/PD1+ ()
-                │   │   │   ├── CD57+/PD1- ()
-                │   │   │   ├── CD57-/PD1+ ()
-                │   │   │   └── CD57-/PD1- ()
-                │   │   └── CD27-/CD28- ()
-                │   │       ├── CD57+/PD1+ ()
-                │   │       ├── CD57+/PD1- ()
-                │   │       ├── CD57-/PD1+ ()
-                │   │       └── CD57-/PD1- ()
-                │   └── Tem ()
-                │       ├── CD27+/CD28+ ()
-                │       │   ├── CD57+/PD1+ ()
-                │       │   ├── CD57+/PD1- ()
-                │       │   ├── CD57-/PD1+ ()
-                │       │   └── CD57-/PD1- ()
-                │       ├── CD27+/CD28- ()
-                │       │   ├── CD57+/PD1+ ()
-                │       │   ├── CD57+/PD1- ()
-                │       │   ├── CD57-/PD1+ ()
-                │       │   └── CD57-/PD1- ()
-                │       ├── CD27-/CD28+ ()
-                │       │   ├── CD57+/PD1+ ()
-                │       │   ├── CD57+/PD1- ()
-                │       │   ├── CD57-/PD1+ ()
-                │       │   └── CD57-/PD1- ()
-                │       └── CD27-/CD28- ()
-                │           ├── CD57+/PD1+ ()
-                │           ├── CD57+/PD1- ()
-                │           ├── CD57-/PD1+ ()
-                │           └── CD57-/PD1- ()
-                └── CD4+/CD8- ()
-                    ├── naive ()
-                    │   ├── CD27+/CD28+ ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   ├── CD27+/CD28- ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   ├── CD27-/CD28+ ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   └── CD27-/CD28- ()
-                    │       ├── CD57+/PD1+ ()
-                    │       ├── CD57+/PD1- ()
-                    │       ├── CD57-/PD1+ ()
-                    │       └── CD57-/PD1- ()
-                    ├── Tcm ()
-                    │   ├── CD27+/CD28+ ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   ├── CD27+/CD28- ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   ├── CD27-/CD28+ ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   └── CD27-/CD28- ()
-                    │       ├── CD57+/PD1+ ()
-                    │       ├── CD57+/PD1- ()
-                    │       ├── CD57-/PD1+ ()
-                    │       └── CD57-/PD1- ()
-                    ├── Temra ()
-                    │   ├── CD27+/CD28+ ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   ├── CD27+/CD28- ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   ├── CD27-/CD28+ ()
-                    │   │   ├── CD57+/PD1+ ()
-                    │   │   ├── CD57+/PD1- ()
-                    │   │   ├── CD57-/PD1+ ()
-                    │   │   └── CD57-/PD1- ()
-                    │   └── CD27-/CD28- ()
-                    │       ├── CD57+/PD1+ ()
-                    │       ├── CD57+/PD1- ()
-                    │       ├── CD57-/PD1+ ()
-                    │       └── CD57-/PD1- ()
-                    └── Tem ()
-                        ├── CD27+/CD28+ ()
-                        │   ├── CD57+/PD1+ ()
-                        │   ├── CD57+/PD1- ()
-                        │   ├── CD57-/PD1+ ()
-                        │   └── CD57-/PD1- ()
-                        ├── CD27+/CD28- ()
-                        │   ├── CD57+/PD1+ ()
-                        │   ├── CD57+/PD1- ()
-                        │   ├── CD57-/PD1+ ()
-                        │   └── CD57-/PD1- ()
-                        ├── CD27-/CD28+ ()
-                        │   ├── CD57+/PD1+ ()
-                        │   ├── CD57+/PD1- ()
-                        │   ├── CD57-/PD1+ ()
-                        │   └── CD57-/PD1- ()
-                        └── CD27-/CD28- ()
-                            ├── CD57+/PD1+ ()
-                            ├── CD57+/PD1- ()
-                            ├── CD57-/PD1+ ()
-                            └── CD57-/PD1- ()
+        NBNode::
+            
+            AllCells ()
+            ├── not CD45 ()
+            └── CD45+ ()
+                ├── not CD3 ()
+                │   ├── not MNC ()
+                │   └── MNCs ()
+                │       ├── other ()
+                │       └── Monocytes ()
+                └── CD3+ ()
+                    ├── DN ()
+                    ├── DP ()
+                    ├── CD4-/CD8+ ()
+                    │   ├── naive ()
+                    │   │   ├── CD27+/CD28+ ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   ├── CD27+/CD28- ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   ├── CD27-/CD28+ ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   └── CD27-/CD28- ()
+                    │   │       ├── CD57+/PD1+ ()
+                    │   │       ├── CD57+/PD1- ()
+                    │   │       ├── CD57-/PD1+ ()
+                    │   │       └── CD57-/PD1- ()
+                    │   ├── Tcm ()
+                    │   │   ├── CD27+/CD28+ ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   ├── CD27+/CD28- ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   ├── CD27-/CD28+ ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   └── CD27-/CD28- ()
+                    │   │       ├── CD57+/PD1+ ()
+                    │   │       ├── CD57+/PD1- ()
+                    │   │       ├── CD57-/PD1+ ()
+                    │   │       └── CD57-/PD1- ()
+                    │   ├── Temra ()
+                    │   │   ├── CD27+/CD28+ ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   ├── CD27+/CD28- ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   ├── CD27-/CD28+ ()
+                    │   │   │   ├── CD57+/PD1+ ()
+                    │   │   │   ├── CD57+/PD1- ()
+                    │   │   │   ├── CD57-/PD1+ ()
+                    │   │   │   └── CD57-/PD1- ()
+                    │   │   └── CD27-/CD28- ()
+                    │   │       ├── CD57+/PD1+ ()
+                    │   │       ├── CD57+/PD1- ()
+                    │   │       ├── CD57-/PD1+ ()
+                    │   │       └── CD57-/PD1- ()
+                    │   └── Tem ()
+                    │       ├── CD27+/CD28+ ()
+                    │       │   ├── CD57+/PD1+ ()
+                    │       │   ├── CD57+/PD1- ()
+                    │       │   ├── CD57-/PD1+ ()
+                    │       │   └── CD57-/PD1- ()
+                    │       ├── CD27+/CD28- ()
+                    │       │   ├── CD57+/PD1+ ()
+                    │       │   ├── CD57+/PD1- ()
+                    │       │   ├── CD57-/PD1+ ()
+                    │       │   └── CD57-/PD1- ()
+                    │       ├── CD27-/CD28+ ()
+                    │       │   ├── CD57+/PD1+ ()
+                    │       │   ├── CD57+/PD1- ()
+                    │       │   ├── CD57-/PD1+ ()
+                    │       │   └── CD57-/PD1- ()
+                    │       └── CD27-/CD28- ()
+                    │           ├── CD57+/PD1+ ()
+                    │           ├── CD57+/PD1- ()
+                    │           ├── CD57-/PD1+ ()
+                    │           └── CD57-/PD1- ()
+                    └── CD4+/CD8- ()
+                        ├── naive ()
+                        │   ├── CD27+/CD28+ ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   ├── CD27+/CD28- ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   ├── CD27-/CD28+ ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   └── CD27-/CD28- ()
+                        │       ├── CD57+/PD1+ ()
+                        │       ├── CD57+/PD1- ()
+                        │       ├── CD57-/PD1+ ()
+                        │       └── CD57-/PD1- ()
+                        ├── Tcm ()
+                        │   ├── CD27+/CD28+ ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   ├── CD27+/CD28- ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   ├── CD27-/CD28+ ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   └── CD27-/CD28- ()
+                        │       ├── CD57+/PD1+ ()
+                        │       ├── CD57+/PD1- ()
+                        │       ├── CD57-/PD1+ ()
+                        │       └── CD57-/PD1- ()
+                        ├── Temra ()
+                        │   ├── CD27+/CD28+ ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   ├── CD27+/CD28- ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   ├── CD27-/CD28+ ()
+                        │   │   ├── CD57+/PD1+ ()
+                        │   │   ├── CD57+/PD1- ()
+                        │   │   ├── CD57-/PD1+ ()
+                        │   │   └── CD57-/PD1- ()
+                        │   └── CD27-/CD28- ()
+                        │       ├── CD57+/PD1+ ()
+                        │       ├── CD57+/PD1- ()
+                        │       ├── CD57-/PD1+ ()
+                        │       └── CD57-/PD1- ()
+                        └── Tem ()
+                            ├── CD27+/CD28+ ()
+                            │   ├── CD57+/PD1+ ()
+                            │   ├── CD57+/PD1- ()
+                            │   ├── CD57-/PD1+ ()
+                            │   └── CD57-/PD1- ()
+                            ├── CD27+/CD28- ()
+                            │   ├── CD57+/PD1+ ()
+                            │   ├── CD57+/PD1- ()
+                            │   ├── CD57-/PD1+ ()
+                            │   └── CD57-/PD1- ()
+                            ├── CD27-/CD28+ ()
+                            │   ├── CD57+/PD1+ ()
+                            │   ├── CD57+/PD1- ()
+                            │   ├── CD57-/PD1+ ()
+                            │   └── CD57-/PD1- ()
+                            └── CD27-/CD28- ()
+                                ├── CD57+/PD1+ ()
+                                ├── CD57+/PD1- ()
+                                ├── CD57-/PD1+ ()
+                                └── CD57-/PD1- ()
     """
     celltree = tree_complex()
 
@@ -367,17 +369,19 @@ def tree_complete_cell() -> NBNode:
 
 
 def tree_simple_cutoff_NOTWORKING() -> NBNode:
-    """Not working simple tree with decision cutoffs, only for testing
+    """Not working simple tree with decision cutoffs, only for testing.
 
+    Blank 
 
     Returns:
-        NBNode:
-        a (counter:0, decision_name:None, decision_value:None)
-        ├── a0 (counter:0, decision_name:m1, decision_value:-1)
-        ├── a1 (counter:0, decision_name:m1, decision_value:1)
-        │   └── a1a (counter:0, decision_name:m2, decision_value:test)
-        ├── a2 (counter:0, decision_name:m3, decision_value:another)
-        └── a3 (counter:0, decision_name:['m1', 'm4'], decision_value:[0, 1])
+        NBNode::
+
+            a (counter:0, decision_name:None, decision_value:None)
+            ├── a0 (counter:0, decision_name:m1, decision_value:-1)
+            ├── a1 (counter:0, decision_name:m1, decision_value:1)
+            │   └── a1a (counter:0, decision_name:m2, decision_value:test)
+            ├── a2 (counter:0, decision_name:m3, decision_value:another)
+            └── a3 (counter:0, decision_name:['m1', 'm4'], decision_value:[0, 1])
     """
     mytree = NBNode("a")
     # a0 =
@@ -402,10 +406,11 @@ def tree_simple_cutoff_NOTWORKING() -> NBNode:
 
 
 def tree_simple_cutoff() -> NBNode:
-    """_summary_
+    """_summary_.
 
     Returns:
-        NBNode:
+        NBNode::
+
             a (counter:0, decision_name:None, decision_value:None)
             ├── a0 (counter:0, decision_name:m1, decision_value:-1)
             ├── a1 (counter:0, decision_name:m1, decision_value:1)
@@ -428,16 +433,17 @@ def tree_simple_cutoff() -> NBNode:
 
 
 def tree_simple_cutoff_mixed() -> NBNode:
-    """Functioning tree with decision cutoffs, testing
+    """Functioning tree with decision cutoffs, testing.
 
     Returns:
-        NBNode:
-        a (counter:0, decision_name:None, decision_value:None)
-        ├── a0 (counter:0, decision_name:m1, decision_value:-1)
-        ├── a1 (counter:0, decision_name:m1, decision_value:1)
-        │   └── a1a (counter:0, decision_name:m2, decision_value:test)
-        ├── a2 (counter:0, decision_name:m3, decision_value:another)
-        └── a3 (counter:0, decision_name:['m2', 'm4'], decision_value:['test', 1])
+        NBNode::
+        
+            a (counter:0, decision_name:None, decision_value:None)
+            ├── a0 (counter:0, decision_name:m1, decision_value:-1)
+            ├── a1 (counter:0, decision_name:m1, decision_value:1)
+            │   └── a1a (counter:0, decision_name:m2, decision_value:test)
+            ├── a2 (counter:0, decision_name:m3, decision_value:another)
+            └── a3 (counter:0, decision_name:['m2', 'm4'], decision_value:['test', 1])
     """
     mytree = NBNode("a")
     # a0 =
@@ -458,8 +464,7 @@ def tree_simple_cutoff_mixed() -> NBNode:
 
 
 def tree_complete_aligned() -> NBNode:
-    """
-    Tree for the aligned (now "rescaled") T-cell panel data.
+    """Tree for the aligned (now "rescaled") T-cell panel data.
 
     Uses decision cutoffs.
 
@@ -723,7 +728,8 @@ def tree_complete_aligned_trunk() -> NBNode:
     """Trunk of the tree_complete_aligned_v2 tree.
 
     Returns:
-        NBNode:
+        NBNode::
+
             AllCells (counter:0, decision_name:None, decision_value:None)
             ├── DN (counter:0, decision_name:['CD4', 'CD8'], decision_value:[-1, -1])
             ├── DP (counter:0, decision_name:['CD4', 'CD8'], decision_value:[1, 1])

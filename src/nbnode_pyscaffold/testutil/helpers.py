@@ -9,15 +9,18 @@ def find_dirname_above(
     verbose: bool = False,
     realpath: bool = True,
 ) -> str:
-    """
-    Goes directory-wise upwards starting at dirpath and
-    0) current_directory = dirpath
-    1) list content of current_directory and search for 'dirname'.
-    2)  If found
-            Return the path
-        If not found
-            # Ascend one directory, go to 1)
-            current_directory = os.path.join(current_directory, '..')
+    """Find dirname above. 
+
+    Goes directory-wise upwards starting at dirpath and:
+
+        0) current_directory = dirpath
+
+        1) list content of current_directory and search for 'dirname'.
+
+        2.1)  If found, Return the path
+        
+        2.2)   If not found, # Ascend one directory, go to 1), 
+        current_directory = os.path.join(current_directory, '..')
 
     Args:
         dirpath:
@@ -35,7 +38,6 @@ def find_dirname_above(
         The first found path to the directory 'dirname'
 
     """
-
     TESTS_DIR = dirpath
     i = 0
     if verbose:
