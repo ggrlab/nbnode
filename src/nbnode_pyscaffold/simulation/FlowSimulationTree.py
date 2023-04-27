@@ -1,11 +1,12 @@
-from abc import abstractmethod
 import copy
+import warnings
+from abc import abstractmethod
 from importlib.metadata import PackageNotFoundError
 from typing import Any, Dict, List, Literal, Optional, Tuple, Union
-import pandas as pd
-import numpy as np
-import warnings
+
 import anytree
+import numpy as np
+import pandas as pd
 
 from nbnode_pyscaffold.nbnode import NBNode
 from nbnode_pyscaffold.nbnode_util import per_node_data_fun
@@ -21,28 +22,33 @@ class BaseFlowSimulationTree:
     def __init__(
         self,
         rootnode: NBNode,
-        population_nodes: Optional[Union[List[NBNode], List[str]]] = None,
         data_cellgroup_col: str = "sample",
         node_percentages: Optional[pd.DataFrame] = None,
         seed: int = 12987,
         include_features="dataset_melanoma",
     ) -> None:
-        """_summary_
+        """Base flow simulation.
 
         Args:
-            nodes (List[NBNode]): _description_
-            rootnode (NBNode, optional): _description_. Defaults to None.
-            data_cellgroup_col (str, optional): _description_.
-                Defaults to "sample". The column of rootnode.data containing identifiers per cell
-                which sample it refers to.
-                If "None" and node_percentages=None, all cells are assumed to come from a single
-                sample.
-            node_percentages (pd.DataFrame, optional): _description_.
-                If node_percentages is not given, node.data MUST contain a column which identifies
-                groups of cells (default: "sample")
-            seed (int, optional): _description_.
-                Defaults to 12987. Relevant if sampling from the resulting Simulation.
+            rootnode (NBNode):
+                A NBnode from which the simulation should be initiated.
+
+            data_cellgroup_col (str, optional):
+                The column of rootnode.data containing identifiers
+                per cell which sample it refers to.
+                If "None" and node_percentages=None, all cells are assumed to come from
+                a single sample.
+
+                Defaults to "sample".
+            node_percentages (Optional[pd.DataFrame], optional):
+                If node_percentages is not given, node.data MUST contain a column which
+                identifies groups of cells (default: "sample")
+                Defaults to None.
+            seed (int, optional):
+                Relevant if sampling from the resulting Simulation.
+                Defaults to 12987.
             include_features (str, optional): _description_. Defaults to "dataset_melanoma".
+
 
         Attributes:
             _orig_nodes_to_leafnodes:
@@ -51,6 +57,7 @@ class BaseFlowSimulationTree:
                 a leaf node, `leaf_node = node`.
                 The index of the dataframe is `leaf_node.get_name_full()`.
         """
+
         self.rootnode_structure = rootnode.copy_structure()
         leaf_nodes_data = [
             node for node in anytree.PreOrderIter(rootnode) if node.is_leaf

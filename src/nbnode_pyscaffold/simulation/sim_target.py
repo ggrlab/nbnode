@@ -1,7 +1,8 @@
-from typing import Tuple, Dict, Any, List
-import os
 import copy
+import os
 import warnings
+from typing import Any, Dict, List, Tuple
+
 import pandas as pd
 
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
@@ -9,15 +10,17 @@ from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDi
 
 def sim_target(
     flowsim: FlowSimulationTreeDirichlet,
-    change_pop_mean_target: List[Dict[str, float]]=[{"/AllCells/CD4+/CD8-/Tem": 0.05}],
+    change_pop_mean_target: List[Dict[str, float]] = [
+        {"/AllCells/CD4+/CD8-/Tem": 0.05}
+    ],
     n_cells=25000,
     use_only_diagonal_covmat=True,
     save_dir="sim/intraassay/sim00_target",
-    sample_name = None, 
+    sample_name=None,
     seed_sample_0=129873,
     verbose=False,
     only_return_sampled_cell_numbers=True,
-    save_changed_parameters = False
+    save_changed_parameters=False,
 ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
     """
         This function simulates new cells (`n_cells`) for `n_samples` samples according to the given
@@ -25,7 +28,7 @@ def sim_target(
 
             1. flowsim.reset_populations() (for consistency)
             2. For every list element in change_pop_mean_target, change all contained populations (keys)
-            to their respective mean proportions (values). Values outside (0, 1) are not allowed. 
+            to their respective mean proportions (values). Values outside (0, 1) are not allowed.
 
             with their respective value and changed by `flowsim.new_pop_mean(old_mean * change_prop)`
             2. Generate `n_samples` with `n_cells` are sampled from the changed FlowSimulation.
@@ -84,7 +87,6 @@ def sim_target(
     # Undo any changes to the populations after creating the flowsimulation
     flowsim.reset_populations()
 
-    
     ncells_A_df = None
     generated_samples = []
     changed_parameters = []
@@ -92,9 +94,13 @@ def sim_target(
         # Change the given population means
         for pop_x, pop_target_proportion in sample_targets.items():
             if pop_target_proportion <= 0:
-                raise ValueError("Changing to a target proportion of <=0 does not work properly")
+                raise ValueError(
+                    "Changing to a target proportion of <=0 does not work properly"
+                )
             if pop_target_proportion >= 1:
-                raise ValueError("Changing to a target proportion of >=1 does not work properly")
+                raise ValueError(
+                    "Changing to a target proportion of >=1 does not work properly"
+                )
 
             flowsim.new_pop_mean(
                 population_node_full_name=pop_x,
@@ -105,7 +111,7 @@ def sim_target(
                 changed_parameters += [copy.deepcopy(flowsim.population_parameters)]
 
             flowsim.set_seed(seed_sample_0 + sample_i)
-            if sample_name is None: 
+            if sample_name is None:
                 sample_name = f"sample_{sample_i}"
 
             if only_return_sampled_cell_numbers:

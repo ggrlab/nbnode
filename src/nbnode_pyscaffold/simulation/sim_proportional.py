@@ -1,7 +1,8 @@
-from typing import Tuple, Dict, Any, List
-import os
 import copy
+import os
 import warnings
+from typing import Any, Dict, List, Tuple
+
 import pandas as pd
 
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
@@ -16,7 +17,7 @@ def sim_proportional(
     save_dir="sim/intraassay/sim00_baseline",
     seed_sample_0=129873,
     verbose=False,
-    only_return_sampled_cell_numbers = True
+    only_return_sampled_cell_numbers=True,
 ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
     """
         This function simulates new cells (`n_cells`) for `n_samples` samples according to the given
@@ -63,7 +64,7 @@ def sim_proportional(
             The following variable should only be turned off if you do NOT want the cells actually
             generated, but instead want to return only the cell NUMBERS per population
     Returns:
-        Tuple: 
+        Tuple:
             pd.DataFrame:   Returns the true number of generated cells per leaf-population.
             Dict:           A dee copy of `flowsim.population_parameters`
     """
@@ -101,17 +102,15 @@ def sim_proportional(
         sample_name = f"sample_{sample_i}"
         # print(sample_name)
         if only_return_sampled_cell_numbers:
-            ncells_A = flowsim.sample_populations(
-                n_cells=n_cells
-            )
-        else: 
+            ncells_A = flowsim.sample_populations(n_cells=n_cells)
+        else:
             sample_A, ncells_A = flowsim.sample(
                 n_cells=n_cells,
                 return_sampled_cell_numbers=True,
                 use_only_diagonal_covmat=use_only_diagonal_covmat,
             )
             generated_samples.append(sample_A)
-        
+
             if save_dir is not None:
                 current_filepath = os.path.join(save_dir, f"sample_{sample_i}.csv")
                 sample_A.to_csv(current_filepath, index=False)
