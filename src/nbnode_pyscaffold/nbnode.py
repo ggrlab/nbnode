@@ -418,7 +418,9 @@ class NBNode(anytree.Node):
                 node for node in graph.get_node_list() if node.get_name() != '"\\n"'
             ]
             # identify the first node
-            node_zero = [node for node in nodes if node.get_name() == '"' + hex(id(tree)) + '"']
+            node_zero = [
+                node for node in nodes if node.get_name() == '"' + hex(id(tree)) + '"'
+            ]
             if len(node_zero) != 0:
                 # Then the node_zero could be found and the edge is created
                 # Otherwise the edge is not created
@@ -543,15 +545,49 @@ class NBNode(anytree.Node):
                 )
             node_x.parent = self
 
-    def export_counts(predicted_celltree: "NBNode", only_leafnodes: bool = False):
+    def export_counts(
+        predicted_celltree: "NBNode",
+        only_leafnodes: bool = False,
+        node_counts_dtype="int64",
+    ) -> pd.DataFrame:
+        """
+        Export the counts of the predicted celltree to a pd.Dataframe.
+
+        Rows are the samples, columns the node names `get_name_full()`
+
+        Args:
+            predicted_celltree (NBNode):
+                The tree whose counts should be exported
+            only_leafnodes (bool, optional):
+                Should only leaf nodes (or all nodes) be counted/exported?
+                Defaults to False.
+            node_counts_dtype (str, optional):
+                The dtype of the resulting counts. Defaults to "int64".
+        Returns:
+            pd.DataFrame:
+                Rows are the samples, columns the node names `get_name_full()`.
+        """
         predicted_celltree.count(use_ids=True)
 
         leaf_nodes_dict = {}
         all_nodes_dict = {}
+        if predicted_celltree.data.shape[0] == 0:
+            raise ValueError(
+                "predicted_celltree.data is empty. Did you set it and make id_preds()?"
+                + "\na = celltree_trunk.predict(cellmat)"
+                + "\npredicted_celltree.data = pd.DataFrame()"
+                + "\ncelltree_trunk.id_preds(a)"
+            )
+
         for x in anytree.PostOrderIter(predicted_celltree):
             x: NBNode
-            node_counts = x.data["sample_name"].value_counts()
-            node_counts.sort_index(inplace=True)
+            if "sample_name" not in predicted_celltree.data.columns:
+                # Then I assume all cells in the node are from the same sample
+                node_counts = x.data.shape[0]
+                node_counts = pd.Series(node_counts, dtype=node_counts_dtype)
+            else:
+                node_counts = x.data["sample_name"].value_counts()
+                node_counts.sort_index(inplace=True)
             if only_leafnodes:
                 if x.is_leaf:
                     leaf_nodes_dict[x.get_name_full()] = node_counts
@@ -566,6 +602,7 @@ class NBNode(anytree.Node):
         counts_allsamples.fillna(0, inplace=True)
         counts_allsamples["Sample"] = counts_allsamples.index
         counts_allsamples.set_index("Sample", inplace=True)
+        counts_allsamples = counts_allsamples.astype(node_counts_dtype)
         return counts_allsamples
 
     @staticmethod
@@ -712,6 +749,24 @@ class NBNode(anytree.Node):
                     ),
                 )
         return self_tmp
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, NBNode):
+            return False
+        if not self.eq_structure(other):
+            return False
+        for x, y in self.both_iterator(other):
+            if not all(
+                [
+                    x.name == y.name,
+                    x.decision_name == y.decision_name,
+                    x.decision_value == y.decision_value,
+                    x.counter == y.counter,
+                    x.ids == y.ids,
+                ]
+            ):
+                return False
+        return True
 
     def __add__(self, other):
         return self.__both_nodeattr_fun(other=other, fun=inspect.stack()[0][3])

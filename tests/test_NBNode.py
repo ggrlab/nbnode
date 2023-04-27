@@ -78,8 +78,9 @@ class TestNBNode(TestCase):
             "a1",
             "a",
         ]
-        
+
         import pandas as pd
+
         single_prediction = mytree.predict(
             pd.DataFrame([[1, "test", 2], [1, "test", 2]], columns=["m1", "m2", "m3"])
         )
@@ -91,6 +92,7 @@ class TestNBNode(TestCase):
         ]
 
         import datatable as dt
+
         single_prediction = mytree.predict(
             dt.Frame({"m1": [1], "m2": ["test"], "m3": [2]})
         )
@@ -102,15 +104,14 @@ class TestNBNode(TestCase):
         ]
 
         import numpy as np
+
         with self.assertRaises(ValueError):
             # Cannot predict with a numpy array because it does not have column names
-            single_prediction = mytree.predict(
-                np.array([[-1, 0,0]])
-            )
+            single_prediction = mytree.predict(np.array([[-1, 0, 0]]))
         # Giving names to predict() for the numpy array works
         single_prediction = mytree.predict(
-                np.array([[-1, 0,0]]), names=["m1", "m2", "m3"]
-            )
+            np.array([[-1, 0, 0]]), names=["m1", "m2", "m3"]
+        )
         assert isinstance(single_prediction, pd.Series)
         assert [x.name for x in single_prediction[0].iter_path_reverse()] == [
             "a0",
@@ -119,10 +120,7 @@ class TestNBNode(TestCase):
         with self.assertRaises(ValueError):
             # Test a random nonworking input
             # ValueError: I do not know how to fit the given inputdata.
-            single_prediction = mytree.predict(
-                1
-            )
-
+            single_prediction = mytree.predict(1)
 
     def test_tree_predict_cutoff_defaulttests(self):
         mytree = nbtree.tree_simple_cutoff()
@@ -182,7 +180,7 @@ class TestNBNode(TestCase):
         celltree = nbtree.tree_complete_aligned()
         a = celltree.predict(cellmat)
         print(a)
-        
+
     def test_tree_simple_predict_str(self):
         mytree = nbtree.tree_simple()
         mytree.pretty_print()
@@ -684,7 +682,9 @@ class TestNBNode(TestCase):
             any_plot=graph, file="tests_output/graph_from_dot_colored_title.pdf"
         )
 
-        graph = mytree.graph_from_dot(mytree, custom_min_max_dict={"min": .5, "max": 3})
+        graph = mytree.graph_from_dot(
+            mytree, custom_min_max_dict={"min": 0.5, "max": 3}
+        )
         plot_save_unified(
             any_plot=graph, file="tests_output/graph_from_dot_colored_custom_minmax.pdf"
         )
@@ -694,7 +694,8 @@ class TestNBNode(TestCase):
         )
         graph = mytree.graph_from_dot(mytree, minmax="not_equal")  # custom
         plot_save_unified(
-            any_plot=graph, file="tests_output/graph_from_dot_colored_custom_NOTequal.pdf"
+            any_plot=graph,
+            file="tests_output/graph_from_dot_colored_custom_NOTequal.pdf",
         )
 
     def test_graph_from_dot_summary_color(self):
@@ -942,6 +943,13 @@ class TestNBNode(TestCase):
         assert mytree2.eq_structure(mytree2)
         assert not mytree2.eq_structure(mytree)
 
+        # The previous asserts return false because the length of the tree is different
+        # Here it has to actually traverse the tree.
+        mytree_3 = nbtree.tree_simple()
+        mytree_3.name = "NOT a"
+        # mytree_3.pretty_print()
+        assert not mytree_3.eq_structure(mytree)
+
     def test_math(self):
         mytree = nbtree.tree_simple()
         mytree.counter = 4
@@ -962,6 +970,43 @@ class TestNBNode(TestCase):
         with self.assertRaises(ZeroDivisionError):
             mytree / mytree
         mytree.pretty_print()
+
+    def test_math_2_eq(self):
+        mytree = nbtree.tree_simple()
+        mytree.counter = 5
+        assert (mytree // 2).counter == 2
+        assert (mytree / 2).counter == 2.5
+        assert (mytree + 2).counter == 7
+
+        mytree.children[0].counter = 2
+        mytree.children[1].counter = 1
+        mytree.children[2].counter = 2
+        mytree.children[1].children[0].counter = 1
+        # mytree.pretty_print()
+        mytree.pretty_print("__long__")
+        # # mytree2 = nbtree.tree_simple()
+        # # mytree2.pretty_print()
+        a = mytree / mytree
+        assert a.counter == 1
+        assert (mytree // 2).counter == 2
+        assert (mytree % 2).counter == 1
+        assert (mytree / 2).counter == 2.5
+        assert (mytree + 2).counter == 7
+
+        assert mytree == mytree
+        a = mytree + 1
+        b = mytree + 1
+        assert a == b
+        c = mytree + 2
+        assert a != c
+
+        # returns the quotient and remainder of 5/2
+        assert divmod(mytree, 2).counter == (2, 1)
+        new_tree = mytree << 3
+        assert new_tree == mytree * (2**3)
+        new_tree.both_iterator()
+        for node in anytree.PreOrderIter(new_tree):
+            assert node.counter == 0
 
     def test_sum_inplace(self):
         mytree = nbtree.tree_simple()
@@ -1165,7 +1210,6 @@ class TestNBNode(TestCase):
         assert mytree.get_name_full() == "/a"
         assert mytree.children[1].children[0].get_name_full() == "/a/a1/a1a"
 
-
     def test_copy_structure(self):
         import pandas as pd
 
@@ -1187,14 +1231,84 @@ class TestNBNode(TestCase):
         for node in anytree.PreOrderIter(new_tree):
             assert node.counter == 0
 
-
     def test_export_counts(self):
+        import re
+        import pandas as pd
 
-        counts_allnodes = celltree_decision.export_counts()
-        counts_allnodes.to_csv("celltree_intraassay_predicted_allnodes.csv")
+        cellmat = pd.read_csv(
+            os.path.join(
+                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
+            )
+        )
+        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
+        celltree_trunk = nbtree.tree_complete_aligned_trunk()
+        a = celltree_trunk.predict(cellmat)
 
-        counts_leafnodes = celltree_decision.export_counts(only_leafnodes=True)
-        counts_leafnodes.to_csv("celltree_intraassay_predicted_leafnodes.csv")
+        with self.assertRaises(AttributeError):
+            # I did not set .data, therefore you cannot export counts
+            celltree_trunk.export_counts()
 
-        pass
-        
+        celltree_trunk.data = cellmat
+        with self.assertRaises(ValueError):
+            # Setting data is not enough, you also have to set the ids, otherwise
+            # node.data will be empty (node.data == root._data[ids, :])
+            celltree_trunk.export_counts()
+
+        celltree_trunk.id_preds(a)
+        counts_allnodes = celltree_trunk.export_counts()
+        counts_allnodes.to_csv("tests_output/celltree_trunk_allnodes.csv")
+
+        counts_leafnodes = celltree_trunk.export_counts(only_leafnodes=True)
+        counts_allnodes.to_csv("tests_output/celltree_trunk_leafnodes.csv")
+
+    def test_export_counts_with_sample_names(self):
+        import re
+        import pandas as pd
+
+        cellmat = pd.read_csv(
+            os.path.join(
+                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
+            )
+        )
+        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
+        celltree_trunk = nbtree.tree_complete_aligned_trunk()
+        a = celltree_trunk.predict(cellmat)
+        celltree_trunk.data = cellmat
+        celltree_trunk.id_preds(a)
+        # No "sample_name" column in cellmat, all cells are regarded as coming from
+        # the same sample
+        counts_allnodes = celltree_trunk.export_counts()
+
+        cellmat["sample_name"] = "sample1"
+        celltree_trunk.data = cellmat
+        celltree_trunk.id_preds(a)
+        counts_allnodes_withnames = celltree_trunk.export_counts()
+
+        assert type(counts_allnodes_withnames) == type(counts_allnodes)
+        assert type(counts_allnodes_withnames.iloc[0, :]) == type(
+            counts_allnodes.iloc[0, :]
+        )
+        assert (
+            counts_allnodes_withnames.iloc[0, :].dtype
+            == counts_allnodes.iloc[0, :].dtype
+        )
+        assert counts_allnodes_withnames.iloc[0, :].equals(counts_allnodes.iloc[0, :])
+
+        # Changing the first 100 cells to be from a different sample.
+        # Many cell population counts must change compared to if all cells were
+        # from the same sample
+        cellmat["sample_name"][0:100] = "sample2"
+        celltree_trunk.data = cellmat
+        celltree_trunk.id_preds(a)
+        counts_allnodes_twosamples = celltree_trunk.export_counts()
+        assert type(counts_allnodes_twosamples) == type(counts_allnodes)
+        assert type(counts_allnodes_twosamples.iloc[0, :]) == type(
+            counts_allnodes.iloc[0, :]
+        )
+        assert (
+            counts_allnodes_twosamples.iloc[0, :].dtype
+            == counts_allnodes.iloc[0, :].dtype
+        )
+        assert not counts_allnodes_twosamples.iloc[0, :].equals(
+            counts_allnodes.iloc[0, :]
+        )
