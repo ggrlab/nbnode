@@ -67,10 +67,14 @@ def tree_complex() -> NBNode:
             │       ├── other (counter:0, decision_name:CD4, decision_value:-1)
             │       └── Monocytes (counter:0, decision_name:CD4, decision_value:1)
             └── CD3+ (counter:0, decision_name:CD3, decision_value:1)
-                ├── DN (counter:0, decision_name:['CD4', 'CD8'], decision_value:[-1, -1])
-                ├── DP (counter:0, decision_name:['CD4', 'CD8'], decision_value:[1, 1])
-                ├── CD4-/CD8+ (counter:0, decision_name:['CD4', 'CD8'], decision_value:[-1, 1])
-                └── CD4+/CD8- (counter:0, decision_name:['CD4', 'CD8'], decision_value:[1, -1])
+                ├── DN (counter:0, decision_name:['CD4', 'CD8'],
+                        decision_value:[-1, -1])
+                ├── DP (counter:0, decision_name:['CD4', 'CD8'],
+                        decision_value:[1, 1])
+                ├── CD4-/CD8+ (counter:0, decision_name:['CD4', 'CD8'],
+                                decision_value:[-1, 1])
+                └── CD4+/CD8- (counter:0, decision_name:['CD4', 'CD8'],
+                                decision_value:[1, -1])
     """
     celltree = NBNode(
         "AllCells",
@@ -723,16 +727,26 @@ def tree_complete_aligned_trunk() -> NBNode:
             AllCells (counter:0, decision_name:None, decision_value:None)
             ├── DN (counter:0, decision_name:['CD4', 'CD8'], decision_value:[-1, -1])
             ├── DP (counter:0, decision_name:['CD4', 'CD8'], decision_value:[1, 1])
-            ├── CD4-/CD8+ (counter:0, decision_name:['CD4', 'CD8'], decision_value:[-1, 1])
-            │   ├── naive (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[1, 1])
-            │   ├── Tcm (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[1, -1])
-            │   ├── Temra (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[-1, 1])
-            │   └── Tem (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[-1, -1])
-            └── CD4+/CD8- (counter:0, decision_name:['CD4', 'CD8'], decision_value:[1, -1])
-                ├── naive (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[1, 1])
-                ├── Tcm (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[1, -1])
-                ├── Temra (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[-1, 1])
-                └── Tem (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[-1, -1])
+            ├── CD4-/CD8+ (counter:0, decision_name:['CD4', 'CD8'],
+                            decision_value:[-1, 1])
+            │   ├── naive (counter:0, decision_name:['CCR7', 'CD45RA'],
+                            decision_value:[1, 1])
+            │   ├── Tcm (counter:0, decision_name:['CCR7', 'CD45RA'],
+                            decision_value:[1, -1])
+            │   ├── Temra (counter:0, decision_name:['CCR7', 'CD45RA'],
+                            decision_value:[-1, 1])
+            │   └── Tem (counter:0, decision_name:['CCR7', 'CD45RA'],
+                            decision_value:[-1, -1])
+            └── CD4+/CD8- (counter:0, decision_name:['CD4', 'CD8'],
+                            decision_value:[1, -1])
+                ├── naive (counter:0, decision_name:['CCR7', 'CD45RA'],
+                        decision_value:[1, 1])
+                ├── Tcm (counter:0, decision_name:['CCR7', 'CD45RA'],
+                        decision_value:[1, -1])
+                ├── Temra (counter:0, decision_name:['CCR7', 'CD45RA'],
+                        decision_value:[-1, 1])
+                └── Tem (counter:0, decision_name:['CCR7', 'CD45RA'],
+                        decision_value:[-1, -1])
 
     """
     # Betreff:	gates
