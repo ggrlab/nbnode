@@ -81,7 +81,6 @@ def test_per_node_data_fun():
 
 
 def test_per_node_data_fun_covariance_matrix():
-    import math
     import re
 
     import nbnode_pyscaffold.nbnode_trees as nbtree
