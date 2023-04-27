@@ -9,6 +9,7 @@ def test_shifted_colormap():
         max_val=10,
         name="NoName",
     )
+    print(new_cmap)
 
 
 def test_linear_shifted_colormap():

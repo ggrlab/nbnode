@@ -160,6 +160,7 @@ class TestNBNode(TestCase):
             single_prediction = mytree.predict(
                 values=[0, "adfg", 124, 10], names=["m1", "m2", "m3", "m4"]
             )
+            print(single_prediction)
 
     def test_tree_predict_cutoff(self):
         mytree = nbtree.tree_simple_cutoff()
@@ -1302,7 +1303,7 @@ class TestNBNode(TestCase):
         counts_allnodes.to_csv("tests_output/celltree_trunk_allnodes.csv")
 
         counts_leafnodes = celltree_trunk.export_counts(only_leafnodes=True)
-        counts_allnodes.to_csv("tests_output/celltree_trunk_leafnodes.csv")
+        counts_leafnodes.to_csv("tests_output/celltree_trunk_leafnodes.csv")
 
     def test_export_counts_with_sample_names(self):
         import re
@@ -1328,10 +1329,10 @@ class TestNBNode(TestCase):
         celltree_trunk.id_preds(a)
         counts_allnodes_withnames = celltree_trunk.export_counts()
 
-        assert type(counts_allnodes_withnames) == type(counts_allnodes)
-        assert type(counts_allnodes_withnames.iloc[0, :]) == type(
-            counts_allnodes.iloc[0, :]
-        )
+        assert isinstance(counts_allnodes_withnames, pd.DataFrame)
+        assert isinstance(counts_allnodes, pd.DataFrame)
+        assert isinstance(counts_allnodes_withnames.iloc[0, :], pd.Series)
+        assert isinstance(counts_allnodes.iloc[0, :], pd.Series)
         assert (
             counts_allnodes_withnames.iloc[0, :].dtype
             == counts_allnodes.iloc[0, :].dtype
@@ -1345,10 +1346,11 @@ class TestNBNode(TestCase):
         celltree_trunk.data = cellmat
         celltree_trunk.id_preds(a)
         counts_allnodes_twosamples = celltree_trunk.export_counts()
-        assert type(counts_allnodes_twosamples) == type(counts_allnodes)
-        assert type(counts_allnodes_twosamples.iloc[0, :]) == type(
-            counts_allnodes.iloc[0, :]
-        )
+
+        assert isinstance(counts_allnodes_withnames, pd.DataFrame)
+        assert isinstance(counts_allnodes, pd.DataFrame)
+        assert isinstance(counts_allnodes_withnames.iloc[0, :], pd.Series)
+        assert isinstance(counts_allnodes.iloc[0, :], pd.Series)
         assert (
             counts_allnodes_twosamples.iloc[0, :].dtype
             == counts_allnodes.iloc[0, :].dtype
