@@ -8,11 +8,14 @@ def test_flatten():
     assert [1, 2, 3, "4", {5: 5}] == flatten([[1, [[2]], [[[3]]]], [["4"], {5: 5}]])
     assert flatten([[1, 2, 3, 4, 5, 6, 7, 8]]) == [1, 2, 3, 4, 5, 6, 7, 8]
 
+
 def test_plot_save_unified_dot():
     import os
-    import nbnode_pyscaffold.nbnode_trees as nbtree
+
     import anytree.exporter as a_exp
     import pydotplus
+
+    import nbnode_pyscaffold.nbnode_trees as nbtree
     from nbnode_pyscaffold.plot.utils import plot_save_unified
 
     simpletree = nbtree.tree_simple()
@@ -29,13 +32,14 @@ def test_plot_save_unified_dot():
     )
     assert os.path.exists("tests_output/pydotplus_graph_nocolor_NOTpdf.pdf")
 
-    plot_save_unified(
-        any_plot=graph, file="tests_output/pydotplus_graph_nocolor.pdf"
-    )
+    plot_save_unified(any_plot=graph, file="tests_output/pydotplus_graph_nocolor.pdf")
+
 
 def test_plot_save_unified_matplotlib():
     import os
+
     import matplotlib.pyplot as plt
+
     from nbnode_pyscaffold.plot.utils import plot_save_unified
 
     plt.plot([1, 2, 3, 4])

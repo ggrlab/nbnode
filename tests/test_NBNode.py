@@ -70,16 +70,16 @@ class TestNBNode(TestCase):
     def test_getitem(self):
         mytree = nbtree.tree_simple()
         # The node named "123" does not exist
-        assert mytree["2"] is None 
+        assert mytree["2"] is None
         with self.assertRaises(ValueError):
             # You cannot access nodes by numbers (special case: 0)
             mytree[2]
-        # This happens if printing predicted nodes (which are a pandas.DataFrame) 
+        # This happens if printing predicted nodes (which are a pandas.DataFrame)
         assert mytree == mytree[0]
         assert mytree == mytree[mytree.get_name_full()]
         assert mytree["a"] is None
         assert mytree == mytree["/a"]
-        
+
     def test_tree_simple_predict_inputs(self):
         mytree = nbtree.tree_simple()
 
@@ -1020,14 +1020,14 @@ class TestNBNode(TestCase):
         assert a != nbtree.tree_complex()
 
         mytree.counter = 5.0
-        assert (mytree / 2.).counter == 2.5
+        assert (mytree / 2.0).counter == 2.5
 
         # returns the quotient and remainder of 5/2
-        assert divmod(mytree, 2.).counter == (2, 1)
+        assert divmod(mytree, 2.0).counter == (2, 1)
         with self.assertRaises(AttributeError):
             # AttributeError: type object 'float' has no attribute '__lshift__'
             # Some of the tree elements are floats, so this is not possible
-            new_tree = mytree << 3  
+            new_tree = mytree << 3
         mytree_int = mytree.astype_math_node_attribute(int, inplace=False)
         assert mytree_int == mytree
         assert isinstance(mytree_int.counter, int)
@@ -1037,11 +1037,10 @@ class TestNBNode(TestCase):
         assert isinstance(mytree.counter, int)
         assert mytree_int == mytree
 
-
-        new_tree = mytree << 3  
+        new_tree = mytree << 3
         assert new_tree == mytree * (2**3)
         new_tree = mytree >> 3
-        # The following must be unequal after the shift works on integers, therefore 
+        # The following must be unequal after the shift works on integers, therefore
         # / (2**3) reflects (here) the integer division not the float division
         # There is no python shift on floats (https://bugs.python.org/issue11967)
         assert new_tree != mytree / (2**3)
@@ -1276,6 +1275,7 @@ class TestNBNode(TestCase):
 
     def test_export_counts(self):
         import re
+
         import pandas as pd
 
         cellmat = pd.read_csv(
@@ -1306,6 +1306,7 @@ class TestNBNode(TestCase):
 
     def test_export_counts_with_sample_names(self):
         import re
+
         import pandas as pd
 
         cellmat = pd.read_csv(

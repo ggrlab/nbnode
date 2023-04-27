@@ -1,5 +1,6 @@
 def test_shifted_colormap():
     import matplotlib
+
     from nbnode_pyscaffold.plot.shifted_colormap import shifted_colormap
 
     new_cmap = shifted_colormap(
@@ -12,6 +13,7 @@ def test_shifted_colormap():
 
 def test_linear_shifted_colormap():
     import matplotlib
+
     from nbnode_pyscaffold.plot.utils import LinearShiftedColormap
 
     LinearShiftedColormap()

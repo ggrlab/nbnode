@@ -8,6 +8,7 @@
 """
 # https://stackoverflow.com/questions/17801300/how-to-run-a-method-before-all-tests-in-all-classes
 
+
 def pytest_configure(config):
     """
     Allows plugins and conftest files to perform initial configuration.
@@ -22,15 +23,16 @@ def pytest_sessionstart(session):
     before performing collection and entering the run test loop.
     """
     import shutil
+
     shutil.rmtree("tests_output", ignore_errors=True)
-    
+
 
 def pytest_sessionfinish(session, exitstatus):
     """
     Called after whole test run finished, right before
     returning the exit status to the system.
     """
-    
+
 
 def pytest_unconfigure(config):
     """

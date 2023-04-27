@@ -929,33 +929,33 @@ class NBNode(anytree.Node):
     ) -> "NBNode":
         """Apply a function to the "same" node of two NBNodes
 
-        Traverses both trees simultaneously and applies 
+        Traverses both trees simultaneously and applies
         ``fun(node_1.math_node_attribute, node_2.math_node_attribute)``.
 
         Args:
             other (NBNode): The other NBNode
-            fun (_type_, optional): 
-                The function to apply to the math_node_attribute of all nodes from 
-                both NBNodes. 
-                
+            fun (_type_, optional):
+                The function to apply to the math_node_attribute of all nodes from
+                both NBNodes.
+
                 Defaults to ``lambda x, y: x + y``.
-            strict (bool, optional): 
+            strict (bool, optional):
                 See `NBNode.both_iterator()`.
                 Defaults to True.
-            inplace (bool, optional): 
+            inplace (bool, optional):
                 If True, the NBNode is modified inplace.
                 Defaults to None.
-            type_force_fun_names (tuple, optional): 
+            type_force_fun_names (tuple, optional):
                 Some functions need to be forced to be applied to the same type of the
                 math_node_attribute. Use with care!
                 Better, use ``NBNode.astype_math_node_attribute()`` before.
-                
+
                 Defaults to ( "__truediv__", "__divmod__", ).
 
         Returns:
-            NBNode: 
+            NBNode:
                 A new NBNode with the result of the function applied to the
-                math_node_attribute of both NBNodes. 
+                math_node_attribute of both NBNodes.
                 The result is directly saved in the math_node_attribute of the new
                 NBNode.
         """
