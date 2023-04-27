@@ -6,9 +6,9 @@ import pandas as pd
 
 
 def frame_cov(dt_frame: datatable.Frame) -> pd.DataFrame:
-    """
-    Compute the covariance matrix of a datatable frame from all columns similar to
-    pd.DataFrame.cov().
+    """Compute the covariance matrix of a datatable frame from all columns.
+
+    Similar to pd.DataFrame.cov().
 
     Args:
         dt_frame (datatable.Frame):
@@ -17,9 +17,7 @@ def frame_cov(dt_frame: datatable.Frame) -> pd.DataFrame:
     Returns:
         _type_:
             pd.DataFrame of the covariance matrix
-
     """
-
     f_cols = dt_frame.export_names()
     f_cols_names = dt_frame.names
     cov_array = np.zeros((len(f_cols), len(f_cols)))
@@ -41,20 +39,11 @@ def per_node_data_fun(
     *fun_args,
     **fun_kwargs
 ) -> Union[pd.DataFrame, Any]:
-    """_summary_
+    """per_node_data_fun.
 
-    Args:
-        x (pd.DataFrame): _description_
-        include_features (Union[List[Union[str, int]], slice]): _description_
-        fun_name (str): _description_
-
-    Returns:
-        _type_: _description_
-    """
-    """
-    To be used in NBnode.node.apply() to apply a function to the data of each node.
-    Similar to R's apply(x, 1, fun) where x is a data.frame and fun is a function.
-
+    To be used in NBnode.node.apply() to apply a function to the data of
+    each node. Similar to R's apply(x, 1, fun) where x is a data.frame and fun
+    is a function.
 
     Args:
         x (pd.DataFrame):
@@ -76,7 +65,8 @@ def per_node_data_fun(
         pd.DataFrame:
             Usually, but not necessarily a pd.DataFrame. Depends on the function.
 
-    Examples:
+    Examples::
+    
         node.apply(
             lambda x: per_node_data_fun(
                 x=x, include_features=include_features, fun_name="mean"
