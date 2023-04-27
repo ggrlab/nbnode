@@ -2,7 +2,7 @@ from unittest import TestCase
 import shutil
 import os
 
-from nbnode.testutil.datagen.simulate_odds_data import simulate_odds_data
+from nbnode_pyscaffold.testutil.datagen.simulate_odds_data import simulate_odds_data
 
 
 class Test(TestCase):

@@ -5,7 +5,7 @@ import torch
 from torch.distributions.multivariate_normal import MultivariateNormal
 import matplotlib.pyplot as plt
 # from ccc.plot.plotting import plot_samples
-from nbnode.simulation.MixtureDistribution import (
+from nbnode_pyscaffold.simulation.MixtureDistribution import (
     vary_single_percentage,
     PercentageMixtureDistribution,
 )
