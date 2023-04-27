@@ -55,7 +55,25 @@ class NBNode(anytree.Node):
         self.math_inplace = False
         self._long_print_attributes = ["counter", "decision_name", "decision_value"]
 
-    def prediction_str(self, nodename: str, split: str = "/"):
+    def prediction_str(self, nodename: str, split: str = "/") -> "NBNode":
+        """Return the node that is the prediction for the given nodename.
+
+        Args:
+            nodename (str):
+                The name of the node to predict. Should be something matching to any
+                ``node.get_name_full()`. You have to start with "/" as the root node.
+            split (str, optional):
+                The string to split the single node names.
+                Defaults to "/". E.g. "/child1/child2" corresponds to the node in the
+                hierarchy
+
+                root
+                |---child1
+                |   |---child2
+
+        Returns:
+            NBNode: The node for the given nodename.
+        """
         if isinstance(nodename, str):
             split_names = nodename.split(split)
             # if first element is "", then because that was the root.
@@ -242,6 +260,7 @@ class NBNode(anytree.Node):
             raise ValueError("I do not know how to fit the given inputdata.")
 
     def reset_counts(self):
+        """Set all node.counters to 0."""
         self.counter = 0
         for child in self.children:
             if child is not None:
@@ -285,6 +304,7 @@ class NBNode(anytree.Node):
                     node_x.counter += node_count
 
     def reset_ids(self):
+        """Set all node.ids to []."""
         self.ids = []
 
         for child in self.children:
@@ -313,6 +333,20 @@ class NBNode(anytree.Node):
 
     @property
     def data(self) -> pd.DataFrame:
+        """Data of a node for its ids.
+
+        root._data contains all data. However, each node only "holds" a subset of the
+        data. To not have to copy the data for each node, we just subset the data
+        for each node by the node's ids.
+
+        Usually you would set the ids by `celltree.id_preds(predicted_nodes)`.
+        You can also set them manually, but you have to be certain that they match to
+        the order of the data!
+
+        Returns:
+            pd.DataFrame:
+                A subset of the root._data corresponding to the node's ids.
+        """
         if self.ids == []:
             warnings.warn(
                 "self.ids was an empty list, subset an empty dataframe. Did you call "
@@ -364,7 +398,23 @@ class NBNode(anytree.Node):
         if len(applied_fun_dict) > 0:
             return applied_fun_dict
 
-    def export_dot(self, unique_dot_exporter_kwargs: Dict = "default"):
+    def export_dot(self, unique_dot_exporter_kwargs: Dict = "default") -> str:
+        """Convenience wrapper around anytree.UniqueDotExporter
+
+        Args:
+            unique_dot_exporter_kwargs (Dict, optional):
+                Arguments to anytree.UniqueDotExporter.
+                Defaults to "default":
+                    unique_dot_exporter_kwargs = {
+                        "options": ['node [shape=box, style="filled", color="black"];'],
+                        "nodeattrfunc": lambda node: 'label="{}", fillcolor="white"'.format(
+                            node.name
+                        ),
+                    }
+
+        Returns:
+            str: A string with the exported dot graph in dot format
+        """
         if unique_dot_exporter_kwargs == "default":
             unique_dot_exporter_kwargs = {
                 "options": ['node [shape=box, style="filled", color="black"];'],
@@ -377,6 +427,10 @@ class NBNode(anytree.Node):
         return dotdata_str
 
     def set_uniquedotexporter_ids(self):
+        """
+        UniqueDotExporter needs unique ids for each node.
+        I set them to the hex(id(node)) to make sure they are unique.
+        """
         for node in anytree.iterators.PreOrderIter(self):
             node.id_unique_dot_exporter = hex(
                 id(node)
@@ -393,6 +447,58 @@ class NBNode(anytree.Node):
         fillcolor_missing_val: str = "#91FF9D",
         node_text_attributes: Union[List[str], Dict[str, str]] = "default",
     ) -> pydotplus.Dot:
+        """Make a pydotplus.Dot from a NBNode tree.
+
+        Args:
+            tree (NBNode):
+                The tree which should be plotted
+            exported_dot_graph (str, optional):
+                You can give your custom dot graph.
+                Defaults to None, then it is exported internally by ``tree.export_dot()``.
+            title (str, optional):
+                Title for the plot. Creates an additional node holding the title.
+                Defaults to None.
+            fillcolor_node_attribute (str, optional):
+                The (str) name of each node containing the numeric value how the node
+                should be colored.
+                Defaults to "height".
+            custom_min_max_dict (Dict[str, float], optional):
+                You can give a custom dict with the min and max values for the
+                fillcolor_node_attribute in the colorbar range.
+                Takes precedence over minmax.
+
+                Defaults to None, therefore is created by the minimum and maximum values
+                from the fillcolor_node_attribute.
+            minmax (str, optional):
+                If custom_min_max_dict is None, the node filling colors reach their
+                maximum/minimum color at the extremes of fillcolor_node_attribute.
+                "equal":
+                    The colorbar is centered around 0, so the colorbar reaches from
+                    -max(abs(minimum), abs(maximum))
+                    to
+                    +max(abs(minimum), abs(maximum)).
+                else:
+                    The colorbar reaches from minimum to maximum.
+                    Not necessarily symmetric.
+
+                Defaults to "equal".
+            fillcolor_missing_val (str, optional):
+                Color for missing values.
+
+                Defaults to "#91FF9D".
+            node_text_attributes (Union[List[str], Dict[str, str]], optional):
+                List or dict of attributes which should be displayed in the node.
+
+                 - If "default", the node name is displayed.
+                 - If a list, the list elements are used as keys for the node attributes.
+                 - If a dict, the dict values are used as keys for the node attributes
+                 and the dict values are used as format strings for the node attributes.
+
+                Defaults to "default".
+
+        Returns:
+            pydotplus.Dot: A graphviz Dot element, therefore a plot.
+        """
         if node_text_attributes == "default":
             node_text_attributes = {"name": "{}"}
 
@@ -607,6 +713,7 @@ class NBNode(anytree.Node):
 
     @staticmethod
     def edge_label_fun(decision_names, decision_values):
+        """Function to label the edges of the tree"""
         if not isinstance(decision_names, list):
             decision_names = [decision_names]
             decision_values = [decision_values]
@@ -635,13 +742,33 @@ class NBNode(anytree.Node):
             yield ((node_self, node_other))
 
     def copy_structure(self) -> "NBNode":
+        """Copy only the structure of the tree
+
+        This does not copy the data, the ids or the counts.
+        It copies additionally set attributes.
+
+        Returns:
+            NBNode: _description_
+        """
         new_node = copy.deepcopy(self)
         new_node.reset_counts()
         new_node.reset_ids()
         new_node.data = None
         return new_node
 
-    def eq_structure(self, other: "NBNode"):
+    def eq_structure(self, other: "NBNode") -> bool:
+        """
+        Check if the structure of two trees is equal.
+
+        It only checks node.name, node.decision_name and node.decision_value.
+        It disregards the data, ids, counts or any other attribute.
+
+        Args:
+            other (NBNode): The other node to compare to
+
+        Returns:
+            bool: True if equal
+        """
         if len(self) != len(other):
             return False
 
@@ -656,7 +783,19 @@ class NBNode(anytree.Node):
                 return False
         return True
 
-    def astype_math_node_attribute(self, dtype, inplace=True):
+    def astype_math_node_attribute(self, dtype, inplace=True) -> "NBNode":
+        """Replaces all node.math_node_attribute with the given dtype
+
+
+        Args:
+            dtype (_type_): The target type
+            inplace (bool, optional):
+                Replace inplace or not?.
+                Defaults to True.
+
+        Returns:
+            NBNode: Returns self if inplace=True, else a copy of self
+        """
         if not inplace:
             root = copy.deepcopy(self)
         else:
@@ -675,7 +814,44 @@ class NBNode(anytree.Node):
         add_source_name: str = None,
         add_source_self: str = "self",
         add_source_other: str = "other",
+        inplace: bool = True,
     ) -> "NBNode":
+        """Join two NBNodes
+
+        The NBNodes must match in structure.
+
+            1. The nodes are added --> math_node_attribute of both NBNodes
+            2. The data of other is added to the data of self
+            3. The ids of other are added to the ids of self according to the new _data
+
+        Args:
+            other (NBNode): The other NBNode to join
+            add_source_name (str, optional):
+                If True, when joining the data an additional column is created
+                with the name `add_source_name` which then contains either
+                ``add_source_self`` or ``add_source_other`` depending on the source
+                of the data.
+
+                Defaults to None, so the column is not created.
+            add_source_self (str, optional):
+                The value to use for the column ``add_source_name`` when the data
+                is joined.
+
+                Defaults to "self".
+            add_source_other (str, optional):
+                The value to use for the column ``add_source_name`` when the data
+                is joined
+
+                Defaults to "other".
+            inplace (bool, optional):
+                If True, the NBNode is modified inplace.
+        Returns:
+            NBNode: A single NBNode with the data of both NBNodes
+        """
+        if not inplace:
+            self = copy.deepcopy(self)
+
+        # Add math_node_attribute of both NBNodes
         self = self + other
 
         self_total_predicted_nodes_n = len(self.root.ids)
@@ -707,6 +883,20 @@ class NBNode(anytree.Node):
     def pretty_print(
         self, print_attributes: List[str] = "__default__", round_ndigits: int = None
     ):
+        """
+        Print the tree in a pretty way
+
+        Args:
+            print_attributes (List[str], optional):
+                The attributes of each NBnode which should be printed.
+                Defaults to "__default__", then only the `counter` attribute is shown.
+
+            round_ndigits (int, optional):
+                If not None, the values of the attributes are rounded to the given number
+                of digits.
+
+                Defaults to None.
+        """
         if print_attributes == "__default__":
             print_attributes = ["counter"]
         if print_attributes == "__long__":
@@ -728,7 +918,7 @@ class NBNode(anytree.Node):
 
     def __both_nodeattr_fun(
         self,
-        other,
+        other: "NBNode",
         fun=lambda x, y: x + y,
         strict: bool = True,
         inplace: bool = None,
@@ -737,6 +927,38 @@ class NBNode(anytree.Node):
             "__divmod__",
         ),
     ) -> "NBNode":
+        """Apply a function to the "same" node of two NBNodes
+
+        Traverses both trees simultaneously and applies 
+        ``fun(node_1.math_node_attribute, node_2.math_node_attribute)``.
+
+        Args:
+            other (NBNode): The other NBNode
+            fun (_type_, optional): 
+                The function to apply to the math_node_attribute of all nodes from 
+                both NBNodes. 
+                
+                Defaults to ``lambda x, y: x + y``.
+            strict (bool, optional): 
+                See `NBNode.both_iterator()`.
+                Defaults to True.
+            inplace (bool, optional): 
+                If True, the NBNode is modified inplace.
+                Defaults to None.
+            type_force_fun_names (tuple, optional): 
+                Some functions need to be forced to be applied to the same type of the
+                math_node_attribute. Use with care!
+                Better, use ``NBNode.astype_math_node_attribute()`` before.
+                
+                Defaults to ( "__truediv__", "__divmod__", ).
+
+        Returns:
+            NBNode: 
+                A new NBNode with the result of the function applied to the
+                math_node_attribute of both NBNodes. 
+                The result is directly saved in the math_node_attribute of the new
+                NBNode.
+        """
         self_tmp = self
         if inplace is None:
             inplace = self.math_inplace
@@ -793,7 +1015,7 @@ class NBNode(anytree.Node):
 
     def __hash__(self):
         return hash(self.__repr__())
-    
+
     def __add__(self, other):
         return self.__both_nodeattr_fun(other=other, fun=inspect.stack()[0][3])
 
@@ -918,7 +1140,13 @@ class NBNode(anytree.Node):
         ]
         return anytree.node.util._repr(self, args=args, nameblacklist=exclude_attrs)
 
-    def get_name_full(self):
+    def get_name_full(self) -> str:
+        """
+        Get the full name of the node (including the root node "/")
+
+        Returns:
+            str: Full name of the node.
+        """
         full_name = ""
         current_node = self
         while not current_node.is_root:
