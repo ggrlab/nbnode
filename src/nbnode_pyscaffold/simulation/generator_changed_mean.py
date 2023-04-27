@@ -97,14 +97,16 @@ class GenerateChangedMean:
                 save_dir=save_dir,
                 sample_name=f"sample_{sample_i}",
                 only_return_sampled_cell_numbers=_debugging_only_return_sampled_cell_numbers,
-                save_changed_parameters = False
+                save_changed_parameters=False,
             )
             if all_true_popcounts is None:
                 all_true_popcounts = true_popcounts
                 all_changed_parameters = changed_parameters
                 all_generated_samples = generated_samples
             else:
-                all_true_popcounts = pd.concat([all_true_popcounts, true_popcounts], axis=1)
+                all_true_popcounts = pd.concat(
+                    [all_true_popcounts, true_popcounts], axis=1
+                )
                 all_changed_parameters += changed_parameters
                 all_generated_samples += generated_samples
         if save_dir is not None:
@@ -112,7 +114,12 @@ class GenerateChangedMean:
         if verbose:
             print("")
             print(all_true_popcounts.apply(lambda x: x.mean(), axis=1) / n_cells)
-        return all_true_popcounts, all_changed_parameters, all_generated_samples, all_targets
+        return (
+            all_true_popcounts,
+            all_changed_parameters,
+            all_generated_samples,
+            all_targets,
+        )
 
     def generate(self):
         return self._generate(

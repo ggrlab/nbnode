@@ -1,5 +1,6 @@
-import torch
 from typing import List, Union
+
+import torch
 
 
 def vary_single_percentage(
