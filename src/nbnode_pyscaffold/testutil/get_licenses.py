@@ -1,5 +1,6 @@
 # # from
-# # https://stackoverflow.com/questions/19086030/can-pip-or-setuptools-distribute-etc-list-the-license-used-by-each-install
+# # https://stackoverflow.com/questions/19086030/
+# # can-pip-or-setuptools-distribute-etc-list-the-license-used-by-each-install
 
 # import pkg_resources
 # import prettytable
