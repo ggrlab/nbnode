@@ -15,7 +15,7 @@ def merge_leaf_nodes(intermediate_node: str, leaf_nodes_df: pd.DataFrame) -> flo
 
             For some values it is useful to have the sum of all leaf nodes, especially
             for:
-            
+
                 - Dirichlet concentration parameters
                 - Means of cell proportions
                 - Numbers of cells
