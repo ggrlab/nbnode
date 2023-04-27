@@ -669,6 +669,19 @@ class TestNBNode(TestCase):
             any_plot=graph, file="tests_output/graph_from_dot_colored_title.pdf"
         )
 
+        graph = mytree.graph_from_dot(mytree, custom_min_max_dict={"min": .5, "max": 3})
+        plot_save_unified(
+            any_plot=graph, file="tests_output/graph_from_dot_colored_custom_minmax.pdf"
+        )
+        graph = mytree.graph_from_dot(mytree, minmax="equal")  # default
+        plot_save_unified(
+            any_plot=graph, file="tests_output/graph_from_dot_colored_custom_equal.pdf"
+        )
+        graph = mytree.graph_from_dot(mytree, minmax="not_equal")  # custom
+        plot_save_unified(
+            any_plot=graph, file="tests_output/graph_from_dot_colored_custom_NOTequal.pdf"
+        )
+
     def test_graph_from_dot_summary_color(self):
         import numpy as np
         import pandas as pd
