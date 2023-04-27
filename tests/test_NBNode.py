@@ -168,6 +168,21 @@ class TestNBNode(TestCase):
         )
         assert [x.name for x in single_prediction.iter_path_reverse()] == ["a3", "a"]
 
+    def test_decision_cutoff(self):
+        import re
+
+        import pandas as pd
+
+        cellmat = pd.read_csv(
+            os.path.join(
+                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
+            )
+        )
+        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
+        celltree = nbtree.tree_complete_aligned()
+        a = celltree.predict(cellmat)
+        print(a)
+        
     def test_tree_simple_predict_str(self):
         mytree = nbtree.tree_simple()
         mytree.pretty_print()
@@ -1150,20 +1165,6 @@ class TestNBNode(TestCase):
         assert mytree.get_name_full() == "/a"
         assert mytree.children[1].children[0].get_name_full() == "/a/a1/a1a"
 
-    def test_decision_cutoff(self):
-        import re
-
-        import pandas as pd
-
-        cellmat = pd.read_csv(
-            os.path.join(
-                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
-            )
-        )
-        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
-        celltree = nbtree.tree_complete_aligned()
-        a = celltree.predict(cellmat)
-        print(a)
 
     def test_copy_structure(self):
         import pandas as pd
@@ -1185,3 +1186,15 @@ class TestNBNode(TestCase):
         assert new_tree.data.shape == (0, 0)
         for node in anytree.PreOrderIter(new_tree):
             assert node.counter == 0
+
+
+    def test_export_counts(self):
+
+        counts_allnodes = celltree_decision.export_counts()
+        counts_allnodes.to_csv("celltree_intraassay_predicted_allnodes.csv")
+
+        counts_leafnodes = celltree_decision.export_counts(only_leafnodes=True)
+        counts_leafnodes.to_csv("celltree_intraassay_predicted_leafnodes.csv")
+
+        pass
+        
