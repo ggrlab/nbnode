@@ -407,7 +407,8 @@ class NBNode(anytree.Node):
                 Defaults to "default":
                     unique_dot_exporter_kwargs = {
                         "options": ['node [shape=box, style="filled", color="black"];'],
-                        "nodeattrfunc": lambda node: 'label="{}", fillcolor="white"'.format(
+                        "nodeattrfunc":
+                            lambda node: 'label="{}", fillcolor="white"'.format(
                             node.name
                         ),
                     }
@@ -454,7 +455,8 @@ class NBNode(anytree.Node):
                 The tree which should be plotted
             exported_dot_graph (str, optional):
                 You can give your custom dot graph.
-                Defaults to None, then it is exported internally by ``tree.export_dot()``.
+                Defaults to None, then it is exported internally by
+                ``tree.export_dot()``.
             title (str, optional):
                 Title for the plot. Creates an additional node holding the title.
                 Defaults to None.
@@ -490,7 +492,8 @@ class NBNode(anytree.Node):
                 List or dict of attributes which should be displayed in the node.
 
                  - If "default", the node name is displayed.
-                 - If a list, the list elements are used as keys for the node attributes.
+                 - If a list, the list elements are used as keys for the node
+                 attributes.
                  - If a dict, the dict values are used as keys for the node attributes
                  and the dict values are used as format strings for the node attributes.
 
@@ -892,8 +895,8 @@ class NBNode(anytree.Node):
                 Defaults to "__default__", then only the `counter` attribute is shown.
 
             round_ndigits (int, optional):
-                If not None, the values of the attributes are rounded to the given number
-                of digits.
+                If not None, the values of the attributes are rounded to the given
+                number of digits.
 
                 Defaults to None.
         """
