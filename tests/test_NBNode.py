@@ -67,6 +67,19 @@ class TestNBNode(TestCase):
         )
         assert [x.name for x in single_prediction.iter_path_reverse()] == ["a0", "a"]
 
+    def test_getitem(self):
+        mytree = nbtree.tree_simple()
+        # The node named "123" does not exist
+        assert mytree["2"] is None 
+        with self.assertRaises(ValueError):
+            # You cannot access nodes by numbers (special case: 0)
+            mytree[2]
+        # This happens if printing predicted nodes (which are a pandas.DataFrame) 
+        assert mytree == mytree[0]
+        assert mytree == mytree[mytree.get_name_full()]
+        assert mytree["a"] is None
+        assert mytree == mytree["/a"]
+        
     def test_tree_simple_predict_inputs(self):
         mytree = nbtree.tree_simple()
 
@@ -496,6 +509,9 @@ class TestNBNode(TestCase):
         celltree.count(yternary_preds, reset_counts=False)
         assert celltree.counter == 1998
         celltree.count(yternary_preds, reset_counts=True)
+        print(celltree.counter)
+        assert celltree.counter == 999
+        celltree.count(yternary_preds, reset_counts=True, use_ids=False)
         print(celltree.counter)
         assert celltree.counter == 999
 
@@ -971,7 +987,7 @@ class TestNBNode(TestCase):
             mytree / mytree
         mytree.pretty_print()
 
-    def test_math_2_eq(self):
+    def test_eq_math_2(self):
         mytree = nbtree.tree_simple()
         mytree.counter = 5
         assert (mytree // 2).counter == 2
@@ -999,14 +1015,41 @@ class TestNBNode(TestCase):
         assert a == b
         c = mytree + 2
         assert a != c
+        assert a != "123"  # not an NBNode
+        assert a != nbtree.tree_simple_cutoff()
+        assert a != nbtree.tree_complex()
+
+        mytree.counter = 5.0
+        assert (mytree / 2.).counter == 2.5
 
         # returns the quotient and remainder of 5/2
-        assert divmod(mytree, 2).counter == (2, 1)
-        new_tree = mytree << 3
+        assert divmod(mytree, 2.).counter == (2, 1)
+        with self.assertRaises(AttributeError):
+            # AttributeError: type object 'float' has no attribute '__lshift__'
+            # Some of the tree elements are floats, so this is not possible
+            new_tree = mytree << 3  
+        mytree_int = mytree.astype_math_node_attribute(int, inplace=False)
+        assert mytree_int == mytree
+        assert isinstance(mytree_int.counter, int)
+        assert isinstance(mytree.counter, float)
+
+        mytree.astype_math_node_attribute(int, inplace=True)
+        assert isinstance(mytree.counter, int)
+        assert mytree_int == mytree
+
+
+        new_tree = mytree << 3  
         assert new_tree == mytree * (2**3)
-        new_tree.both_iterator()
-        for node in anytree.PreOrderIter(new_tree):
-            assert node.counter == 0
+        new_tree = mytree >> 3
+        # The following must be unequal after the shift works on integers, therefore 
+        # / (2**3) reflects (here) the integer division not the float division
+        # There is no python shift on floats (https://bugs.python.org/issue11967)
+        assert new_tree != mytree / (2**3)
+        assert new_tree == mytree // (2**3)
+        mytree.counter = 150
+        new_tree = mytree >> 3
+        assert new_tree == mytree // (2**3)
+        assert new_tree != mytree / (2**3)
 
     def test_sum_inplace(self):
         mytree = nbtree.tree_simple()

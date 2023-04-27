@@ -656,6 +656,19 @@ class NBNode(anytree.Node):
                 return False
         return True
 
+    def astype_math_node_attribute(self, dtype, inplace=True):
+        if not inplace:
+            root = copy.deepcopy(self)
+        else:
+            root = self
+        for node in anytree.iterators.PreOrderIter(root):
+            setattr(
+                node,
+                self.math_node_attribute,
+                (dtype)(getattr(node, self.math_node_attribute)),
+            )
+        return root
+
     def join(
         self,
         other: "NBNode",
@@ -714,7 +727,15 @@ class NBNode(anytree.Node):
             print(f"{pre}{node.name} ({joined_attr})")
 
     def __both_nodeattr_fun(
-        self, other, fun=lambda x, y: x + y, strict: bool = True, inplace: bool = None
+        self,
+        other,
+        fun=lambda x, y: x + y,
+        strict: bool = True,
+        inplace: bool = None,
+        type_force_fun_names=(
+            "__truediv__",
+            "__divmod__",
+        ),
     ) -> "NBNode":
         self_tmp = self
         if inplace is None:
@@ -730,23 +751,25 @@ class NBNode(anytree.Node):
             fun = getattr(attr_type, fun)
         if isinstance(other, NBNode):
             for node_self, node_other in self_tmp.both_iterator(other, strict=strict):
+                a = getattr(node_self, self_tmp.math_node_attribute)
+                b = getattr(node_other, self_tmp.math_node_attribute)
+                if fun.__name__ == type_force_fun_names:
+                    a = type(b)(a) if not isinstance(a, type(b)) else a
                 setattr(
                     node_self,
                     self_tmp.math_node_attribute,
-                    fun(
-                        getattr(node_self, self_tmp.math_node_attribute),
-                        getattr(node_other, self_tmp.math_node_attribute),
-                    ),
+                    fun(a, b),
                 )
         else:
             for node_self in anytree.iterators.PreOrderIter(self_tmp):
+                a = getattr(node_self, self_tmp.math_node_attribute)
+                b = other
+                if fun.__name__ in type_force_fun_names:
+                    a = type(b)(a) if not isinstance(a, type(b)) else a
                 setattr(
                     node_self,
                     self_tmp.math_node_attribute,
-                    fun(
-                        getattr(node_self, self_tmp.math_node_attribute),
-                        other,
-                    ),
+                    fun(a, b),
                 )
         return self_tmp
 
@@ -768,6 +791,9 @@ class NBNode(anytree.Node):
                 return False
         return True
 
+    def __hash__(self):
+        return hash(self.__repr__())
+    
     def __add__(self, other):
         return self.__both_nodeattr_fun(other=other, fun=inspect.stack()[0][3])
 
