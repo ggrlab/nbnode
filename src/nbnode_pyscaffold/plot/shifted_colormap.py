@@ -4,8 +4,8 @@ from matplotlib.colors import Colormap, LinearSegmentedColormap
 
 def shifted_colormap(cmap, min_val, max_val, name) -> Colormap:
     """Function to offset the "center" of a colormap.
-    
-    Useful for data with a negative min and positive max and you want the middle of the 
+
+    Useful for data with a negative min and positive max and you want the middle of the
     colormap's dynamic range to be at zero.
 
     Adapted from

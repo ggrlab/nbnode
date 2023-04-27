@@ -33,7 +33,7 @@ def tree_simpleB() -> NBNode:
 
     Returns:
         NBNode::
-            
+
             a (counter:0, decision_name:None, decision_value:None)
             ├── a0 (counter:0, decision_name:m1, decision_value:-1)
             ├── a1 (counter:0, decision_name:m1, decision_value:1)
@@ -153,7 +153,7 @@ def tree_complete_cell() -> NBNode:
 
     Returns:
         NBNode::
-            
+
             AllCells ()
             ├── not CD45 ()
             └── CD45+ ()
@@ -371,7 +371,7 @@ def tree_complete_cell() -> NBNode:
 def tree_simple_cutoff_NOTWORKING() -> NBNode:
     """Not working simple tree with decision cutoffs, only for testing.
 
-    Blank 
+    Blank
 
     Returns:
         NBNode::
@@ -437,7 +437,7 @@ def tree_simple_cutoff_mixed() -> NBNode:
 
     Returns:
         NBNode::
-        
+
             a (counter:0, decision_name:None, decision_value:None)
             ├── a0 (counter:0, decision_name:m1, decision_value:-1)
             ├── a1 (counter:0, decision_name:m1, decision_value:1)

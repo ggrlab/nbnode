@@ -66,7 +66,7 @@ def per_node_data_fun(
             Usually, but not necessarily a pd.DataFrame. Depends on the function.
 
     Examples::
-    
+
         node.apply(
             lambda x: per_node_data_fun(
                 x=x, include_features=include_features, fun_name="mean"
