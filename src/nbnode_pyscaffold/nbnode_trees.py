@@ -439,3 +439,73 @@ def tree_complete_aligned_v2():
     ):
         hutch_node.insert_nodes(temra_part, copy_list=True)
     return celltree
+
+def tree_complete_aligned_trunk():
+    # Betreff:	gates
+    # Erstellt von:	Jxxx.Hxxx@ukr.de
+    # Geplantes Datum:
+    # Erstellungsdatum:	22.09.2022, 16:23
+    # Von:	JH
+    # An: G G (Gxx.Gxx@ukr.de)
+
+    celltree = NBNode(
+        "AllCells",
+        children=[
+            NBNode(
+                "DN",
+                decision_name=["CD4", "CD8"],
+                decision_value=[-1, -1],
+                decision_cutoff=[0.19, 0.2],
+            ),
+            NBNode(
+                "DP",
+                decision_name=["CD4", "CD8"],
+                decision_value=[1, 1],
+                decision_cutoff=[0.19, 0.2],
+            ),
+            NBNode(
+                "CD4-/CD8+",
+                decision_name=["CD4", "CD8"],
+                decision_value=[-1, 1],
+                decision_cutoff=[0.19, 0.2],
+            ),
+            NBNode(
+                "CD4+/CD8-",
+                decision_name=["CD4", "CD8"],
+                decision_value=[1, -1],
+                decision_cutoff=[0.19, 0.2],
+            ),
+        ],
+    )
+
+    temra_part = [
+        NBNode(
+            "naive",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[1, 1],
+            decision_cutoff=[0.24, 0.12],
+        ),
+        NBNode(
+            "Tcm",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[1, -1],
+            decision_cutoff=[0.24, 0.12],
+        ),
+        NBNode(
+            "Temra",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[-1, 1],
+            decision_cutoff=[0.24, 0.12],
+        ),
+        NBNode(
+            "Tem",
+            decision_name=["CCR7", "CD45RA"],
+            decision_value=[-1, -1],
+            decision_cutoff=[0.24, 0.12],
+        ),
+    ]
+    for hutch_node in anytree.findall(
+        celltree, filter_=lambda node: node.name in ["CD4-/CD8+", "CD4+/CD8-"]
+    ):
+        hutch_node.insert_nodes(temra_part, copy_list=True)
+    return celltree
