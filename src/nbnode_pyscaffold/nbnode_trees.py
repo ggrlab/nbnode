@@ -8,7 +8,7 @@ def tree_simple() -> NBNode:
 
 
     Returns:
-        NBNode: 
+        NBNode:
             a (counter:0, decision_name:None, decision_value:None)
             ├── a0 (counter:0, decision_name:m1, decision_value:-1)
             ├── a1 (counter:0, decision_name:m1, decision_value:1)
@@ -32,7 +32,7 @@ def tree_simpleB() -> NBNode:
     """Another simple tree for testing
 
     Returns:
-        NBNode: 
+        NBNode:
         a (counter:0, decision_name:None, decision_value:None)
         ├── a0 (counter:0, decision_name:m1, decision_value:-1)
         ├── a1 (counter:0, decision_name:m1, decision_value:1)
@@ -56,8 +56,8 @@ def tree_complex() -> NBNode:
     """Complex tree to use with yternary
 
     Returns:
-        NBNode: 
-        
+        NBNode:
+
         AllCells (counter:0, decision_name:None, decision_value:None)
         ├── not CD45 (counter:0, decision_name:CD45, decision_value:-1)
         └── CD45+ (counter:0, decision_name:CD45, decision_value:1)
@@ -147,7 +147,7 @@ def tree_complete_cell() -> NBNode:
     """Complete tree for T-cell panel of Beckman Coulter
 
     Returns:
-        NBNode: 
+        NBNode:
         AllCells ()
         ├── not CD45 ()
         └── CD45+ ()
@@ -364,10 +364,10 @@ def tree_complete_cell() -> NBNode:
 
 def tree_simple_cutoff_NOTWORKING() -> NBNode:
     """Not working simple tree with decision cutoffs, only for testing
-    
+
 
     Returns:
-        NBNode: 
+        NBNode:
         a (counter:0, decision_name:None, decision_value:None)
         ├── a0 (counter:0, decision_name:m1, decision_value:-1)
         ├── a1 (counter:0, decision_name:m1, decision_value:1)
@@ -396,11 +396,12 @@ def tree_simple_cutoff_NOTWORKING() -> NBNode:
     )
     return mytree
 
+
 def tree_simple_cutoff() -> NBNode:
     """_summary_
 
     Returns:
-        NBNode: 
+        NBNode:
             a (counter:0, decision_name:None, decision_value:None)
             ├── a0 (counter:0, decision_name:m1, decision_value:-1)
             ├── a1 (counter:0, decision_name:m1, decision_value:1)
@@ -426,22 +427,18 @@ def tree_simple_cutoff_mixed() -> NBNode:
     """Functioning tree with decision cutoffs, testing
 
     Returns:
-        NBNode: 
+        NBNode:
         a (counter:0, decision_name:None, decision_value:None)
         ├── a0 (counter:0, decision_name:m1, decision_value:-1)
         ├── a1 (counter:0, decision_name:m1, decision_value:1)
         │   └── a1a (counter:0, decision_name:m2, decision_value:test)
         ├── a2 (counter:0, decision_name:m3, decision_value:another)
         └── a3 (counter:0, decision_name:['m2', 'm4'], decision_value:['test', 1])
-    """    
+    """
     mytree = NBNode("a")
     # a0 =
-    NBNode(
-        "a0", parent=mytree, decision_value=-1, decision_name="m1"
-    )
-    a1 = NBNode(
-        "a1", parent=mytree, decision_value=1, decision_name="m1"
-    )
+    NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
+    a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
     # a2 =
     NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
     # a1a =
@@ -458,9 +455,9 @@ def tree_simple_cutoff_mixed() -> NBNode:
 
 def tree_complete_aligned() -> NBNode:
     """
-    Tree for the aligned (now "rescaled") T-cell panel data. 
+    Tree for the aligned (now "rescaled") T-cell panel data.
 
-    Uses decision cutoffs. 
+    Uses decision cutoffs.
 
     Returns:
         NBNode: See ``tree_complete_cell()``, only the decision cutoffs are different
@@ -586,9 +583,9 @@ def tree_complete_aligned() -> NBNode:
 
 def tree_complete_aligned_v2():
     """
-    Tree for the aligned (now "rescaled") T-cell panel data. 
+    Tree for the aligned (now "rescaled") T-cell panel data.
 
-    Uses decision cutoffs. 
+    Uses decision cutoffs.
 
     Returns:
         NBNode: See ``tree_complete_aligned()``, only the decision cutoffs are different
@@ -717,11 +714,12 @@ def tree_complete_aligned_v2():
         hutch_node.insert_nodes(temra_part, copy_list=True)
     return celltree
 
+
 def tree_complete_aligned_trunk() -> NBNode:
     """Trunk of the tree_complete_aligned_v2 tree.
 
     Returns:
-        NBNode: 
+        NBNode:
             AllCells (counter:0, decision_name:None, decision_value:None)
             ├── DN (counter:0, decision_name:['CD4', 'CD8'], decision_value:[-1, -1])
             ├── DP (counter:0, decision_name:['CD4', 'CD8'], decision_value:[1, 1])
@@ -735,7 +733,7 @@ def tree_complete_aligned_trunk() -> NBNode:
                 ├── Tcm (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[1, -1])
                 ├── Temra (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[-1, 1])
                 └── Tem (counter:0, decision_name:['CCR7', 'CD45RA'], decision_value:[-1, -1])
-            
+
     """
     # Betreff:	gates
     # Erstellt von:	Jxxx.Hxxx@ukr.de

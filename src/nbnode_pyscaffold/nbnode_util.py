@@ -87,7 +87,7 @@ def per_node_data_fun(
     x = datatable.Frame(x)
     if include_features is not None:
         x = x[:, include_features]
-        
+
     if fun_name == "cov":
         return frame_cov(x)
     else:

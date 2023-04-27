@@ -1,11 +1,10 @@
 import os
+
 import datatable as dt
 import numpy as np
 import pandas as pd
 
-from nbnode_pyscaffold.nbnode_util import per_node_data_fun
-from nbnode_pyscaffold.nbnode_util import frame_cov
-
+from nbnode_pyscaffold.nbnode_util import frame_cov, per_node_data_fun
 from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
 
 TESTS_DIR = find_dirname_above_currentfile()
@@ -21,6 +20,7 @@ def test_frame_cov():
 def test_per_node_data_fun():
     import math
     import re
+
     import nbnode_pyscaffold.nbnode_trees as nbtree
 
     cellmat = pd.read_csv(
@@ -83,6 +83,7 @@ def test_per_node_data_fun():
 def test_per_node_data_fun_covariance_matrix():
     import math
     import re
+
     import nbnode_pyscaffold.nbnode_trees as nbtree
 
     cellmat = pd.read_csv(

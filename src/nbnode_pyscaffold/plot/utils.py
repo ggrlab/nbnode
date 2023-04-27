@@ -38,6 +38,7 @@ class LinearShiftedColormap:
 
     Takes a base colormap and scales/stretches it between min_val and max_val.
     """
+
     def __init__(
         self,
         range_min: float = -1,
