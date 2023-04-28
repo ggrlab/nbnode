@@ -29,6 +29,8 @@ class TestNBNode(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
             )
         )
+        # FS TOF (against FS INT which is "FS")
+        cellmat.rename(columns={'FS_TOF':'FS.0'}, inplace=True)
         cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
         self.cellmat = cellmat
 

@@ -47,7 +47,7 @@ class TestFlowSimulation(TestCase):
             len(yternary)
         )
         celltree.data = yternary
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             rootnode=celltree,
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
@@ -76,29 +76,29 @@ class TestFlowSimulation(TestCase):
                 rootnode=celltree,
             )
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             rootnode=celltree,
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             data_cellgroup_col="CD8",  # JUST FOR TESTING!
         )
         # test sampling a single sample
-        flow_dist.set_seed(1230847)
-        x = flow_dist.sample(n_cells=1)
+        flowsim.set_seed(1230847)
+        x = flowsim.sample(n_cells=1)
         print(x.iloc[0].to_numpy())
         assert all(
             np.isclose(
                 x.iloc[0].to_numpy(), np.array([0.9913707, -0.78346626, 0.07124489])
             )
         )
-        x = flow_dist.sample(n_cells=100)
+        x = flowsim.sample(n_cells=100)
         assert not all(
             np.isclose(
                 x.iloc[0].to_numpy(), np.array([0.9913707, -0.78346626, 0.07124489])
             )
         )
-        flow_dist.set_seed(1230847)
-        x = flow_dist.sample(n_cells=1)
+        flowsim.set_seed(1230847)
+        x = flowsim.sample(n_cells=1)
         assert all(
             np.isclose(
                 x.iloc[0].to_numpy(), np.array([0.9913707, -0.78346626, 0.07124489])
@@ -106,8 +106,8 @@ class TestFlowSimulation(TestCase):
         )
         assert x.shape[0] == 1
         assert x.shape[1] == 3
-        flow_dist.set_seed(1230847)
-        x = flow_dist.sample(n_cells=100)
+        flowsim.set_seed(1230847)
+        x = flowsim.sample(n_cells=100)
         print(x.iloc[0])
         assert all(
             np.isclose(x.iloc[99].to_numpy(), np.array([0.0, 0.0, 0.20777241447137335]))
@@ -129,14 +129,14 @@ class TestFlowSimulation(TestCase):
             len(yternary)
         )
         celltree.data = yternary
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             rootnode=celltree,
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
 
-        x = flow_dist.sample(n_cells=100)
+        x = flowsim.sample(n_cells=100)
         assert x.shape[0] == 100
         assert x.shape[1] == 3
 
@@ -165,19 +165,19 @@ class TestFlowSimulation(TestCase):
 
         leaf_nodes = [x for x in anytree.PreOrderIter(celltree) if x.is_leaf]
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             rootnode=celltree,
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
 
-        flow_dist.set_seed(10289)
-        z = flow_dist.sample(
+        flowsim.set_seed(10289)
+        z = flowsim.sample(
             n_cells=100,
-            # mean=flow_dist.population_distribution_parameters["mean"] * 2,
-            # cov=np.diag(np.diag(flow_dist.population_distribution_parameters["cov"])),
-            # population_names=flow_dist.population_distribution_parameters["mean"].index,
+            # mean=flowsim.population_distribution_parameters["mean"] * 2,
+            # cov=np.diag(np.diag(flowsim.population_distribution_parameters["cov"])),
+            # population_names=flowsim.population_distribution_parameters["mean"].index,
         )
 
     def test_subset_by_nodename(self):
@@ -214,14 +214,14 @@ class TestFlowSimulation(TestCase):
             columns=["f1", "f2"],
         )
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             rootnode=mytree,
             include_features=["f1", "f2"],
             node_percentages=None,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
-        flow_dist.set_seed(1234)
-        leaf_sample = flow_dist.sample(10, return_sampled_cell_numbers=True)
+        flowsim.set_seed(1234)
+        leaf_sample = flowsim.sample(10, return_sampled_cell_numbers=True)
         leaf_sample_popN = leaf_sample[1]
         assert len(leaf_sample_popN) == 2
 
@@ -240,15 +240,15 @@ class TestFlowSimulation(TestCase):
         )
         celltree.data = yternary
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
 
-        flow_dist.set_seed(10289)
-        z = flow_dist.sample(n_cells=100)
+        flowsim.set_seed(10289)
+        z = flowsim.sample(n_cells=100)
 
     def test_FlowSimulationTree_report_mean_precision(self):
         yternary = pd.read_csv(
@@ -265,28 +265,28 @@ class TestFlowSimulation(TestCase):
         )
         celltree.data = yternary
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
-        print(flow_dist.precision)
-        print(flow_dist.mean_leafs)
-        assert flow_dist.pop_alpha("/AllCells") == flow_dist.precision
+        print(flowsim.precision)
+        print(flowsim.mean_leafs)
+        assert flowsim.pop_alpha("/AllCells") == flowsim.precision
         assert (
-            flow_dist.pop_alpha("/AllCells/CD45+")
-            == flow_dist.precision
-            - flow_dist.population_parameters["alpha"]["/AllCells/not CD45"]
+            flowsim.pop_alpha("/AllCells/CD45+")
+            == flowsim.precision
+            - flowsim.population_parameters["alpha"]["/AllCells/not CD45"]
         )
-        assert flow_dist.pop_mean("/AllCells") == 1
+        assert flowsim.pop_mean("/AllCells") == 1
         assert (
-            flow_dist.pop_mean("/AllCells/CD45+")
+            flowsim.pop_mean("/AllCells/CD45+")
             == (
-                flow_dist.precision
-                - flow_dist.population_parameters["alpha"]["/AllCells/not CD45"]
+                flowsim.precision
+                - flowsim.population_parameters["alpha"]["/AllCells/not CD45"]
             )
-            / flow_dist.precision
+            / flowsim.precision
         )
 
     def test_FlowSimulationTree_report_all_alpha(self):
@@ -304,15 +304,15 @@ class TestFlowSimulation(TestCase):
         )
         celltree.data = yternary
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
-        print(flow_dist.precision)
-        print(flow_dist.mean_leafs)
-        print(flow_dist.alpha_all)
+        print(flowsim.precision)
+        print(flowsim.mean_leafs)
+        print(flowsim.alpha_all)
 
     def test_FlowSimulationTree_new_mean(self):
         yternary = pd.read_csv(
@@ -329,33 +329,33 @@ class TestFlowSimulation(TestCase):
         )
         celltree.data = yternary
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
-        # print(flow_dist.precision)
-        assert len(flow_dist.pop_leafnode_names("/AllCells")) == len(
+        # print(flowsim.precision)
+        assert len(flowsim.pop_leafnode_names("/AllCells")) == len(
             [x for x in anytree.PreOrderIter(celltree) if x.is_leaf]
         )
-        assert len(flow_dist.pop_leafnode_names("/AllCells/not CD45")) == 1
+        assert len(flowsim.pop_leafnode_names("/AllCells/not CD45")) == 1
         assert (
-            len(flow_dist.pop_leafnode_names("/AllCells/CD45+"))
+            len(flowsim.pop_leafnode_names("/AllCells/CD45+"))
             == len([x for x in anytree.PreOrderIter(celltree) if x.is_leaf]) - 1
         )
-        assert len(flow_dist.pop_leafnode_names("/AllCells/CD45+/CD3+/CD4+/CD8-")) == 1
+        assert len(flowsim.pop_leafnode_names("/AllCells/CD45+/CD3+/CD4+/CD8-")) == 1
 
         with self.assertRaises(ValueError):
-            flow_dist.new_pop_mean("/AllCells/not CD45", percentage=1.1)
+            flowsim.new_pop_mean("/AllCells/not CD45", percentage=1.1)
         with self.assertRaises(ValueError):
-            flow_dist.new_pop_mean("/AllCells/not CD45", percentage=-0.1)
+            flowsim.new_pop_mean("/AllCells/not CD45", percentage=-0.1)
 
-        flow_dist.new_pop_mean("/AllCells/not CD45", percentage=0.1)
-        assert flow_dist.pop_mean("/AllCells/not CD45") == 0.1
+        flowsim.new_pop_mean("/AllCells/not CD45", percentage=0.1)
+        assert flowsim.pop_mean("/AllCells/not CD45") == 0.1
 
-        flow_dist.new_pop_mean("/AllCells/CD45+/CD3+", percentage=0.1)
-        assert flow_dist.pop_mean("/AllCells/CD45+/CD3+") == 0.1
+        flowsim.new_pop_mean("/AllCells/CD45+/CD3+", percentage=0.1)
+        assert flowsim.pop_mean("/AllCells/CD45+/CD3+") == 0.1
 
     def test_FlowSimulationTree_report_parameters(self):
         yternary = pd.read_csv(
@@ -372,7 +372,7 @@ class TestFlowSimulation(TestCase):
         )
         celltree.data = yternary
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
@@ -381,8 +381,8 @@ class TestFlowSimulation(TestCase):
         for x in anytree.PreOrderIter(celltree):
             print(
                 x.get_name_full(),
-                flow_dist.pop_alpha(x.get_name_full()),
-                flow_dist.pop_mean(x.get_name_full()),
+                flowsim.pop_alpha(x.get_name_full()),
+                flowsim.pop_mean(x.get_name_full()),
             )
 
     def test_FlowSimulationTree_reset_populations(self):
@@ -400,23 +400,23 @@ class TestFlowSimulation(TestCase):
         )
         celltree.data = yternary
 
-        flow_dist = FlowSimulationTreeDirichlet(
+        flowsim = FlowSimulationTreeDirichlet(
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
         )
-        assert flow_dist.pop_mean("/AllCells/not CD45") == 0.28343526674499486
-        flow_dist.reset_populations()
-        assert flow_dist.pop_mean("/AllCells/not CD45") == 0.28343526674499486
+        assert flowsim.pop_mean("/AllCells/not CD45") == 0.28343526674499486
+        flowsim.reset_populations()
+        assert flowsim.pop_mean("/AllCells/not CD45") == 0.28343526674499486
 
-        flow_dist.new_pop_mean("/AllCells/not CD45", percentage=0.1)
-        assert flow_dist.pop_mean("/AllCells/not CD45") == 0.1
+        flowsim.new_pop_mean("/AllCells/not CD45", percentage=0.1)
+        assert flowsim.pop_mean("/AllCells/not CD45") == 0.1
 
-        flow_dist.reset_populations()
-        assert flow_dist.pop_mean("/AllCells/not CD45") == 0.28343526674499486
+        flowsim.reset_populations()
+        assert flowsim.pop_mean("/AllCells/not CD45") == 0.28343526674499486
 
-    def test_FlowSimulationTree_singlenode(self):
+    def test_FlowSimulationTree_nodata_noids(self):
         import re
         import pandas as pd
 
@@ -425,7 +425,46 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
             )
         )
+        cellmat.rename(columns={'FS_TOF':'FS.0'}, inplace=True)
         cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
+
         celltree = nbtree.tree_complete_aligned()
-        a = celltree.predict(cellmat)
-        print(a)
+
+        with self.assertRaises(ValueError):
+            # ValueError: rootnode.data is None.
+            # Please set rootnode.data before creating the simulation
+            flowsim = FlowSimulationTreeDirichlet(
+                node_percentages=None,
+                rootnode=celltree,
+                data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+                include_features="dataset_melanoma_short",
+            )
+
+        celltree.data = cellmat
+        with self.assertRaises(ValueError):
+            # ValueError: rootnode.ids does not contain any id.
+            # In this simulation we assume that all cells originate from the root node,
+            # therefore rootnode.ids must contain at least one id.
+            # Please set rootnode.ids before creating the simulation. Usually:
+            #
+            #     predicted_nodes_per_cell = celltree.predict(cellmat)
+            #     celltree.id_preds(predicted_nodes_per_cell)
+
+            flowsim = FlowSimulationTreeDirichlet(
+                node_percentages=None,
+                rootnode=celltree,
+                data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+                include_features="dataset_melanoma_short",
+            )
+
+        # The following two commands are equivalent after celltree.data was set
+        # predicted_nodes_per_cell = celltree.predict(celltree.data)
+        predicted_nodes_per_cell = celltree.predict()
+        celltree.id_preds(predicted_nodes_per_cell)
+        flowsim = FlowSimulationTreeDirichlet(
+            node_percentages=None,
+            rootnode=celltree,
+            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            include_features="dataset_melanoma_short",
+        )
+        print(flowsim.sample(n_cells=10))
