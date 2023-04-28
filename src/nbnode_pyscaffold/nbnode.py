@@ -37,7 +37,7 @@ class NBNode(anytree.Node):
         self.decision_cutoff = decision_cutoff  # Not necessary in ternary prediction
         self.counter = 0
         self.ids = []
-        self._data = None
+        self._data: pd.DataFrame = None
         self.id_unique_dot_exporter = None
         # Set math_node_attribute to whatever you want to add when using
         # (usual) mathematics.
@@ -335,12 +335,16 @@ class NBNode(anytree.Node):
             pd.DataFrame:
                 A subset of the root._data corresponding to the node's ids.
         """
+        if self.root._data is None:
+            return None
+
         if self.ids == []:
             warnings.warn(
                 "self.ids was an empty list, subset an empty dataframe. Did you call "
                 + "celltree.id_preds(predicted_nodes)?"
                 + " Can also be a node with no cells."
             )
+
         return self.root._data.iloc[self.ids, :]
 
     @data.setter
