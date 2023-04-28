@@ -7,6 +7,18 @@ import pandas as pd
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 from nbnode_pyscaffold.simulation.sim_target import sim_target
 
+import numpy as np
+
+
+class PseudoTorchDistributionNormal:
+    def __init__(self, loc, scale):
+        self.loc = loc
+        self.scale = scale
+
+    def sample(self):
+        return np.random.normal(loc=self.loc, scale=self.scale, size=1)
+
+
 try:
     import torch.distributions as D
 
@@ -14,19 +26,8 @@ try:
         # You can also set that a lambda-function, e.g.
         #   lambda original_mean: D.Normal(loc=original_mean + 0, scale=1)
         return D.Normal(loc=original_mean + 0, scale=1)
-
 except ImportError:
-    import numpy as np
-
-    class PseudoTorchDistributionNormal:
-        def __init__(self, loc, scale):
-            self.loc = loc
-            self.scale = scale
-
-        def sample(self):
-            return np.random.normal(loc=self.loc, scale=self.scale, size=1)
-
-    def mean_dist_fun(original_mean: float) -> D.Distribution:
+    def mean_dist_fun(original_mean: float) -> PseudoTorchDistributionNormal:
         """A function that returns a distribution for the new mean.
 
         This is a fallback function that is used if torch is not installed.
@@ -108,7 +109,7 @@ class TreeMeanDistributionSampler:
             for pop, perc in flowsim_tree.mean_leafs.items():
                 print(f"{perc:.6f}  {pop:125}")
         # *100 to have the distribution work on the mean proportion in percentages
-        target_mean_dist: D.Distribution = mean_distribution(original_mean * 100)
+        target_mean_dist = mean_distribution(original_mean * 100)
         all_true_popcounts = None
         all_changed_parameters = None
         all_sampled_samples = None
