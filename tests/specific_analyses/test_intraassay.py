@@ -21,21 +21,33 @@ TESTS_DIR = find_dirname_above_currentfile()
 class TestIntraassayData(TestCase):
     @classmethod
     def setUpClass(self):
-        try:
-            with open(
-                "examples/results/intraassay_gate_init_4samples.pickle", "rb"
-            ) as f:
-                self.celltree, node_counts_df, self.flowsim_tree = pickle.load(f)
-        except:
+        # If debugging is true, gate_init() is not called over and over again 
+        # but the result is loaded from a pickle file.
+        # However
+        #   1) Changes in gate_init() will not be reflected
+        #   2) Test coverage will not be complete
+        debugging = False
+        if not debugging:
             # 4 samples just to speed up things
             self.celltree, node_counts_df, self.flowsim_tree = gate_init(
-                sample_list=[0, 1, 2, 3]
-            )
-            os.makedirs("examples/results", exist_ok=True)
-            pickle_open_dump(
-                (self.celltree, node_counts_df, self.flowsim_tree),
-                "examples/results/intraassay_gate_init_4samples.pickle",
-            )
+                    sample_list=[0, 1, 2, 3]
+                )
+        else:
+            try:
+                with open(
+                    "examples/results/intraassay_gate_init_4samples.pickle", "rb"
+                ) as f:
+                    self.celltree, node_counts_df, self.flowsim_tree = pickle.load(f)
+            except:
+                # 4 samples just to speed up things
+                self.celltree, node_counts_df, self.flowsim_tree = gate_init(
+                    sample_list=[0, 1, 2, 3]
+                )
+                os.makedirs("examples/results", exist_ok=True)
+                pickle_open_dump(
+                    (self.celltree, node_counts_df, self.flowsim_tree),
+                    "examples/results/intraassay_gate_init_4samples.pickle",
+                )
 
     def test_sample_cells(self):
         self.flowsim_tree.set_seed(10289)
