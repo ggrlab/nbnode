@@ -190,6 +190,20 @@ class TestTreeMeans(TestCase):
         )
         result4 = tmds.sample()
         (true_popcounts, changed_parameters, sampled_samples) = result4
-        assert changed_parameters == []
+        assert changed_parameters is None
 
+        tmds = TreeMeanRelative(
+            "tests_output/flowsim_trunk.pickle",
+            change_pop_mean_proportional={"/AllCells/DN": 1},
+            n_samples=2,
+            n_cells=100,
+            verbose=False,
+        )
+        tmds = TreeMeanRelative(
+            "tests_output/flowsim_trunk.pickle",
+            change_pop_mean_proportional={"/AllCells/DN": 1},
+            n_samples=2,
+            n_cells=100,
+            verbose=True,
+        )
         print(result1, result2, result3, result4)
