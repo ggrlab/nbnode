@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def merge_leaf_nodes(intermediate_node: str, leaf_nodes_df: pd.DataFrame) -> float:
+def merge_leaf_nodes(leaf_nodes_df: pd.DataFrame, intermediate_node: str) -> float:
     """Merge leaf node dataframe into intermediate node.
 
     Args:

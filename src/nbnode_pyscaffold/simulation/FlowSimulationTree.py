@@ -14,7 +14,7 @@ from nbnode_pyscaffold.nbnode_util import per_node_data_fun
 dirichlet_installed = True
 try:
     import dirichlet
-except:
+except ImportError:
     dirichlet_installed = False
 
 
@@ -68,7 +68,10 @@ class BaseFlowSimulationTree:
 
         if len(leaf_nodes_data) == 1:
             warnings.warn(
-                "Only one single leaf node found, potentially parameter estimation does not work."
+                "Only one single leaf node found, all cells will be simulated from"
+                + " single node, are you sure that is what you want?\n"
+                + "The dirichlet parameter will be 1, only the estimated"
+                + "cell_distributions might make sense."
             )
 
         if rootnode.data is None:
@@ -364,15 +367,11 @@ class BaseFlowSimulationTree:
     def sample_populations(
         self,
         n_cells: int = 10000,
-        population_names: Optional[List[str]] = None,
         **population_parameters,
     ) -> pd.Series:
         #### Generate number of cells according to leaf node population distributions
         if len(population_parameters) == 0:
             population_parameters = self.population_parameters
-
-        if population_names is None:
-            population_names = self.population_parameters["__name"]
 
         onesample_ncells_perpop = self.generate_populations(
             population_parameters={
@@ -382,21 +381,23 @@ class BaseFlowSimulationTree:
             },
             n_cells=n_cells,
         )
-        tmp = pd.DataFrame(data=onesample_ncells_perpop, index=population_names)
-        return tmp[0]  # then it becomes a Frame, no DataFrame
-        # return onesample_ncells_perpop, population_names
+        tmp_allpops = pd.DataFrame(
+            data=onesample_ncells_perpop, 
+            index=population_parameters["__name"]
+            )
+
+        return tmp_allpops[0]  # then it becomes a pd.Series, no pd.DataFrame
 
     def sample(
         self,
         n_cells: int = 10000,
         return_sampled_cell_numbers: bool = False,
         use_only_diagonal_covmat: bool = True,
-        population_names: Optional[List[str]] = None,
         **population_parameters,
     ) -> Union[Tuple[pd.DataFrame, pd.Series], pd.DataFrame]:
         #### 1. Generate number of cells according to leaf node population distributions
         onesample_ncells_perpop_df = self.sample_populations(
-            n_cells=n_cells, population_names=population_names, **population_parameters
+            n_cells=n_cells, **population_parameters
         )
 
         #### 2. Actually generate the cells _per population_
@@ -441,6 +442,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
         node_percentages: pd.DataFrame = None,
         seed: int = 12987,
         include_features="dataset_melanoma",
+        verbose: bool = False,
     ) -> None:
         if not dirichlet_installed:
             raise PackageNotFoundError(
@@ -453,6 +455,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
             node_percentages=node_percentages,
             seed=seed,
             include_features=include_features,
+            verbose=verbose,
         )
 
     @staticmethod
@@ -545,7 +548,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
     @property
     def alpha_all(self) -> pd.Series:
         all_alphas = copy.deepcopy(self.population_parameters["alpha"])
-        node_names = list(all_alphas.index)
+        # node_names = list(all_alphas.index)
         for node in anytree.PostOrderIter(self.rootnode_structure):
             if not node.is_leaf:
                 current_sum = 0
