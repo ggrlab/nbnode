@@ -18,7 +18,7 @@ try:
 except ImportError:
     import numpy as np
 
-    class PseudoTorchDistribution:
+    class PseudoTorchDistributionNormal:
         def __init__(self, loc, scale):
             self.loc = loc
             self.scale = scale
@@ -48,7 +48,7 @@ except ImportError:
                 it has a sample() method that returns a new value from the distribution.
         """
 
-        return PseudoTorchDistribution(loc=original_mean + 0, scale=1)
+        return PseudoTorchDistributionNormal(loc=original_mean + 0, scale=1)
 
 
 class GenerateChangedMean:
