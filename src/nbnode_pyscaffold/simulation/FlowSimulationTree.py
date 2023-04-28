@@ -502,9 +502,20 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
             "alpha": pd.DataFrame(alphas, index=node_percentages.index)[0],
         }
 
-    def remove_population(self, population_name):
-        self.population_parameters["alpha"].drop(population_name, inplace=True)
-        self.population_parameters["__name"].remove(population_name)
+    def remove_population(self, population_name: str):
+        """Remove a population from the tree
+
+        Args:
+            population_name (str): The get_name_full() of a population
+        """
+        leaf_population_names = self.pop_leafnode_names(population_name)
+        for pop_x in leaf_population_names: 
+            try: 
+                self.population_parameters["alpha"].drop(pop_x, inplace=True)
+                self.population_parameters["__name"].remove(pop_x)
+            except KeyError:
+                # Then the population was already removed
+                pass
 
     def generate_populations(
         self, population_parameters, n_cells: int, *args, **kwargs
@@ -573,7 +584,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
             for x in pop_node.children:
                 leafnodes += self.pop_leafnode_names(x)
             return leafnodes
-
+        
     def pop_alpha(self, population_node_full_name: str):
         this_pop_leafnode_names = self.pop_leafnode_names(
             population_node_full_name=population_node_full_name
