@@ -3,16 +3,52 @@ import pickle
 from typing import Any, Dict, List, Tuple, Union
 
 import pandas as pd
-import torch.distributions as D
 
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 from nbnode_pyscaffold.simulation.sim_target import sim_target
 
+try:
+    import torch.distributions as D
 
-def mean_dist_fun(original_mean: float) -> D.Distribution:
-    # You can also set that a lambda-function, e.g.
-    #   lambda original_mean: D.Normal(loc=original_mean + 0, scale=1)
-    return D.Normal(loc=original_mean + 0, scale=1)
+    def mean_dist_fun(original_mean: float) -> D.Distribution:
+        # You can also set that a lambda-function, e.g.
+        #   lambda original_mean: D.Normal(loc=original_mean + 0, scale=1)
+        return D.Normal(loc=original_mean + 0, scale=1)
+
+except ImportError:
+    import numpy as np
+
+    class PseudoTorchDistribution:
+        def __init__(self, loc, scale):
+            self.loc = loc
+            self.scale = scale
+
+        def sample(self):
+            return np.random.normal(loc=self.loc, scale=self.scale, size=1)
+
+    def mean_dist_fun(original_mean: float) -> D.Distribution:
+        """A function that returns a distribution for the new mean.
+
+        This is a fallback function that is used if torch is not installed.
+        Within GenerateChangedMean, this function is used to generate a distribution
+        for the new mean. The distribution is then used to sample a new mean for
+        the population that is to be changed.
+
+        So the calls are::
+
+            mean_distribution = mean_dist_fun(new_mean)
+            new_value_from_distribution = mean_distribution.sample()
+
+        Args:
+            original_mean (float): The mean of the normal distribution
+
+        Returns:
+            Pseudo-D.Distribution:
+                Mimics the torch.distributions.Distribution class in the sense that
+                it has a sample() method that returns a new value from the distribution.
+        """
+
+        return PseudoTorchDistribution(loc=original_mean + 0, scale=1)
 
 
 class GenerateChangedMean:
