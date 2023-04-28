@@ -1307,7 +1307,6 @@ class TestNBNode(TestCase):
 
     def test_export_counts_with_sample_names(self):
         import re
-
         import pandas as pd
 
         cellmat = pd.read_csv(
@@ -1358,3 +1357,30 @@ class TestNBNode(TestCase):
         assert not counts_allnodes_twosamples.iloc[0, :].equals(
             counts_allnodes.iloc[0, :]
         )
+
+    def test_data_access(self):
+        import re
+        import pandas as pd
+
+        cellmat = pd.read_csv(
+            os.path.join(
+                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
+            )
+        )
+        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
+        celltree_trunk = nbtree.tree_complete_aligned_trunk()
+        a = celltree_trunk.predict(cellmat)
+        assert celltree_trunk.data is None
+        celltree_trunk.data = cellmat
+        # Accessing data here leads to NO cells even if data is set
+        # That is intended after no node contains any ids yet
+        # which subset _data
+        assert len(celltree_trunk.data) == 0
+        assert celltree_trunk._data.equals(cellmat)
+
+        celltree_trunk.id_preds(a)
+        # Accessing data here leads to all cells after all ids are 
+        # (not necessarily! but I do not know if there is a usecase for that)
+        # in the root node.
+        assert celltree_trunk.data.equals(cellmat)
+        assert celltree_trunk._data.equals(cellmat)
