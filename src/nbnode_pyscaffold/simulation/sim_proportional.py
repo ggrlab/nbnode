@@ -20,12 +20,14 @@ def sim_proportional(
     only_return_sampled_cell_numbers=False,
 ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
     """
-        This function simulates new cells (`n_cells`) for `n_samples` samples according to the given
-        flow simulation `flowsim`.
+        This function simulates new cells (`n_cells`) for `n_samples` samples
+        according to the given flow simulation `flowsim`.
 
-            1. The population mean of the keys from `change_pop_mean_proportional` are multiplied
-            with their respective value and changed by `flowsim.new_pop_mean(old_mean * change_prop)`
-            2. Generate `n_samples` with `n_cells` are sampled from the changed FlowSimulation.
+            1. The population mean of the keys from `change_pop_mean_proportional` are
+            multiplied with their respective value and changed by
+            `flowsim.new_pop_mean(old_mean * change_prop)`
+            2. Generate `n_samples` with `n_cells` are sampled from the changed
+            FlowSimulation.
             3. (optional) The generated samples are saved to save_dir
             3. The actual number of cells and the changed parameters are returned
 
@@ -40,18 +42,22 @@ def sim_proportional(
 
             Defaults to 25000.
         use_only_diagonal_covmat (bool, optional):
-            If False, the complete covariance matrix per cell population is used to draw new cells
+            If False, the complete covariance matrix per cell population is used to
+            draw new cells
             If True, all off-diagonal elements of the covariance matrix are set to 0.
 
             Defaults to True.
         change_pop_mean_proportional (dict, optional):
-            A dictionary of which cell population(s) should be changed by which fraction.
+            A dictionary of which cell population(s) should be changed by which
+            fraction.
             A value of 1 does not change the mean proportion of the cell population.
-            The changes to `flowsim` are not persistent as they are undone after the simulation.
+            The changes to `flowsim` are not persistent as they are undone after the
+            simulation.
 
             Defaults to {"/AllCells/CD4+/CD8-/Tem": 1}.
         save_dir (str, optional):
-            If given, the created samples (n cells X p markers) are saved into that directory as f"sample_{sample_i}.csv".
+            If given, the created samples (n cells X p markers) are saved into that
+            directory as f"sample_{sample_i}.csv".
 
             Defaults to "sim/intraassay/sim00_baseline".
 
@@ -65,8 +71,10 @@ def sim_proportional(
             not the actual samples.
     Returns:
         Tuple:
-            pd.DataFrame:   Returns the true number of generated cells per leaf-population.
-            Dict:           A dee copy of `flowsim.population_parameters`
+            pd.DataFrame:
+                Returns the true number of generated cells per leaf-population.
+            Dict:
+                A deep copy of `flowsim.population_parameters`
     """
 
     if save_dir is not None:
@@ -74,7 +82,9 @@ def sim_proportional(
 
     if len(change_pop_mean_proportional) > 1:
         warnings.warn(
-            "Changing more than 1 population is NOT setting the means to the specified values - only the LAST value will be exactly the set percentage"
+            "Changing more than 1 population is NOT setting the means to the "
+            + "specified values - only the LAST value will be "
+            + "exactly the set percentage"
         )
     # Change the given population means
     for pop_x, change_prop in change_pop_mean_proportional.items():

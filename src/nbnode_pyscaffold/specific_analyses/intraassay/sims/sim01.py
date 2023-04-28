@@ -16,7 +16,8 @@ def sim01_double_tcm(
 ):
     proportional_generator = TreeMeanRelative(
         change_pop_mean_proportional={
-            # Changing CD4+Tems was just for testing - but worked (in the sense of not changing stuff)
+            # Changing CD4+Tems was just for testing,
+            # but worked (in the sense of not changing stuff)
             # "/AllCells/CD4+/CD8-/Tem": 1,
             "/AllCells/CD4+/CD8-/Tcm": 2,
         },
