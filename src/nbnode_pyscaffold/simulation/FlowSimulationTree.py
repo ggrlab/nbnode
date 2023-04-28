@@ -401,7 +401,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
     def __init__(
         self,
         rootnode: NBNode,
-        population_nodes: Optional[Union[List[NBNode], List[str]]] = None,
+        # population_nodes: Optional[Union[List[NBNode], List[str]]] = None,
         data_cellgroup_col: str = "sample",
         node_percentages: pd.DataFrame = None,
         seed: int = 12987,
@@ -413,7 +413,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
             )
         super().__init__(
             rootnode=rootnode,
-            population_nodes=population_nodes,
+            # population_nodes=population_nodes,
             data_cellgroup_col=data_cellgroup_col,
             node_percentages=node_percentages,
             seed=seed,
