@@ -3,7 +3,7 @@ tests_output/
 **removeme**
 .testmondata*
 docs/docstr_coverage_badge.svg
-
+example_data/
 
 # Temporary and binary files
 *~
