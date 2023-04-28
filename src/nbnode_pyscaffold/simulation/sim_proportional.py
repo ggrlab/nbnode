@@ -61,8 +61,8 @@ def sim_proportional(
             Verboseness. Defaults to True.
 
         only_return_sampled_cell_numbers (bool):
-            The following variable should only be turned off if you do NOT want the cells actually
-            generated, but instead want to return only the cell NUMBERS per population
+            If true, only the number of cells per population are returned, 
+            not the actual samples.
     Returns:
         Tuple:
             pd.DataFrame:   Returns the true number of generated cells per leaf-population.

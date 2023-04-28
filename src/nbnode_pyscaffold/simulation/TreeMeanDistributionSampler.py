@@ -63,7 +63,7 @@ class TreeMeanDistributionSampler:
         verbose=True,
         seed_sample_0=129873,
         save_dir="sim/sim00_m0.sd1",
-        debugging_only_return_sampled_cell_numbers=True,
+        only_return_sampled_cell_numbers=False,
     ) -> None:
         self.flowsim_tree = flowsim_tree
         self.n_samples = n_samples
@@ -79,11 +79,7 @@ class TreeMeanDistributionSampler:
         )
         self.mean_distribution = mean_distribution
 
-        # The following variable should only be turned off if you do NOT want the cells actually
-        # sampled, but instead want to return only the cell NUMBERS per population
-        self._debugging_only_return_sampled_cell_numbers = (
-            debugging_only_return_sampled_cell_numbers
-        )
+        self._only_return_sampled_cell_numbers = only_return_sampled_cell_numbers
 
     @staticmethod
     def _sample(
@@ -97,7 +93,7 @@ class TreeMeanDistributionSampler:
         verbose=True,
         seed_sample_0=129873,
         save_dir="sim/sim00_pure_estimate",
-        _debugging_only_return_sampled_cell_numbers=True,
+        _only_return_sampled_cell_numbers=False,
     ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
         if isinstance(flowsim_tree, str):
             with open(
@@ -132,7 +128,7 @@ class TreeMeanDistributionSampler:
                 seed_sample_0=seed_sample_0 + sample_i,
                 save_dir=save_dir,
                 sample_name=f"sample_{sample_i}",
-                only_return_sampled_cell_numbers=_debugging_only_return_sampled_cell_numbers,
+                only_return_sampled_cell_numbers=_only_return_sampled_cell_numbers,
                 save_changed_parameters=False,
             )
             if all_true_popcounts is None:
@@ -170,5 +166,5 @@ class TreeMeanDistributionSampler:
             verbose=self.verbose,
             seed_sample_0=self.seed_sample_0,
             save_dir=self.save_dir,
-            _debugging_only_return_sampled_cell_numbers=self._debugging_only_return_sampled_cell_numbers,
+            _only_return_sampled_cell_numbers=self._only_return_sampled_cell_numbers,
         )
