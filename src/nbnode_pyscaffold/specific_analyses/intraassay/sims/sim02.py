@@ -1,7 +1,7 @@
 from typing import Union
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode.simulation.generator_proportional import GenerateProportional
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.simulation.TreeMeanRelative import TreeMeanRelative
 
 
 def sim02_temra(
@@ -14,7 +14,7 @@ def sim02_temra(
     save_dir="sim/sim02_temra",
     debugging_only_return_sampled_cell_numbers=False,
 ):
-    proportional_generator = GenerateProportional(
+    proportional_generator = TreeMeanRelative(
         change_pop_mean_proportional={
             # 7.17% --> 33.23%
             "/AllCells/CD4-/CD8+/Temra": 4.634588563458856,

@@ -1,7 +1,7 @@
 from typing import Union
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode.simulation.generator_proportional import GenerateProportional
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.simulation.TreeMeanRelative import TreeMeanRelative
 
 
 def sim01_double_tcm(
@@ -14,7 +14,7 @@ def sim01_double_tcm(
     save_dir="sim/sim01_double_tcm",
     debugging_only_return_sampled_cell_numbers=False,
 ):
-    proportional_generator = GenerateProportional(
+    proportional_generator = TreeMeanRelative(
         change_pop_mean_proportional={
             # Changing CD4+Tems was just for testing - but worked (in the sense of not changing stuff)
             # "/AllCells/CD4+/CD8-/Tem": 1,

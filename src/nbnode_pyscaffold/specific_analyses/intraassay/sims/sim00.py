@@ -1,7 +1,7 @@
 from typing import Union
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode.simulation.generator_proportional import GenerateProportional
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.simulation.TreeMeanRelative import TreeMeanRelative
 
 
 def sim00_baseline(
@@ -14,7 +14,7 @@ def sim00_baseline(
     save_dir="sim/sim00_pure_estimate",
     debugging_only_return_sampled_cell_numbers=False,
 ):
-    proportional_generator = GenerateProportional(
+    proportional_generator = TreeMeanRelative(
         change_pop_mean_proportional={},
         flowsim_tree=flowsim_tree,
         n_samples=n_samples,
