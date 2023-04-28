@@ -30,7 +30,7 @@ except ImportError:
         """A function that returns a distribution for the new mean.
 
         This is a fallback function that is used if torch is not installed.
-        Within GenerateChangedMean, this function is used to generate a distribution
+        Within TreeMeanDistributionSampler, this function is used to sample a distribution
         for the new mean. The distribution is then used to sample a new mean for
         the population that is to be changed.
 
@@ -51,7 +51,7 @@ except ImportError:
         return PseudoTorchDistributionNormal(loc=original_mean + 0, scale=1)
 
 
-class GenerateChangedMean:
+class TreeMeanDistributionSampler:
     def __init__(
         self,
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
@@ -80,13 +80,13 @@ class GenerateChangedMean:
         self.mean_distribution = mean_distribution
 
         # The following variable should only be turned off if you do NOT want the cells actually
-        # generated, but instead want to return only the cell NUMBERS per population
+        # sampled, but instead want to return only the cell NUMBERS per population
         self._debugging_only_return_sampled_cell_numbers = (
             debugging_only_return_sampled_cell_numbers
         )
 
     @staticmethod
-    def _generate(
+    def _sample(
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
         population_name_to_change: float,
         original_mean: float,
@@ -115,13 +115,13 @@ class GenerateChangedMean:
         target_mean_dist: D.Distribution = mean_distribution(original_mean * 100)
         all_true_popcounts = None
         all_changed_parameters = None
-        all_generated_samples = None
+        all_sampled_samples = None
         all_targets = []
         for sample_i in range(n_samples):
             if verbose:
                 print(".", end="")
             all_targets += [max(1e-9, float(target_mean_dist.sample()) / 100.0)]
-            true_popcounts, changed_parameters, generated_samples = sim_target(
+            true_popcounts, changed_parameters, sampled_samples = sim_target(
                 flowsim=flowsim_tree,
                 change_pop_mean_target={
                     # Use the max to omit negative and 0 values
@@ -138,13 +138,13 @@ class GenerateChangedMean:
             if all_true_popcounts is None:
                 all_true_popcounts = true_popcounts
                 all_changed_parameters = changed_parameters
-                all_generated_samples = generated_samples
+                all_sampled_samples = sampled_samples
             else:
                 all_true_popcounts = pd.concat(
                     [all_true_popcounts, true_popcounts], axis=1
                 )
                 all_changed_parameters += changed_parameters
-                all_generated_samples += generated_samples
+                all_sampled_samples += sampled_samples
         if save_dir is not None:
             all_true_popcounts.to_csv(f"{save_dir}.csv")
         if verbose:
@@ -153,12 +153,12 @@ class GenerateChangedMean:
         return (
             all_true_popcounts,
             all_changed_parameters,
-            all_generated_samples,
+            all_sampled_samples,
             all_targets,
         )
 
-    def generate(self):
-        return self._generate(
+    def sample(self):
+        return self._sample(
             flowsim_tree=self.flowsim_tree,
             n_samples=self.n_samples,
             n_cells=self.n_cells,
