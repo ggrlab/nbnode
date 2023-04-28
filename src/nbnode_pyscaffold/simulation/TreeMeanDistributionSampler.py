@@ -20,13 +20,16 @@ class PseudoTorchDistributionNormal:
 
 
 try:
+    import torch
     import torch.distributions as D
 
     def mean_dist_fun(original_mean: float) -> D.Distribution:
         # You can also set that a lambda-function, e.g.
         #   lambda original_mean: D.Normal(loc=original_mean + 0, scale=1)
         return D.Normal(loc=original_mean + 0, scale=1)
+
 except ImportError:
+
     def mean_dist_fun(original_mean: float) -> PseudoTorchDistributionNormal:
         """A function that returns a distribution for the new mean.
 
@@ -65,8 +68,17 @@ class TreeMeanDistributionSampler:
         seed_sample_0=129873,
         save_dir="sim/sim00_m0.sd1",
         only_return_sampled_cell_numbers=False,
+        save_changed_parameters=False,
+        minimum_target_mean_proportion=1e-9,
     ) -> None:
+        if isinstance(flowsim_tree, str):
+            with open(
+                flowsim_tree,
+                "rb",
+            ) as f:
+                flowsim_tree: FlowSimulationTreeDirichlet = pickle.load(f)
         self.flowsim_tree = flowsim_tree
+
         self.n_samples = n_samples
         self.n_cells = n_cells
         self.use_only_diagonal_covmat = use_only_diagonal_covmat
@@ -80,7 +92,9 @@ class TreeMeanDistributionSampler:
         )
         self.mean_distribution = mean_distribution
 
+        self.save_changed_parameters = save_changed_parameters
         self._only_return_sampled_cell_numbers = only_return_sampled_cell_numbers
+        self.minimum_target_mean_proportion = minimum_target_mean_proportion
 
     @staticmethod
     def _sample(
@@ -95,14 +109,9 @@ class TreeMeanDistributionSampler:
         seed_sample_0=129873,
         save_dir="sim/sim00_pure_estimate",
         _only_return_sampled_cell_numbers=False,
+        save_changed_parameters=False,
+        minimum_target_mean_proportion=1e-9,
     ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-        if isinstance(flowsim_tree, str):
-            with open(
-                flowsim_tree,
-                "rb",
-            ) as f:
-                flowsim_tree: FlowSimulationTreeDirichlet = pickle.load(f)
-
         if save_dir is not None:
             os.makedirs(save_dir, exist_ok=True)
         if verbose:
@@ -117,7 +126,22 @@ class TreeMeanDistributionSampler:
         for sample_i in range(n_samples):
             if verbose:
                 print(".", end="")
-            all_targets += [max(1e-9, float(target_mean_dist.sample()) / 100.0)]
+            # Set a seed for the target value of the sample. (reproducibility)
+            try: 
+                torch.manual_seed(seed_sample_0 + sample_i + 12947)
+            except NameError:
+                # Then torch is not installed and the 
+                pass
+            np.random.seed(seed_sample_0 + sample_i + 12947)
+            # raise ValueError(seed_sample_0 + sample_i + 12947)
+
+            target_percentage = float(target_mean_dist.sample())
+            all_targets += [
+                max(
+                    minimum_target_mean_proportion,
+                    target_percentage / 100.0,
+                )
+            ]
             true_popcounts, changed_parameters, sampled_samples = sim_target(
                 flowsim=flowsim_tree,
                 change_pop_mean_target={
@@ -130,7 +154,7 @@ class TreeMeanDistributionSampler:
                 save_dir=save_dir,
                 sample_name=f"sample_{sample_i}",
                 only_return_sampled_cell_numbers=_only_return_sampled_cell_numbers,
-                save_changed_parameters=False,
+                save_changed_parameters=save_changed_parameters,
             )
             if all_true_popcounts is None:
                 all_true_popcounts = true_popcounts
@@ -168,4 +192,6 @@ class TreeMeanDistributionSampler:
             seed_sample_0=self.seed_sample_0,
             save_dir=self.save_dir,
             _only_return_sampled_cell_numbers=self._only_return_sampled_cell_numbers,
+            save_changed_parameters=self.save_changed_parameters,
+            minimum_target_mean_proportion = self.minimum_target_mean_proportion
         )

@@ -20,8 +20,16 @@ class TreeMeanRelative:
         seed_sample_0=129873,
         save_dir="sim/sim00_pure_estimate",
         only_return_sampled_cell_numbers=False,
+        save_changed_parameters=True,
     ) -> None:
+        if isinstance(flowsim_tree, str):
+            with open(
+                flowsim_tree,
+                "rb",
+            ) as f:
+                flowsim_tree: FlowSimulationTreeDirichlet = pickle.load(f)
         self.flowsim_tree = flowsim_tree
+
         self.change_pop_mean_proportional = change_pop_mean_proportional
         self.n_samples = n_samples
         self.n_cells = n_cells
@@ -29,11 +37,9 @@ class TreeMeanRelative:
         self.verbose = verbose
         self.seed_sample_0 = seed_sample_0
         self.save_dir = save_dir
-        # The following variable should only be turned off if you do NOT want the cells actually
-        # sampled, but instead want to return only the cell NUMBERS per population
-        self._only_return_sampled_cell_numbers = (
-            only_return_sampled_cell_numbers
-        )
+        self.save_changed_parameters = save_changed_parameters
+        self._only_return_sampled_cell_numbers = only_return_sampled_cell_numbers
+
 
     @staticmethod
     def _sample(
@@ -46,14 +52,8 @@ class TreeMeanRelative:
         seed_sample_0=129873,
         save_dir="sim/sim00_pure_estimate",
         _only_return_sampled_cell_numbers=False,
+        save_changed_parameters=False,
     ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-        if isinstance(flowsim_tree, str):
-            with open(
-                flowsim_tree,
-                "rb",
-            ) as f:
-                flowsim_tree: FlowSimulationTreeDirichlet = pickle.load(f)
-
         if save_dir is not None:
             os.makedirs(save_dir, exist_ok=True)
         if verbose:
@@ -69,9 +69,12 @@ class TreeMeanRelative:
             save_dir=save_dir,
             only_return_sampled_cell_numbers=_only_return_sampled_cell_numbers,
         )
+        if not save_changed_parameters:
+            changed_parameters = None
         if save_dir is not None:
             true_popcounts.to_csv(f"{save_dir}.csv")
-            changed_parameters["alpha"].to_csv(f"{save_dir}_parameters.csv")
+            if save_changed_parameters:
+                changed_parameters["alpha"].to_csv(f"{save_dir}_parameters.csv")
         if verbose:
             print(true_popcounts.apply(lambda x: x.mean(), axis=1) / n_cells)
         return true_popcounts, changed_parameters, sampled_samples
@@ -87,6 +90,7 @@ class TreeMeanRelative:
             seed_sample_0=self.seed_sample_0,
             save_dir=self.save_dir,
             _only_return_sampled_cell_numbers=self._only_return_sampled_cell_numbers,
+            save_changed_parameters=self.save_changed_parameters,
         )
 
     def sample_customize(
@@ -99,6 +103,7 @@ class TreeMeanRelative:
         seed_sample_0=None,
         save_dir=None,
         _only_return_sampled_cell_numbers=None,
+        save_changed_parameters=False,
     ):
         return self._sample(
             n_samples=self.n_samples if n_samples is None else n_samples,
@@ -117,4 +122,7 @@ class TreeMeanRelative:
             _only_return_sampled_cell_numbers=self._only_return_sampled_cell_numbers
             if _only_return_sampled_cell_numbers is None
             else _only_return_sampled_cell_numbers,
+            save_changed_parameters=self.save_changed_parameters
+            if save_changed_parameters is None
+            else save_changed_parameters,
         )
