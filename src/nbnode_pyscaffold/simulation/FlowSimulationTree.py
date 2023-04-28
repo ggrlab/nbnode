@@ -92,7 +92,7 @@ class BaseFlowSimulationTree:
                 + "\n    predicted_nodes_per_cell = celltree.predict(cellmat)\n"
                 + "    celltree.id_preds(predicted_nodes_per_cell)\n"
             )
-        #### 1. Get the percentage of cells in each LEAF-node per sample
+        # 1. Get the percentage of cells in each LEAF-node per sample
         if node_percentages is None:
             # If node_percentages is not given, node.data MUST contain
             # a column which identifies
@@ -123,7 +123,7 @@ class BaseFlowSimulationTree:
             node_percentages = ncells_pernode_persample.div(ncells_per_sample, axis=1)
         self.node_percentages = node_percentages
 
-        #### 2. Estimate distribution of populations
+        # 2. Estimate distribution of populations
         # Use the identified or given node_percentages
         # to calculate/estimate the distribution of how many cells are in each LEAF-node
         # Results in a dictionary of
@@ -145,10 +145,11 @@ class BaseFlowSimulationTree:
         # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4742377/
         # https://mail.python.org/pipermail/scipy-user/2011-August/030312.html
         # https://cmdlinetips.com/2019/05/empirical-cumulative-distribution-function-ecdf-in-python/
-        # ! https://stats.stackexchange.com/questions/226935/algorithms-for-computing-multivariate-empirical-distribution-function-ecdf
+        # ! https://stats.stackexchange.com/questions/226935/
+        # algorithms-for-computing-multivariate-empirical-distribution-function-ecdf
         # ! https://www.sciencedirect.com/science/article/pii/S0167947321001018
 
-        #### 3. Estimate CELL distributions per LEAF-node using `node.data`
+        # 3. Estimate CELL distributions per LEAF-node using `node.data`
         # The distribution is estimated only for `node.data[include_features]`
         if include_features == "dataset_melanoma":
             include_features = [
@@ -190,7 +191,7 @@ class BaseFlowSimulationTree:
         # because populations where the distributions could not be estimated
         # have been removed
         self.__reset_pop_params = copy.deepcopy(self.population_parameters)
-        #### 4. Set the initial seed such that .sample() gives consistent results
+        # 4. Set the initial seed such that .sample() gives consistent results
         self.set_seed(seed)
 
     def estimate_cell_distributions(self, nodes):
@@ -309,7 +310,7 @@ class BaseFlowSimulationTree:
         self._rng = np.random.default_rng(seed)
 
     def ncells_from_percentages(self, percentages, n_cells) -> List[int]:
-        ### "Sample" the number of cells according to the random percentages
+        # "Sample" the number of cells according to the random percentages
         onesample_ncells_perpop = percentages * n_cells
         onesample_ncells_perpop = np.floor(onesample_ncells_perpop)
 
@@ -346,7 +347,7 @@ class BaseFlowSimulationTree:
             List[int]: List of percentages per cell population
         Example:
 
-            ### 1. Generate random percentages for each population
+            # 1. Generate random percentages for each population
             random_mean = self._rng.multivariate_normal(
                 **population_parameters
             )
@@ -359,7 +360,7 @@ class BaseFlowSimulationTree:
             # normalize to 1
             random_mean = random_mean / sum(random_mean)
 
-            ### 2. "Sample" the number of cells according to the random percentages
+            # 2. "Sample" the number of cells according to the random percentages
             onesample_ncells_perpop = random_mean * n_cells
             onesample_ncells_perpop = np.floor(onesample_ncells_perpop)
 
@@ -381,7 +382,7 @@ class BaseFlowSimulationTree:
         n_cells: int = 10000,
         **population_parameters,
     ) -> pd.Series:
-        #### Generate number of cells according to leaf node population distributions
+        # Generate number of cells according to leaf node population distributions
         if len(population_parameters) == 0:
             population_parameters = self.population_parameters
 
@@ -406,12 +407,12 @@ class BaseFlowSimulationTree:
         use_only_diagonal_covmat: bool = True,
         **population_parameters,
     ) -> Union[Tuple[pd.DataFrame, pd.Series], pd.DataFrame]:
-        #### 1. Generate number of cells according to leaf node population distributions
+        # 1. Generate number of cells according to leaf node population distributions
         onesample_ncells_perpop_df = self.sample_populations(
             n_cells=n_cells, **population_parameters
         )
 
-        #### 2. Actually generate the cells _per population_
+        # 2. Actually generate the cells _per population_
         # According to the estimated CELL distributions per leaf node
         all_cells = None
         for population_name, n_in_population in onesample_ncells_perpop_df.items():
@@ -482,11 +483,12 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
         if any(any_samplewise_zeros):
             node_percentages = copy.deepcopy(node_percentages)
             warnings.warn(
-                f"Having zero percentages, because of dirichlet estimation replacing"
-                + " zero values with {min_nonzero}"
+                "Having zero percentages, because of dirichlet estimation replacing"
+                + f" zero values with {min_nonzero}"
             )
             # Then there are percentages which are exactly zero.
-            # dirichlet estimation cannot cope with those, therefore add a small pseudo-percentage
+            # dirichlet estimation cannot cope with those, therefore add a
+            # small pseudo-percentage
             for sample_x in any_samplewise_zeros.index:
                 if any_samplewise_zeros[sample_x]:
                     # add pseudo-percentage (minimum percentage x 1e-3)
