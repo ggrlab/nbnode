@@ -2,8 +2,8 @@ from typing import Union
 
 import torch.distributions as D
 
-from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode.simulation.generator_changed_mean import GenerateChangedMean
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import TreeMeanDistributionSampler
 
 
 def sim03_m_sd(
@@ -19,7 +19,7 @@ def sim03_m_sd(
     save_dir="sim/sim03_m_sd",
     debugging_only_return_sampled_cell_numbers=False,
 ):
-    generator = GenerateChangedMean(
+    generator = TreeMeanDistributionSampler(
         population_name_to_change=population_name,
         mean_distribution=lambda original_mean: D.Normal(
             loc=original_mean + meanshift, scale=sd
