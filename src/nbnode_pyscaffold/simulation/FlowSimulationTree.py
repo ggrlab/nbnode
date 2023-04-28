@@ -509,8 +509,8 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
             population_name (str): The get_name_full() of a population
         """
         leaf_population_names = self.pop_leafnode_names(population_name)
-        for pop_x in leaf_population_names: 
-            try: 
+        for pop_x in leaf_population_names:
+            try:
                 self.population_parameters["alpha"].drop(pop_x, inplace=True)
                 self.population_parameters["__name"].remove(pop_x)
             except KeyError:
@@ -584,7 +584,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
             for x in pop_node.children:
                 leafnodes += self.pop_leafnode_names(x)
             return leafnodes
-        
+
     def pop_alpha(self, population_node_full_name: str):
         this_pop_leafnode_names = self.pop_leafnode_names(
             population_node_full_name=population_node_full_name

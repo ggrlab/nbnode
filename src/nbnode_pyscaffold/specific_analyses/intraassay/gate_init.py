@@ -1,12 +1,13 @@
-from typing import Tuple
 import os
+from typing import Tuple
+
 import pandas as pd
 
-from nbnode_pyscaffold.nbnode import NBNode
+from nbnode_pyscaffold.apply.count_celltree_df import count_celltree_df
 from nbnode_pyscaffold.apply.gate_csv import gate_csv
+from nbnode_pyscaffold.nbnode import NBNode
 from nbnode_pyscaffold.nbnode_trees import tree_complete_aligned_v2
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.apply.count_celltree_df import count_celltree_df
 
 
 def gate_init(

@@ -1,5 +1,5 @@
-import pandas as pd
 import anytree
+import pandas as pd
 
 from nbnode_pyscaffold.nbnode import NBNode
 

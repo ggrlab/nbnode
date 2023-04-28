@@ -2,12 +2,11 @@ import os
 import pickle
 from typing import Any, Dict, List, Tuple, Union
 
+import numpy as np
 import pandas as pd
 
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 from nbnode_pyscaffold.simulation.sim_target import sim_target
-
-import numpy as np
 
 
 class PseudoTorchDistributionNormal:
@@ -127,10 +126,10 @@ class TreeMeanDistributionSampler:
             if verbose:
                 print(".", end="")
             # Set a seed for the target value of the sample. (reproducibility)
-            try: 
+            try:
                 torch.manual_seed(seed_sample_0 + sample_i + 12947)
             except NameError:
-                # Then torch is not installed and the 
+                # Then torch is not installed and the
                 pass
             np.random.seed(seed_sample_0 + sample_i + 12947)
             # raise ValueError(seed_sample_0 + sample_i + 12947)
@@ -193,5 +192,5 @@ class TreeMeanDistributionSampler:
             save_dir=self.save_dir,
             _only_return_sampled_cell_numbers=self._only_return_sampled_cell_numbers,
             save_changed_parameters=self.save_changed_parameters,
-            minimum_target_mean_proportion = self.minimum_target_mean_proportion
+            minimum_target_mean_proportion=self.minimum_target_mean_proportion,
         )
