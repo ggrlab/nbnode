@@ -38,7 +38,7 @@ class TestTreeMeans(TestCase):
         self.flowsim_trunk = FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
             include_features="dataset_melanoma_short",
             verbose=True,
         )

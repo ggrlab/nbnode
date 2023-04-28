@@ -36,7 +36,7 @@ class TestIntraassayData(TestCase):
                     "examples/results/intraassay_gate_init_4samples.pickle", "rb"
                 ) as f:
                     self.celltree, node_counts_df, self.flowsim_tree = pickle.load(f)
-            except:
+            except FileNotFoundError:
                 # 4 samples just to speed up things
                 self.celltree, node_counts_df, self.flowsim_tree = gate_init(
                     sample_list=[0, 1, 2, 3]
@@ -54,7 +54,8 @@ class TestIntraassayData(TestCase):
 
     def test_sample_populations(self):
         self.flowsim_tree.set_seed(10289)
-        # sample_populations() gets one complete sample of n_cells split across all populations
+        # sample_populations() gets one complete sample of
+        # n_cells split across all populations
         n_cells = 1e10
         overconfident_flowdist = copy.deepcopy(self.flowsim_tree)
         overconfident_flowdist.population_parameters["alpha"] *= 1e8

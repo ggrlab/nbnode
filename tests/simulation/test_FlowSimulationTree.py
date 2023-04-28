@@ -215,6 +215,7 @@ class TestFlowSimulation(TestCase):
             # cov=np.diag(np.diag(flowsim.population_distribution_parameters["cov"])),
             # population_names=flowsim.population_distribution_parameters["mean"].index,
         )
+        print(leaf_nodes, z)
 
     def test_subset_by_nodename(self):
         mytree = nbtree.tree_simple()
@@ -288,7 +289,7 @@ class TestFlowSimulation(TestCase):
         )
 
         flowsim.set_seed(10289)
-        z = flowsim.sample(n_cells=100)
+        flowsim.sample(n_cells=100)
 
     def test_FlowSimulationTree_report_mean_precision(self):
         yternary = pd.read_csv(
@@ -535,7 +536,7 @@ class TestFlowSimulation(TestCase):
             # node, are you sure that is what you want?
             # The dirichlet parameter will be 1, only the estimatedcell_distributions
             # might make sense.
-            flowsim = FlowSimulationTreeDirichlet(
+            FlowSimulationTreeDirichlet(
                 node_percentages=None,
                 rootnode=celltree["/AllCells/DP"],
                 # With data_cellgroup_col=None,
@@ -580,7 +581,7 @@ class TestFlowSimulation(TestCase):
         # /AllCells/DN                    0.000000
         # /AllCells/DP                    0.973974
 
-        flowsim = FlowSimulationTreeDirichlet(
+        FlowSimulationTreeDirichlet(
             node_percentages=node_percentages,
             rootnode=celltree,
             include_features="dataset_melanoma_short",
@@ -591,7 +592,7 @@ class TestFlowSimulation(TestCase):
         celltree.data = self.cellmat
         celltree.id_preds(celltree.predict())
 
-        flowsim = FlowSimulationTreeDirichlet(
+        FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
             # With data_cellgroup_col=None,
