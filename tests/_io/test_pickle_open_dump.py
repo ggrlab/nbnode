@@ -9,11 +9,13 @@ from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
 
 
 def test_pickle_open_dump():
+    os.makedirs("tests_output/", exist_ok=True)
     pickle_open_dump("test", "tests_output/test.pkl")
 
 
 def test_pickle_open_dump_NBNode():
     import pandas as pd
+    os.makedirs("tests_output/", exist_ok=True)
 
     yternary = pd.read_csv(
         os.path.join(
