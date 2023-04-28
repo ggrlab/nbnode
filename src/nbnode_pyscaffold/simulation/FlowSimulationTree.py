@@ -26,6 +26,7 @@ class BaseFlowSimulationTree:
         node_percentages: Optional[pd.DataFrame] = None,
         seed: int = 12987,
         include_features="dataset_melanoma",
+        verbose: bool = False,
     ) -> None:
         """Base flow simulation.
 
@@ -70,6 +71,22 @@ class BaseFlowSimulationTree:
                 "Only one single leaf node found, potentially parameter estimation does not work."
             )
 
+        if rootnode.data is None:
+            raise ValueError(
+                "rootnode.data is None. Please set rootnode.data before "
+                + "creating the simulation. Usually: \n"
+                + "    "
+                + "rootnode.data = pd.DF_with_colnames_matching_the_include_features"
+            )
+        if len(rootnode.ids) <= 1:
+            raise ValueError(
+                "rootnode.ids does not contain any id.\n"
+                + "In this simulation we assume that all cells originate from the root"
+                + " node, therefore rootnode.ids must contain at least one id.\n"
+                + "Please set rootnode.ids before creating the simulation. Usually: \n"
+                + "\n    predicted_nodes_per_cell = celltree.predict(cellmat)\n"
+                + "    celltree.id_preds(predicted_nodes_per_cell)\n"
+            )
         #### 1. Get the percentage of cells in each LEAF-node per sample
         if node_percentages is None:
             # If node_percentages is not given, node.data MUST contain a column which identifies
@@ -114,7 +131,8 @@ class BaseFlowSimulationTree:
         self.population_parameters = self.estimate_population_distribution(
             node_percentages
         )
-        print(self.population_parameters)
+        if verbose:
+            print(self.population_parameters)
 
         # Extension:
         # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4742377/
@@ -141,6 +159,23 @@ class BaseFlowSimulationTree:
                 "CD57_PacBlue",
                 "CD45_KrOrange",
             ]
+        elif include_features == "dataset_melanoma_short":
+            include_features = [
+                "FS",
+                "FS.0",
+                "SS",
+                "CD45RA",
+                "CCR7",
+                "CD28",
+                "PD1",
+                "CD27",
+                "CD4",
+                "CD8",
+                "CD3",
+                "CD57",
+                "CD45",
+            ]
+
         self.include_features = include_features
         self.nodes_info_dict = self.estimate_cell_distributions(nodes=leaf_nodes_data)
 
