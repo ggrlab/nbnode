@@ -16,7 +16,7 @@ def sim03_m_sd(
     verbose=True,
     seed_sample_0=129873,
     save_dir="sim/sim03_m_sd",
-    debugging_only_return_sampled_cell_numbers=False,
+    only_return_sampled_cell_numbers=False,
 ):
     generator = TreeMeanDistributionSampler(
         population_name_to_change=population_name,
@@ -34,6 +34,6 @@ def sim03_m_sd(
         verbose=verbose,
         seed_sample_0=seed_sample_0,
         save_dir=save_dir,
-        debugging_only_return_sampled_cell_numbers=debugging_only_return_sampled_cell_numbers,
+        only_return_sampled_cell_numbers=only_return_sampled_cell_numbers,
     )
-    return generator.generate()
+    return generator.sample()

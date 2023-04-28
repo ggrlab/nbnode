@@ -12,7 +12,7 @@ def sim00_baseline(
     verbose=True,
     seed_sample_0=129873,
     save_dir="sim/sim00_pure_estimate",
-    debugging_only_return_sampled_cell_numbers=False,
+    only_return_sampled_cell_numbers=False,
 ):
     proportional_generator = TreeMeanRelative(
         change_pop_mean_proportional={},
@@ -23,6 +23,6 @@ def sim00_baseline(
         verbose=verbose,
         seed_sample_0=seed_sample_0,
         save_dir=save_dir,
-        debugging_only_return_sampled_cell_numbers=debugging_only_return_sampled_cell_numbers,
+        only_return_sampled_cell_numbers=only_return_sampled_cell_numbers,
     )
-    return proportional_generator.generate()
+    return proportional_generator.sample()
