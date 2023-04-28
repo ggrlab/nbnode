@@ -1,11 +1,10 @@
 import os
 
 import nbnode_pyscaffold.nbnode_trees as nbtree
+from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
 from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
 
 TESTS_DIR = find_dirname_above_currentfile()
-
-from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
 
 
 def test_pickle_open_dump():

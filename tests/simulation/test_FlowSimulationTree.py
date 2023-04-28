@@ -40,7 +40,9 @@ class TestFlowSimulation(TestCase):
         self.flowsim_trunk = FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
             include_features="dataset_melanoma_short",
             verbose=True,
         )
@@ -82,6 +84,7 @@ class TestFlowSimulation(TestCase):
             node_percentages=None,
             data_cellgroup_col="CD8",  # JUST FOR TESTING!
         )
+        print(flowsim)
 
     def test_FlowSimulationTreeDirichlet(self):
         yternary = pd.read_csv(
@@ -162,7 +165,9 @@ class TestFlowSimulation(TestCase):
             rootnode=celltree,
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
 
         x = flowsim.sample(n_cells=100)
@@ -177,7 +182,7 @@ class TestFlowSimulation(TestCase):
         a = np.random.default_rng(120983)
         assert np.isclose(0.71607698, a.random(1))
 
-    def test_FlowSimulationTreeDirichlet(self):
+    def test_FlowSimulationTreeDirichlet_2(self):
         yternary = pd.read_csv(
             os.path.join(
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
@@ -198,7 +203,9 @@ class TestFlowSimulation(TestCase):
             rootnode=celltree,
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
 
         flowsim.set_seed(10289)
@@ -247,7 +254,9 @@ class TestFlowSimulation(TestCase):
             rootnode=mytree,
             include_features=["f1", "f2"],
             node_percentages=None,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
         flowsim.set_seed(1234)
         leaf_sample = flowsim.sample(10, return_sampled_cell_numbers=True)
@@ -273,7 +282,9 @@ class TestFlowSimulation(TestCase):
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
 
         flowsim.set_seed(10289)
@@ -298,7 +309,9 @@ class TestFlowSimulation(TestCase):
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
         print(flowsim.precision)
         print(flowsim.mean_leafs)
@@ -337,7 +350,9 @@ class TestFlowSimulation(TestCase):
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
         print(flowsim.precision)
         print(flowsim.mean_leafs)
@@ -362,7 +377,9 @@ class TestFlowSimulation(TestCase):
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
         # print(flowsim.precision)
         assert len(flowsim.pop_leafnode_names("/AllCells")) == len(
@@ -405,7 +422,9 @@ class TestFlowSimulation(TestCase):
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
         for x in anytree.PreOrderIter(celltree):
             print(
@@ -433,7 +452,9 @@ class TestFlowSimulation(TestCase):
             include_features=["CD57", "PD1", "fake_activations"],
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
         )
         assert flowsim.pop_mean("/AllCells/not CD45") == 0.28343526674499486
         flowsim.reset_populations()
@@ -454,7 +475,9 @@ class TestFlowSimulation(TestCase):
             flowsim = FlowSimulationTreeDirichlet(
                 node_percentages=None,
                 rootnode=celltree,
-                data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+                # With data_cellgroup_col=None,
+                # all cells are assumed to come from the same sample
+                data_cellgroup_col=None,
                 include_features="dataset_melanoma_short",
             )
 
@@ -471,7 +494,9 @@ class TestFlowSimulation(TestCase):
             flowsim = FlowSimulationTreeDirichlet(
                 node_percentages=None,
                 rootnode=celltree,
-                data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+                # With data_cellgroup_col=None,
+                # all cells are assumed to come from the same sample
+                data_cellgroup_col=None,
                 include_features="dataset_melanoma_short",
             )
 
@@ -482,7 +507,9 @@ class TestFlowSimulation(TestCase):
         flowsim = FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
             include_features="dataset_melanoma_short",
         )
         print(flowsim.sample(n_cells=10))
@@ -496,7 +523,9 @@ class TestFlowSimulation(TestCase):
         flowsim = FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
             include_features="dataset_melanoma_short",
         )
 
@@ -509,7 +538,9 @@ class TestFlowSimulation(TestCase):
             flowsim = FlowSimulationTreeDirichlet(
                 node_percentages=None,
                 rootnode=celltree["/AllCells/DP"],
-                data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+                # With data_cellgroup_col=None,
+                # all cells are assumed to come from the same sample
+                data_cellgroup_col=None,
                 include_features="dataset_melanoma_short",
             )
 
@@ -563,7 +594,9 @@ class TestFlowSimulation(TestCase):
         flowsim = FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
             include_features="dataset_melanoma_short",
             verbose=True,
         )
@@ -576,7 +609,9 @@ class TestFlowSimulation(TestCase):
         flowsim = FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
-            data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
+            # With data_cellgroup_col=None,
+            # all cells are assumed to come from the same sample
+            data_cellgroup_col=None,
             include_features="dataset_melanoma_short",
             verbose=True,
         )

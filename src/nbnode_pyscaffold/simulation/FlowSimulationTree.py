@@ -48,14 +48,15 @@ class BaseFlowSimulationTree:
             seed (int, optional):
                 Relevant if sampling from the resulting Simulation.
                 Defaults to 12987.
-            include_features (str, optional): _description_. Defaults to "dataset_melanoma".
+            include_features (str, optional): _description_.
+            Defaults to "dataset_melanoma".
 
 
         Attributes:
             _orig_nodes_to_leafnodes:
                 pd.DataFrame from Dict[leaf_node.get_name_full(): node.get_name_full()].
-                Potentially multiple `leaf_nodes` have the same `node`. If `node` is already
-                a leaf node, `leaf_node = node`.
+                Potentially multiple `leaf_nodes` have the same `node`.
+                If `node` is already a leaf node, `leaf_node = node`.
                 The index of the dataframe is `leaf_node.get_name_full()`.
         """
 
@@ -63,7 +64,8 @@ class BaseFlowSimulationTree:
         leaf_nodes_data = [
             node for node in anytree.PreOrderIter(rootnode) if node.is_leaf
         ]
-        # Sort the leaf nodes such that self.sample() gets the same sample regardless of the order
+        # Sort the leaf nodes such that self.sample()
+        # gets the same sample regardless of the order
         leaf_nodes_data = sorted(leaf_nodes_data, key=lambda node: node.get_name_full())
 
         if len(leaf_nodes_data) == 1:
@@ -92,7 +94,8 @@ class BaseFlowSimulationTree:
             )
         #### 1. Get the percentage of cells in each LEAF-node per sample
         if node_percentages is None:
-            # If node_percentages is not given, node.data MUST contain a column which identifies
+            # If node_percentages is not given, node.data MUST contain
+            # a column which identifies
             # groups of cells (default: "sample")
             if data_cellgroup_col is not None:
                 ncells_per_sample = rootnode.data[data_cellgroup_col].value_counts()
@@ -114,7 +117,8 @@ class BaseFlowSimulationTree:
                 ncells_per_node_per_sample,
                 index=[node.get_name_full() for node in leaf_nodes_data],
             )
-            # n_leafnode_persample contains NaN: They are missing because there were no cells inside.
+            # n_leafnode_persample contains NaN: They are missing because there were
+            # no cells inside.
             ncells_pernode_persample = ncells_pernode_persample.fillna(0)
             node_percentages = ncells_pernode_persample.div(ncells_per_sample, axis=1)
         self.node_percentages = node_percentages
@@ -123,12 +127,12 @@ class BaseFlowSimulationTree:
         # Use the identified or given node_percentages
         # to calculate/estimate the distribution of how many cells are in each LEAF-node
         # Results in a dictionary of
-        #   {
-        #       "__name": List[str],  # population names
-        #       "distribution_parameter_1": List,   # First     distribution parameter, e.g. "alpha" or "mean"
-        #       "distribution_parameter_2": List,   # Second    distribution parameter, e.g. "sigma"
-        #       # ...                               # Further   distribution parameters
-        #   }
+        #  {
+        #     "__name": List[str],  # population names
+        #     "distribution_parameter_1": List, # First parameter,e.g. "alpha" or "mean"
+        #     "distribution_parameter_2": List, # Second parameter, e.g. "sigma"
+        #     # ...                             # Further parameters
+        #  }
         # The length of each list must be identical.
         # The distribution parameters are usually pd.DataFrames
         self.population_parameters = self.estimate_population_distribution(
@@ -183,7 +187,8 @@ class BaseFlowSimulationTree:
         self.nodes_info_dict = self.estimate_cell_distributions(nodes=leaf_nodes_data)
 
         # reset population parameters AFTER cell distribution estimation
-        # because populations where the distributions could not be estimated have been removed
+        # because populations where the distributions could not be estimated
+        # have been removed
         self.__reset_pop_params = copy.deepcopy(self.population_parameters)
         #### 4. Set the initial seed such that .sample() gives consistent results
         self.set_seed(seed)
@@ -195,7 +200,9 @@ class BaseFlowSimulationTree:
         for node in nodes:
             if len(node.ids) <= 1:
                 warnings.warn(
-                    f"No cells in {node.get_name_full()} to calculate any moments. Removing the population also from population_means and population_cov.",
+                    f"No cells in {node.get_name_full()} to calculate any moments. "
+                    + "Removing the population also from population_means and "
+                    + "population_cov.",
                 )
                 self.remove_population(node.get_name_full())
 
@@ -249,7 +256,8 @@ class BaseFlowSimulationTree:
                 }
         Example:
 
-            # Calculate mean and covariance for each of the populations (rows of node_percentages)
+            # Calculate mean and covariance for each of the populations
+            # (rows of node_percentages)
 
             population_means = node_percentages.mean(axis=1)
             if node_percentages.shape[1] > 1:
@@ -271,14 +279,16 @@ class BaseFlowSimulationTree:
     @abstractmethod
     def remove_population(self, population_name: str):
         """
-        Remove a certain population from the simulation. Necessary if any population had no cells
+        Remove a certain population from the simulation. Necessary if any population
+        had no cells
         and therefore the cell-parameters for the population cannot be estimated.
         ALWAYS call
             `self.population_parameters["__name"].remove(population_name)`
 
         Args:
             population_name (str):
-                The name of the population which should be removed from the population_parameters.
+                The name of the population which should be removed from the
+                population_parameters.
         Example:
             self.population_parameters["__name"].remove(population_name)
             self.population_parameters["mean"].drop(
@@ -340,9 +350,11 @@ class BaseFlowSimulationTree:
             random_mean = self._rng.multivariate_normal(
                 **population_parameters
             )
-            # HACK: therefore all values are positive, this is a kindoff hack and should be replaced with a better distribution
+            # HACK: therefore all values are positive, this is a kindoff hack and
+            # should be replaced with a better distribution
             random_mean -= min(random_mean)
-            # add the smallest value such that the "most negative population" has atleast _some_ chance of occuring
+            # add the smallest value such that the "most negative population" has
+            # atleast _some_ chance of occuring
             random_mean += sorted(set(random_mean))[1] / 1e3
             # normalize to 1
             random_mean = random_mean / sum(random_mean)
@@ -445,7 +457,8 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
     ) -> None:
         if not dirichlet_installed:
             raise PackageNotFoundError(
-                "Python package <dirichlet> has not been found, cannot simulate FlowSimulationDirichlet"
+                "Python package <dirichlet> has not been found, cannot simulate "
+                + "FlowSimulationDirichlet"
             )
         super().__init__(
             rootnode=rootnode,
@@ -469,7 +482,8 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
         if any(any_samplewise_zeros):
             node_percentages = copy.deepcopy(node_percentages)
             warnings.warn(
-                f"Having zero percentages, because of dirichlet estimation replacing zero values with {min_nonzero}"
+                f"Having zero percentages, because of dirichlet estimation replacing"
+                + " zero values with {min_nonzero}"
             )
             # Then there are percentages which are exactly zero.
             # dirichlet estimation cannot cope with those, therefore add a small pseudo-percentage

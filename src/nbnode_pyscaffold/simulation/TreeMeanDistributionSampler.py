@@ -33,9 +33,9 @@ except ImportError:
         """A function that returns a distribution for the new mean.
 
         This is a fallback function that is used if torch is not installed.
-        Within TreeMeanDistributionSampler, this function is used to sample a distribution
-        for the new mean. The distribution is then used to sample a new mean for
-        the population that is to be changed.
+        Within TreeMeanDistributionSampler, this function is used to sample a
+        distribution for the new mean. The distribution is then used to sample
+        a new mean for the population that is to be changed.
 
         So the calls are::
 

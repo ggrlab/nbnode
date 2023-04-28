@@ -23,18 +23,14 @@ def sim_target(
     save_changed_parameters=False,
 ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
     """
-        This function simulates new cells (`n_cells`) for `n_samples` samples according to the given
-        flow simulation `flowsim`.
+        This function simulates new cells (`n_cells`) for `n_samples` samples according
+        to the given flow simulation `flowsim`.
 
             1. flowsim.reset_populations() (for consistency)
-            2. For every list element in change_pop_mean_target, change all contained populations (keys)
-            to their respective mean proportions (values). Values outside (0, 1) are not allowed.
-
-            with their respective value and changed by `flowsim.new_pop_mean(old_mean * change_prop)`
-            2. Generate `n_samples` with `n_cells` are sampled from the changed FlowSimulation.
-            3. (optional) The generated samples are saved to save_dir
-            3. The actual number of cells and the changed parameters are returned
-
+            2. For every list element in change_pop_mean_target,
+            change all contained populations (keys) to their respective
+            mean proportions (values). Values outside (0, 1) are not allowed.
+            Todo: Further documentation!
 
     Args:
         n_samples (int, optional):
@@ -46,16 +42,19 @@ def sim_target(
 
             Defaults to 25000.
         use_only_diagonal_covmat (bool, optional):
-            If False, the complete covariance matrix per cell population is used to draw new cells
+            If False, the complete covariance matrix per cell population is used to
+            draw new cells
             If True, all off-diagonal elements of the covariance matrix are set to 0.
 
             Defaults to True.
         change_pop_mean_target (List[Dict[str, float]]):
-            A dictionary of which cell population(s) should be changed to which mean proportion of
+            A dictionary of which cell population(s) should be changed to which mean
+            proportion of
             all cells. floats should be between (0, 1)
 
         save_dir (str, optional):
-            If given, the created samples (n cells X p markers) are saved into that directory as f"sample_{sample_i}.csv".
+            If given, the created samples (n cells X p markers) are saved into that
+            directory as f"sample_{sample_i}.csv".
 
             Defaults to "sim/intraassay/sim00_target".
 
