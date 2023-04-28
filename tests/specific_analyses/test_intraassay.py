@@ -221,7 +221,7 @@ class TestIntraassayData(TestCase):
             n_cells=n_cells,
             n_samples=n_samples,
             save_dir=None,
-            debugging_only_return_sampled_cell_numbers=True,
+            only_return_sampled_cell_numbers=True,
         )
         # there must be ``n_samples`` samples
         assert done_sim00[0].shape[1] == n_samples
@@ -238,7 +238,7 @@ class TestIntraassayData(TestCase):
             n_cells=n_cells,
             n_samples=n_samples,
             save_dir=None,
-            debugging_only_return_sampled_cell_numbers=True,
+            only_return_sampled_cell_numbers=True,
         )
         # there must be ``n_samples`` samples
         assert done_sim01[0].shape[1] == n_samples
@@ -260,7 +260,7 @@ class TestIntraassayData(TestCase):
             n_cells=n_cells,
             n_samples=n_samples,
             save_dir=None,
-            debugging_only_return_sampled_cell_numbers=True,
+            only_return_sampled_cell_numbers=True,
         )
         # there must be ``n_samples`` samples
         assert done_sim02[0].shape[1] == n_samples
@@ -326,7 +326,7 @@ class TestIntraassayData(TestCase):
                 n_cells=n_cells,
                 n_samples=n_samples,
                 save_dir=None,
-                debugging_only_return_sampled_cell_numbers=True,
+                only_return_sampled_cell_numbers=True,
             )
             assert done_sims[f"sim03_sd{sd}"][0].shape[1] == n_samples
         import pandas as pd
@@ -392,7 +392,7 @@ class TestIntraassayData(TestCase):
                 n_cells=n_cells,
                 n_samples=n_samples,
                 save_dir=None,
-                debugging_only_return_sampled_cell_numbers=True,
+                only_return_sampled_cell_numbers=True,
             )
             assert done_sims[f"sim03_m.{meanshift}_sd.1"][0].shape[1] == n_samples
         import pandas as pd
@@ -453,7 +453,7 @@ class TestIntraassayData(TestCase):
                 n_cells=n_cells,
                 n_samples=n_samples,
                 save_dir=None,
-                debugging_only_return_sampled_cell_numbers=True,
+                only_return_sampled_cell_numbers=True,
             )
             assert done_sims[f"sim03_m.{meanshift}_sd.1"][0].shape[1] == n_samples
             done_sims[f"sim03_m.{meanshift}_sd.5"] = ia_sims.sim03_m_sd(
@@ -464,7 +464,7 @@ class TestIntraassayData(TestCase):
                 n_cells=n_cells,
                 n_samples=n_samples,
                 save_dir=None,
-                debugging_only_return_sampled_cell_numbers=True,
+                only_return_sampled_cell_numbers=True,
             )
         import pandas as pd
 
