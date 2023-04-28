@@ -521,7 +521,7 @@ class TestFlowSimulation(TestCase):
         celltree.id_preds(celltree.predict())
         # celltree.count(use_ids=True)
 
-        flowsim = FlowSimulationTreeDirichlet(
+        FlowSimulationTreeDirichlet(
             node_percentages=None,
             rootnode=celltree,
             # With data_cellgroup_col=None,
