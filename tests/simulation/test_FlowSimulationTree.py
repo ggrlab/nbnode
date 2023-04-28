@@ -7,11 +7,8 @@ import anytree
 
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 from nbnode_pyscaffold.nbnode import NBNode
-from nbnode_pyscaffold.nbnode_trees import (
-    tree_simple,
-    tree_complex,
-    tree_simpleB,
-)
+import nbnode_pyscaffold.nbnode_trees as nbtree
+
 from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
 
 
@@ -20,7 +17,7 @@ TESTS_DIR = find_dirname_above_currentfile()
 
 class TestFlowSimulation(TestCase):
     def test_tree_simple_predict(self):
-        mytree = tree_simple()
+        mytree = nbtree.tree_simple()
 
         single_prediction = mytree.predict(
             values=[1, "test", 2], names=["m1", "m2", "m3"]
@@ -42,7 +39,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -63,7 +60,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -124,7 +121,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -157,7 +154,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -184,7 +181,7 @@ class TestFlowSimulation(TestCase):
         )
 
     def test_subset_by_nodename(self):
-        mytree = tree_simple()
+        mytree = nbtree.tree_simple()
         for node_x in anytree.PreOrderIter(mytree):
             node_x: NBNode
             a = mytree[node_x.get_name_full()]
@@ -194,7 +191,7 @@ class TestFlowSimulation(TestCase):
             mytree["illegal_two_elements", "illegal_two_elements"]
 
     def test_FlowSimulationTreeDirichlet_return_sampled_cell_numbers(self):
-        mytree = tree_simpleB()
+        mytree = nbtree.tree_simpleB()
         a1a_values = {"values": [1, "test", None], "names": ["m1", "m2", "m3"]}
         a1b_values = {"values": [1, "tmp", None], "names": ["m1", "m2", "m3"]}
         samples = [a1a_values] * 3 + [a1b_values] * 2
@@ -234,7 +231,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -259,7 +256,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -298,7 +295,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -323,7 +320,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -366,7 +363,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -387,13 +384,14 @@ class TestFlowSimulation(TestCase):
                 flow_dist.pop_alpha(x.get_name_full()),
                 flow_dist.pop_mean(x.get_name_full()),
             )
+
     def test_FlowSimulationTree_reset_populations(self):
         yternary = pd.read_csv(
             os.path.join(
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "yternary.csv"
             )
         )
-        celltree = tree_complex()
+        celltree = nbtree.tree_complex()
         yternary_preds = celltree.predict(values=yternary)
         celltree.id_preds(yternary_preds)
 
@@ -414,6 +412,20 @@ class TestFlowSimulation(TestCase):
 
         flow_dist.new_pop_mean("/AllCells/not CD45", percentage=0.1)
         assert flow_dist.pop_mean("/AllCells/not CD45") == 0.1
-        
+
         flow_dist.reset_populations()
         assert flow_dist.pop_mean("/AllCells/not CD45") == 0.28343526674499486
+
+    def test_FlowSimulationTree_singlenode(self):
+        import re
+        import pandas as pd
+
+        cellmat = pd.read_csv(
+            os.path.join(
+                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
+            )
+        )
+        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
+        celltree = nbtree.tree_complete_aligned()
+        a = celltree.predict(cellmat)
+        print(a)
