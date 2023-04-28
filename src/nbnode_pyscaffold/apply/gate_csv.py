@@ -1,7 +1,9 @@
 from typing import List, Union
+
 import pandas as pd
 
 import nbnode_pyscaffold.nbnode_trees as nbtrees
+
 
 def gate_csv(
     csv: Union[str, List[str]],

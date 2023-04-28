@@ -40,7 +40,6 @@ class TreeMeanRelative:
         self.save_changed_parameters = save_changed_parameters
         self._only_return_sampled_cell_numbers = only_return_sampled_cell_numbers
 
-
     @staticmethod
     def _sample(
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],

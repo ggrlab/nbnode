@@ -61,7 +61,7 @@ def sim_proportional(
             Verboseness. Defaults to True.
 
         only_return_sampled_cell_numbers (bool):
-            If true, only the number of cells per population are returned, 
+            If true, only the number of cells per population are returned,
             not the actual samples.
     Returns:
         Tuple:

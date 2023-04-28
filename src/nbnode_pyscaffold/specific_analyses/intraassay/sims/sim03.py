@@ -1,9 +1,11 @@
 from typing import Union
 
-
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import TreeMeanDistributionSampler
-from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import PseudoTorchDistributionNormal
+from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import (
+    PseudoTorchDistributionNormal,
+    TreeMeanDistributionSampler,
+)
+
 
 def sim03_m_sd(
     flowsim_tree: Union[str, FlowSimulationTreeDirichlet],

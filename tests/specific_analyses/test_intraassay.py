@@ -1,19 +1,17 @@
-from unittest import TestCase
 import copy
 import os
 import pickle
+from unittest import TestCase
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
-from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
-from nbnode_pyscaffold.specific_analyses.intraassay.gate_init import gate_init
-from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
 import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-
+from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
+from nbnode_pyscaffold.specific_analyses.intraassay.gate_init import gate_init
+from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
 from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
-
 
 TESTS_DIR = find_dirname_above_currentfile()
 
@@ -21,7 +19,7 @@ TESTS_DIR = find_dirname_above_currentfile()
 class TestIntraassayData(TestCase):
     @classmethod
     def setUpClass(self):
-        # If debugging is true, gate_init() is not called over and over again 
+        # If debugging is true, gate_init() is not called over and over again
         # but the result is loaded from a pickle file.
         # However
         #   1) Changes in gate_init() will not be reflected
@@ -30,8 +28,8 @@ class TestIntraassayData(TestCase):
         if not debugging:
             # 4 samples just to speed up things
             self.celltree, node_counts_df, self.flowsim_tree = gate_init(
-                    sample_list=[0, 1, 2, 3]
-                )
+                sample_list=[0, 1, 2, 3]
+            )
         else:
             try:
                 with open(
@@ -487,6 +485,7 @@ class TestIntraassayData(TestCase):
 
     def test_sim_target(self):
         import shutil
+
         from nbnode_pyscaffold.simulation.sim_target import sim_target
 
         # test the default settings
@@ -641,6 +640,7 @@ class TestIntraassayData(TestCase):
 
     def test_sim_proportional(self):
         import shutil
+
         from nbnode_pyscaffold.simulation.sim_proportional import sim_proportional
 
         # test the default settings
@@ -676,22 +676,22 @@ class TestIntraassayData(TestCase):
             ) = sim_proportional(
                 flowsim=self.flowsim_tree,
                 change_pop_mean_proportional={
-                    "/AllCells/CD4+/CD8-/Tem": 1, 
-                    "/AllCells/CD4+/CD8-/Tcm": 1
-                    },
+                    "/AllCells/CD4+/CD8-/Tem": 1,
+                    "/AllCells/CD4+/CD8-/Tcm": 1,
+                },
                 n_cells=10,
                 n_samples=2,
             )
         (
-                simulated_cell_populations,
-                changed_parameters,
-                simulated_samples,
-            ) = sim_proportional(
-                flowsim=self.flowsim_tree,
-                n_cells=10,
-                n_samples=2,
-                verbose=True,
-            )
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_proportional(
+            flowsim=self.flowsim_tree,
+            n_cells=10,
+            n_samples=2,
+            verbose=True,
+        )
 
     def test_remove_population(self):
         # To remove a population, use remove_population()
