@@ -1,16 +1,14 @@
 import os
 from unittest import TestCase
 
+import anytree
 import numpy as np
 import pandas as pd
-import anytree
 
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.nbnode import NBNode
 import nbnode_pyscaffold.nbnode_trees as nbtree
-
+from nbnode_pyscaffold.nbnode import NBNode
+from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
-
 
 TESTS_DIR = find_dirname_above_currentfile()
 
@@ -418,6 +416,7 @@ class TestFlowSimulation(TestCase):
 
     def test_FlowSimulationTree_nodata_noids(self):
         import re
+
         import pandas as pd
 
         cellmat = pd.read_csv(
@@ -425,7 +424,7 @@ class TestFlowSimulation(TestCase):
                 TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
             )
         )
-        cellmat.rename(columns={'FS_TOF':'FS.0'}, inplace=True)
+        cellmat.rename(columns={"FS_TOF": "FS.0"}, inplace=True)
         cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
 
         celltree = nbtree.tree_complete_aligned()
