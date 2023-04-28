@@ -70,3 +70,16 @@ information on PyScaffold see https://pyscaffold.org/::
     putup --update . --gitlab
     pip install pre-commit
     pre-commit autoupdate
+
+
+
+Tests
+====
+For some tests you need data files, which are not included in the repository.
+Especially all tests in `tests/specific_analyses` need data. 
+You can obtain the data by running the following command in the root directory of the repository:
+
+```
+bash tests/specific_analyses/e01_download_intraassay.sh
+```
+
