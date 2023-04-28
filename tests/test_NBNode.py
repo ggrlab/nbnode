@@ -3,8 +3,8 @@ from unittest import TestCase
 
 import anytree
 
-# from anytree.exporter import a_exp.DotExporter
 import anytree.exporter as a_exp
+import pandas as pd
 
 import nbnode_pyscaffold.nbnode_trees as nbtree
 from nbnode_pyscaffold.nbnode import NBNode
@@ -15,12 +15,22 @@ TESTS_DIR = find_dirname_above_currentfile()
 
 class TestNBNode(TestCase):
     @classmethod
-    def setUpClass(cls) -> None:
+    def setUpClass(self) -> None:
         # https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass
         # setUpClass is only called once for the whole class in contrast to setUp which
         # is called before every test.
 
         os.makedirs("tests_output", exist_ok=True)
+
+        import re
+
+        cellmat = pd.read_csv(
+            os.path.join(
+                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
+            )
+        )
+        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
+        self.cellmat = cellmat
 
     def test_create_tree_simple(self):
         mytree = nbtree.tree_simple()
@@ -180,19 +190,20 @@ class TestNBNode(TestCase):
         )
         assert [x.name for x in single_prediction.iter_path_reverse()] == ["a3", "a"]
 
+    def test_predict(self):
+        celltree_trunk = nbtree.tree_complete_aligned_trunk()
+
+        a = celltree_trunk.predict(self.cellmat)
+        with self.assertRaises(ValueError):
+            # ValueError: predict() without argument (the data to predict) is only possible if self.data is not None
+            b = celltree_trunk.predict()
+        celltree_trunk.data = self.cellmat
+        b = celltree_trunk.predict()
+        assert a.equals(b)
+
     def test_decision_cutoff(self):
-        import re
-
-        import pandas as pd
-
-        cellmat = pd.read_csv(
-            os.path.join(
-                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
-            )
-        )
-        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
         celltree = nbtree.tree_complete_aligned()
-        a = celltree.predict(cellmat)
+        a = celltree.predict(self.cellmat)
         print(a)
 
     def test_tree_simple_predict_str(self):
@@ -1275,24 +1286,14 @@ class TestNBNode(TestCase):
             assert node.counter == 0
 
     def test_export_counts(self):
-        import re
-
-        import pandas as pd
-
-        cellmat = pd.read_csv(
-            os.path.join(
-                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
-            )
-        )
-        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
         celltree_trunk = nbtree.tree_complete_aligned_trunk()
-        a = celltree_trunk.predict(cellmat)
+        a = celltree_trunk.predict(self.cellmat)
 
         with self.assertRaises(AttributeError):
             # I did not set .data, therefore you cannot export counts
             celltree_trunk.export_counts()
 
-        celltree_trunk.data = cellmat
+        celltree_trunk.data = self.cellmat
         with self.assertRaises(ValueError):
             # Setting data is not enough, you also have to set the ids, otherwise
             # node.data will be empty (node.data == root._data[ids, :])
@@ -1306,23 +1307,15 @@ class TestNBNode(TestCase):
         counts_leafnodes.to_csv("tests_output/celltree_trunk_leafnodes.csv")
 
     def test_export_counts_with_sample_names(self):
-        import re
-        import pandas as pd
-
-        cellmat = pd.read_csv(
-            os.path.join(
-                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
-            )
-        )
-        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
         celltree_trunk = nbtree.tree_complete_aligned_trunk()
-        a = celltree_trunk.predict(cellmat)
-        celltree_trunk.data = cellmat
+        a = celltree_trunk.predict(self.cellmat)
+        celltree_trunk.data = self.cellmat
         celltree_trunk.id_preds(a)
         # No "sample_name" column in cellmat, all cells are regarded as coming from
         # the same sample
         counts_allnodes = celltree_trunk.export_counts()
 
+        cellmat = self.cellmat.copy()
         cellmat["sample_name"] = "sample1"
         celltree_trunk.data = cellmat
         celltree_trunk.id_preds(a)
@@ -1359,28 +1352,19 @@ class TestNBNode(TestCase):
         )
 
     def test_data_access(self):
-        import re
-        import pandas as pd
-
-        cellmat = pd.read_csv(
-            os.path.join(
-                TESTS_DIR, "testdata", "flowcytometry", "gated_cells", "cellmat.csv"
-            )
-        )
-        cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
         celltree_trunk = nbtree.tree_complete_aligned_trunk()
-        a = celltree_trunk.predict(cellmat)
+        a = celltree_trunk.predict(self.cellmat)
         assert celltree_trunk.data is None
-        celltree_trunk.data = cellmat
+        celltree_trunk.data = self.cellmat
         # Accessing data here leads to NO cells even if data is set
         # That is intended after no node contains any ids yet
         # which subset _data
         assert len(celltree_trunk.data) == 0
-        assert celltree_trunk._data.equals(cellmat)
+        assert celltree_trunk._data.equals(self.cellmat)
 
         celltree_trunk.id_preds(a)
-        # Accessing data here leads to all cells after all ids are 
+        # Accessing data here leads to all cells after all ids are
         # (not necessarily! but I do not know if there is a usecase for that)
         # in the root node.
-        assert celltree_trunk.data.equals(cellmat)
-        assert celltree_trunk._data.equals(cellmat)
+        assert celltree_trunk.data.equals(self.cellmat)
+        assert celltree_trunk._data.equals(self.cellmat)

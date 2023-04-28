@@ -205,19 +205,30 @@ class NBNode(anytree.Node):
 
     def predict(
         self,
-        values: Union[List, Dict, pd.DataFrame],
+        values: Union[List, Dict, pd.DataFrame] = None,
         names: list = None,
         allow_unfitting_data: bool = False,
         allow_part_predictions: bool = False,
     ) -> Union["NBNode", List["NBNode"], pd.Series]:
         """See ``single_prediction``.
 
-        But you can put in dataframes or ndarrays
-        instead of only dict + value/key paired lists.
+        But you can put in dataframes or ndarrays instead of only
+        dict + value/key paired lists.
+
+        If values is not given or None, the self._data is used.
 
         Returns:
             List[NBNodes]: Returns for each value its NBNode
         """
+        if values is None:
+            if self.data is None:
+                raise ValueError(
+                    "predict() without argument (the data to predict) is only "
+                    + "possible if self._data is not None"
+                )
+            else:
+                values = self._data
+
         if isinstance(values, datatable.Frame):
             values = values.to_pandas()
 
