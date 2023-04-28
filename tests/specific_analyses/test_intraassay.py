@@ -4,9 +4,16 @@ import os
 import pickle
 
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
 from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
 from nbnode_pyscaffold.specific_analyses.intraassay.gate_init import gate_init
 from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
+import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
+
+from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
+
 
 TESTS_DIR = find_dirname_above_currentfile()
 
@@ -52,23 +59,30 @@ class TestIntraassayData(TestCase):
         )
 
     def test_changepop(self):
-        self.flowsim_tree.set_seed(10289)
         n_cells = 1e6
         overconfident_flowdist = copy.deepcopy(self.flowsim_tree)
-        overconfident_flowdist.population_parameters["alpha"] *= 1e8
-        many_cells_overconfident = overconfident_flowdist.sample_populations(
-            n_cells=n_cells
-        )
-        assert np.allclose(
-            (many_cells_overconfident / (1.0 * n_cells)),
-            self.flowsim_tree.mean_leafs,
-            atol=1e-5,
-            rtol=1e-5,
-        )
+        for overconfidence, abs_deviation in zip(
+            (1e3, 1e5, 1e7, 1e9, 1e12),
+            (1e-2, 1e-3, 1e-4, 2e-5, 2e-5),
+        ):
+            overconfident_flowdist.population_parameters["alpha"] *= overconfidence
+            overconfident_flowdist.set_seed(10289)  # with this it worked certainly
+            many_cells_overconfident = overconfident_flowdist.sample_populations(
+                n_cells=n_cells
+            )
+            overconfident_flowdist.reset_populations()
+            sampled_cell_proportions = many_cells_overconfident / (1.0 * n_cells)
+            max_abs_deviance_across_leafs = max(
+                abs(sampled_cell_proportions - self.flowsim_tree.mean_leafs)
+            )
+            print(
+                max_abs_deviance_across_leafs,
+                abs_deviation,
+                max_abs_deviance_across_leafs < abs_deviation,
+            )
+            assert max_abs_deviance_across_leafs < abs_deviation
 
     def test_sim00_baseline(self):
-        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-
         (
             true_popcounts_sim00,
             changed_parameters,
@@ -153,8 +167,6 @@ class TestIntraassayData(TestCase):
         )
 
     def test_simulations(self):
-        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-
         n_cells = 1e5
         n_samples = 5
 
@@ -195,18 +207,7 @@ class TestIntraassayData(TestCase):
         assert all([x.shape == tuple((n_cells, 13)) for x in done_sim02[2]])
 
     def test_visualinspection_simulations_cellnumbers(self):
-        import pickle
-
-        try:
-            with open("examples/results/intraassay_gate_init.pickle", "rb") as f:
-                full_celltree, node_counts_df, full_flowsim_tree = pickle.load(f)
-        except:
-            full_flowsim_tree = self.flowsim_tree
-
-        import matplotlib.pyplot as plt
-
-        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
+        full_flowsim_tree = self.flowsim_tree
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tcm",
@@ -227,7 +228,8 @@ class TestIntraassayData(TestCase):
         assert done_sim00[0].shape[1] == n_samples
         relevant_pop_sim00 = {
             relevant_intermediate_population: merge_leaf_nodes(
-                relevant_intermediate_population, done_sim00[0]
+                leaf_nodes_df=done_sim00[0],
+                intermediate_node=relevant_intermediate_population,
             )
             / n_cells
             for relevant_intermediate_population in relevant_pops
@@ -244,7 +246,8 @@ class TestIntraassayData(TestCase):
         assert done_sim01[0].shape[1] == n_samples
         relevant_pop_sim01 = {
             relevant_intermediate_population: merge_leaf_nodes(
-                relevant_intermediate_population, done_sim01[0]
+                leaf_nodes_df=done_sim01[0],
+                intermediate_node=relevant_intermediate_population,
             )
             / n_cells
             for relevant_intermediate_population in relevant_pops
@@ -266,7 +269,8 @@ class TestIntraassayData(TestCase):
         assert done_sim02[0].shape[1] == n_samples
         relevant_pop_sim02 = {
             relevant_intermediate_population: merge_leaf_nodes(
-                relevant_intermediate_population, done_sim02[0]
+                leaf_nodes_df=done_sim02[0],
+                intermediate_node=relevant_intermediate_population,
             )
             / n_cells
             for relevant_intermediate_population in relevant_pops
@@ -299,16 +303,7 @@ class TestIntraassayData(TestCase):
         plt.close("all")
 
     def test_visualinspection_sim03_vary_sd(self):
-        try:
-            with open("examples/results/intraassay_gate_init.pickle", "rb") as f:
-                full_celltree, node_counts_df, full_flowsim_tree = pickle.load(f)
-        except:
-            full_flowsim_tree = self.flowsim_tree
-
-        import matplotlib.pyplot as plt
-        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-
-        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
+        full_flowsim_tree = self.flowsim_tree
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tem",
@@ -329,13 +324,13 @@ class TestIntraassayData(TestCase):
                 only_return_sampled_cell_numbers=True,
             )
             assert done_sims[f"sim03_sd{sd}"][0].shape[1] == n_samples
-        import pandas as pd
 
         relevant_pop_sim03 = {
             key: pd.DataFrame.from_dict(
                 {
                     relevant_intermediate_population: merge_leaf_nodes(
-                        relevant_intermediate_population, done_simulation[0]
+                        leaf_nodes_df=done_simulation[0],
+                        intermediate_node=relevant_intermediate_population,
                     )
                     / n_cells
                     for relevant_intermediate_population in relevant_pops
@@ -365,16 +360,7 @@ class TestIntraassayData(TestCase):
         plt.close("all")
 
     def test_visualinspection_sim03_vary_mean(self):
-        try:
-            with open("examples/results/intraassay_gate_init.pickle", "rb") as f:
-                full_celltree, node_counts_df, full_flowsim_tree = pickle.load(f)
-        except:
-            full_flowsim_tree = self.flowsim_tree
-
-        import matplotlib.pyplot as plt
-        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-
-        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
+        full_flowsim_tree = self.flowsim_tree
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tem",
@@ -395,13 +381,13 @@ class TestIntraassayData(TestCase):
                 only_return_sampled_cell_numbers=True,
             )
             assert done_sims[f"sim03_m.{meanshift}_sd.1"][0].shape[1] == n_samples
-        import pandas as pd
 
         relevant_pop_sim03 = {
             key: pd.DataFrame.from_dict(
                 {
                     relevant_intermediate_population: merge_leaf_nodes(
-                        relevant_intermediate_population, done_simulation[0]
+                        leaf_nodes_df=done_simulation[0],
+                        intermediate_node=relevant_intermediate_population,
                     )
                     / n_cells
                     for relevant_intermediate_population in relevant_pops
@@ -426,16 +412,7 @@ class TestIntraassayData(TestCase):
             plt.close("all")
 
     def test_visualinspection_sim03_vary_mean_sd(self):
-        try:
-            with open("examples/results/intraassay_gate_init.pickle", "rb") as f:
-                full_celltree, node_counts_df, full_flowsim_tree = pickle.load(f)
-        except:
-            full_flowsim_tree = self.flowsim_tree
-
-        import matplotlib.pyplot as plt
-        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-
-        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
+        full_flowsim_tree = self.flowsim_tree
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tem",
@@ -466,13 +443,13 @@ class TestIntraassayData(TestCase):
                 save_dir=None,
                 only_return_sampled_cell_numbers=True,
             )
-        import pandas as pd
 
         relevant_pop_sim03 = {
             key: pd.DataFrame.from_dict(
                 {
                     relevant_intermediate_population: merge_leaf_nodes(
-                        relevant_intermediate_population, done_simulation[0]
+                        leaf_nodes_df=done_simulation[0],
+                        intermediate_node=relevant_intermediate_population,
                     )
                     / n_cells
                     for relevant_intermediate_population in relevant_pops
@@ -495,3 +472,222 @@ class TestIntraassayData(TestCase):
             ax.set_xlim([0, 0.4])
             fig.savefig(f"removeme_relevant_pop_Tem_{sim_name}.pdf")
             plt.close("all")
+
+    def test_sim_target(self):
+        import shutil
+        from nbnode_pyscaffold.simulation.sim_target import sim_target
+
+        # test the default settings
+        shutil.rmtree("sim/intraassay/sim00_target", ignore_errors=True)
+        simulated_cell_populations, changed_parameters, simulated_samples = sim_target(
+            flowsim=self.flowsim_tree
+        )
+        assert os.path.exists("sim/intraassay/sim00_target")
+        assert simulated_cell_populations.shape == (81, 1)
+        assert all(simulated_cell_populations.sum() == 25000)
+        assert len(os.listdir("sim/intraassay/sim00_target")) == 1
+
+        shutil.rmtree("sim/intraassay/sim00_target")
+        simulated_cell_populations, changed_parameters, simulated_samples = sim_target(
+            flowsim=self.flowsim_tree, save_dir=None, n_cells=10
+        )
+        assert not os.path.exists("sim/intraassay/sim00_target")
+
+        with self.assertWarns(UserWarning):
+            (
+                simulated_cell_populations,
+                changed_parameters,
+                simulated_samples,
+            ) = sim_target(
+                flowsim=self.flowsim_tree,
+                change_pop_mean_target=[
+                    {"/AllCells/CD4+/CD8-/Tem": 0.05, "/AllCells/CD4+/CD8-/Tcm": 0.05}
+                ],
+                n_cells=10,
+            )
+        # You should not set a mean outside (0, 1)
+        with self.assertRaises(ValueError):
+            (
+                simulated_cell_populations,
+                changed_parameters,
+                simulated_samples,
+            ) = sim_target(
+                flowsim=self.flowsim_tree,
+                change_pop_mean_target=[{"/AllCells/CD4+/CD8-/Tem": 0.00}],
+                n_cells=10,
+            )
+        with self.assertRaises(ValueError):
+            (
+                simulated_cell_populations,
+                changed_parameters,
+                simulated_samples,
+            ) = sim_target(
+                flowsim=self.flowsim_tree,
+                change_pop_mean_target=[{"/AllCells/CD4+/CD8-/Tem": -1}],
+                n_cells=10,
+            )
+        with self.assertRaises(ValueError):
+            (
+                simulated_cell_populations,
+                changed_parameters,
+                simulated_samples,
+            ) = sim_target(
+                flowsim=self.flowsim_tree,
+                change_pop_mean_target=[{"/AllCells/CD4+/CD8-/Tem": 1}],
+                n_cells=10,
+            )
+
+        with self.assertRaises(ValueError):
+            (
+                simulated_cell_populations,
+                changed_parameters,
+                simulated_samples,
+            ) = sim_target(
+                flowsim=self.flowsim_tree,
+                change_pop_mean_target=[{"/AllCells/CD4+/CD8-/Tem": 10}],
+                n_cells=10,
+            )
+
+        # A list with one dictionary of two elements creates
+        # one sample with two parameters actively changed
+        # (the others change accordingly, TWICE)
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_target(
+            flowsim=self.flowsim_tree,
+            change_pop_mean_target=[
+                {"/AllCells/CD4+/CD8-/Tem": 0.05, "/AllCells/CD4+/CD8-/Tcm": 0.05}
+            ],
+            n_cells=10,
+        )
+        assert len(simulated_samples) == 1
+
+        # A list with two dictionary of one elements creates
+        # one sample with one parameter actively changed
+        # (the others change accordingly)
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_target(
+            flowsim=self.flowsim_tree,
+            change_pop_mean_target=[
+                {"/AllCells/CD4+/CD8-/Tem": 0.05},
+                {"/AllCells/CD4+/CD8-/Tcm": 0.05},
+            ],
+            n_cells=10,
+        )
+        assert len(simulated_samples) == 2
+
+        shutil.rmtree("sim/intraassay/sim00_target")
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_target(
+            flowsim=self.flowsim_tree,
+            n_cells=10,
+            sample_name="custom_sample",
+        )
+        assert os.path.exists("sim/intraassay/sim00_target/custom_sample.csv")
+        assert len(os.listdir("sim/intraassay/sim00_target")) == 1
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_target(
+            flowsim=self.flowsim_tree,
+            n_cells=10,
+        )
+        assert os.path.exists("sim/intraassay/sim00_target/sample_0.csv")
+        assert len(os.listdir("sim/intraassay/sim00_target")) == 2
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_target(
+            flowsim=self.flowsim_tree,
+            n_cells=10,
+        )
+
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_target(flowsim=self.flowsim_tree, n_cells=10, verbose=True)
+        assert changed_parameters == []
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_target(
+            flowsim=self.flowsim_tree, n_cells=10, save_changed_parameters=True
+        )
+        assert changed_parameters != []
+
+    def test_sim_proportional(self):
+        import shutil
+        from nbnode_pyscaffold.simulation.sim_proportional import sim_proportional
+
+        # test the default settings
+        shutil.rmtree("sim/intraassay/sim00_baseline", ignore_errors=True)
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_proportional(flowsim=self.flowsim_tree, n_samples=2)
+        assert os.path.exists("sim/intraassay/sim00_baseline")
+        assert simulated_cell_populations.shape == (81, 2)
+        assert all(simulated_cell_populations.sum() == 25000)
+        assert len(os.listdir("sim/intraassay/sim00_baseline")) == 2
+
+        shutil.rmtree("sim/intraassay/sim00_baseline")
+        (
+            simulated_cell_populations,
+            changed_parameters,
+            simulated_samples,
+        ) = sim_proportional(
+            flowsim=self.flowsim_tree,
+            save_dir=None,
+            n_cells=10,
+            n_samples=2,
+        )
+        assert not os.path.exists("sim/intraassay/sim00_baseline")
+
+        with self.assertWarns(UserWarning):
+            (
+                simulated_cell_populations,
+                changed_parameters,
+                simulated_samples,
+            ) = sim_proportional(
+                flowsim=self.flowsim_tree,
+                change_pop_mean_proportional={
+                    "/AllCells/CD4+/CD8-/Tem": 1, 
+                    "/AllCells/CD4+/CD8-/Tcm": 1
+                    },
+                n_cells=10,
+                n_samples=2,
+            )
+        (
+                simulated_cell_populations,
+                changed_parameters,
+                simulated_samples,
+            ) = sim_proportional(
+                flowsim=self.flowsim_tree,
+                n_cells=10,
+                n_samples=2,
+                verbose=True,
+            )
+
+    def test_remove_population(self):
+        # To remove a population, use remove_population()
+        mytree = copy.deepcopy(self.flowsim_tree)
+        mytree.remove_population("/AllCells/CD4+/CD8-/Tcm/CD27+/CD28+")
+        assert len(mytree.mean_leafs) == len(self.flowsim_tree.mean_leafs) - 3
+        mytree.remove_population("/AllCells/CD4+/CD8-/Tcm")
+        assert len(mytree.mean_leafs) == len(self.flowsim_tree.mean_leafs) - 6
+        with self.assertRaises(AttributeError):
+            # You cannot remove a population that does not exist
+            mytree.remove_population("/AllCells/CD4+/CD8-/Tcm/CD27+/CD28+/CD57+")
