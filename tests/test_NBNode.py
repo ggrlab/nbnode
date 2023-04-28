@@ -196,7 +196,8 @@ class TestNBNode(TestCase):
 
         a = celltree_trunk.predict(self.cellmat)
         with self.assertRaises(ValueError):
-            # ValueError: predict() without argument (the data to predict) is only possible if self.data is not None
+            # ValueError: predict() without argument (the data to predict)
+            # is only possible if self.data is not None
             b = celltree_trunk.predict()
         celltree_trunk.data = self.cellmat
         b = celltree_trunk.predict()
