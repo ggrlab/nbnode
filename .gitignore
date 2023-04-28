@@ -4,6 +4,8 @@ tests_output/
 .testmondata*
 docs/docstr_coverage_badge.svg
 example_data/
+examples/results/
+sim/
 
 # Temporary and binary files
 *~
