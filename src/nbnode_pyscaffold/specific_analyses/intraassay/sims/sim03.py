@@ -1,10 +1,9 @@
 from typing import Union
 
-import torch.distributions as D
 
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import TreeMeanDistributionSampler
-
+from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import PseudoTorchDistributionNormal
 
 def sim03_m_sd(
     flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
@@ -21,9 +20,13 @@ def sim03_m_sd(
 ):
     generator = TreeMeanDistributionSampler(
         population_name_to_change=population_name,
-        mean_distribution=lambda original_mean: D.Normal(
+        mean_distribution=lambda original_mean: PseudoTorchDistributionNormal(
             loc=original_mean + meanshift, scale=sd
         ),
+        # import torch.distributions as D
+        # mean_distribution=lambda original_mean: D.Normal(
+        #     loc=original_mean + meanshift, scale=sd
+        # ),
         flowsim_tree=flowsim_tree,
         n_samples=n_samples,
         n_cells=n_cells,
