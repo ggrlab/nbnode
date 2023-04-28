@@ -13,7 +13,7 @@ from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDi
 def gate_init(
     sample_list=None,
 ) -> Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]:
-    ## 1. Prepare the samples for gating
+    # 1. Prepare the samples for gating
     rescaled_data_dir = os.path.join("example_data", "asinh.align_manual.CD3_Gate")
     if not os.path.exists(rescaled_data_dir):
         raise FileNotFoundError(
@@ -42,11 +42,11 @@ def gate_init(
         "CD45",
     ]
 
-    ## 2. Mainly for testing: select only a subset of samples
+    # 2. Mainly for testing: select only a subset of samples
     if sample_list is not None:
         all_files = [all_files[i] for i in sample_list]
 
-    ## 3. Gate the samples
+    # 3. Gate the samples
     celltree_gated = gate_csv(
         csv=all_files,
         celltree=tree_complete_aligned_v2(),
@@ -60,7 +60,7 @@ def gate_init(
     #   Necessary to estimate the distribution of cells in marker values PER POPULATION
     #
 
-    ## 4. Generate the Dirichlet-based simulation
+    # 4. Generate the Dirichlet-based simulation
     flowsim_tree = FlowSimulationTreeDirichlet(
         rootnode=celltree_gated,
         include_features=new_colnames,
@@ -68,7 +68,7 @@ def gate_init(
         data_cellgroup_col="sample",  # is the default
     )
 
-    ## 5. Extract the gated counts
+    # 5. Extract the gated counts
     node_counts_df = count_celltree_df(celltree_gated)
 
     return celltree_gated, node_counts_df, flowsim_tree
