@@ -19,7 +19,7 @@ def sim_target(
     sample_name=None,
     seed_sample_0=129873,
     verbose=False,
-    only_return_sampled_cell_numbers=True,
+    only_return_sampled_cell_numbers=False,
     save_changed_parameters=False,
 ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
     """
@@ -66,20 +66,31 @@ def sim_target(
             Verboseness. Defaults to True.
 
         only_return_sampled_cell_numbers (bool):
-            If true, only the number of cells per population are returned, 
+            If true, only the number of cells per population are returned,
             not the actual samples.
     Returns:
         Tuple:
-            pd.DataFrame:   Returns the true number of generated cells per leaf-population.
+            pd.DataFrame:   The true number of generated cells per leaf-population.
             Dict:           A dee copy of `flowsim.population_parameters`
+            List[pd.DataFrame]:
+                The generated samples (n cells X p markers), potentially also saved
+                into the given save_dir as f"sample_{sample_i}.csv".
+
+    Usage::
+
+        simulated_cell_populations, changed_parameters, simulated_samples = sim_target(
+            flowsim
+        )
     """
 
     if save_dir is not None:
         os.makedirs(save_dir, exist_ok=True)
 
-    if len(change_pop_mean_target) > 1:
+    if any([len(change_params) > 1 for change_params in change_pop_mean_target]):
+        # print("ASLKDH")
         warnings.warn(
-            "Changing more than 1 population is NOT setting the means to the specified values - only the LAST value will be exactly the set percentage"
+            "Changing more than 1 population is NOT setting the means to the specified"
+            + "values - only the LAST value will be exactly the set percentage"
         )
     if isinstance(change_pop_mean_target, dict):
         # Then a single dictionary was given (and only one sample should be generated)
@@ -107,35 +118,35 @@ def sim_target(
                 percentage=pop_target_proportion,
             )
 
-            if save_changed_parameters:
-                changed_parameters += [copy.deepcopy(flowsim.population_parameters)]
+        if save_changed_parameters:
+            changed_parameters += [copy.deepcopy(flowsim.population_parameters)]
 
-            flowsim.set_seed(seed_sample_0 + sample_i)
-            if sample_name is None:
-                sample_name = f"sample_{sample_i}"
+        flowsim.set_seed(seed_sample_0 + sample_i)
+        if sample_name is None:
+            sample_name = f"sample_{sample_i}"
 
-            if only_return_sampled_cell_numbers:
-                ncells_A = flowsim.sample_populations(n_cells=n_cells)
-            else:
-                sample_A, ncells_A = flowsim.sample(
-                    n_cells=n_cells,
-                    return_sampled_cell_numbers=True,
-                    use_only_diagonal_covmat=use_only_diagonal_covmat,
-                )
-                generated_samples.append(sample_A)
+        if only_return_sampled_cell_numbers:
+            ncells_A = flowsim.sample_populations(n_cells=n_cells)
+        else:
+            sample_A, ncells_A = flowsim.sample(
+                n_cells=n_cells,
+                return_sampled_cell_numbers=True,
+                use_only_diagonal_covmat=use_only_diagonal_covmat,
+            )
+            generated_samples.append(sample_A)
 
-                if save_dir is not None:
-                    current_filepath = os.path.join(save_dir, f"sample_{sample_i}.csv")
-                    sample_A.to_csv(current_filepath, index=False)
-                    if verbose:
-                        print(f"Saved {current_filepath}")
+            if save_dir is not None:
+                current_filepath = os.path.join(save_dir, sample_name + ".csv")
+                sample_A.to_csv(current_filepath, index=False)
+                if verbose:
+                    print(f"Saved {current_filepath}")
 
-            if ncells_A_df is None:
-                ncells_A_df = pd.DataFrame(ncells_A)
-                ncells_A_df.columns = [sample_name]
-            else:
-                ncells_A_df[sample_name] = ncells_A
+        if ncells_A_df is None:
+            ncells_A_df = pd.DataFrame(ncells_A)
+            ncells_A_df.columns = [sample_name]
+        else:
+            ncells_A_df[sample_name] = ncells_A
 
-            # Undo the changes of the given population means
-            flowsim.reset_populations()
+        # Undo the changes of the given population means
+        flowsim.reset_populations()
     return ncells_A_df, changed_parameters, generated_samples

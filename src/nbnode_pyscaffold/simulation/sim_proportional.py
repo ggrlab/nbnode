@@ -17,7 +17,7 @@ def sim_proportional(
     save_dir="sim/intraassay/sim00_baseline",
     seed_sample_0=129873,
     verbose=False,
-    only_return_sampled_cell_numbers=True,
+    only_return_sampled_cell_numbers=False,
 ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
     """
         This function simulates new cells (`n_cells`) for `n_samples` samples according to the given
