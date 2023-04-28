@@ -15,6 +15,7 @@ def test_pickle_open_dump():
 
 def test_pickle_open_dump_NBNode():
     import pandas as pd
+
     os.makedirs("tests_output/", exist_ok=True)
 
     yternary = pd.read_csv(

@@ -2,7 +2,6 @@ import os
 from unittest import TestCase
 
 import anytree
-
 import anytree.exporter as a_exp
 import pandas as pd
 
@@ -30,7 +29,7 @@ class TestNBNode(TestCase):
             )
         )
         # FS TOF (against FS INT which is "FS")
-        cellmat.rename(columns={'FS_TOF':'FS.0'}, inplace=True)
+        cellmat.rename(columns={"FS_TOF": "FS.0"}, inplace=True)
         cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
         self.cellmat = cellmat
 
