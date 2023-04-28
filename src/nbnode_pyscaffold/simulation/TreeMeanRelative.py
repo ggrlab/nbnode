@@ -8,7 +8,7 @@ from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDi
 from nbnode_pyscaffold.simulation.sim_proportional import sim_proportional
 
 
-class GenerateProportional:
+class TreeMeanRelative:
     def __init__(
         self,
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
@@ -30,13 +30,13 @@ class GenerateProportional:
         self.seed_sample_0 = seed_sample_0
         self.save_dir = save_dir
         # The following variable should only be turned off if you do NOT want the cells actually
-        # generated, but instead want to return only the cell NUMBERS per population
+        # sampled, but instead want to return only the cell NUMBERS per population
         self._debugging_only_return_sampled_cell_numbers = (
             debugging_only_return_sampled_cell_numbers
         )
 
     @staticmethod
-    def _generate(
+    def _sample(
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
         n_samples=100,
         n_cells=10000,
@@ -59,7 +59,7 @@ class GenerateProportional:
         if verbose:
             for pop, perc in flowsim_tree.mean_leafs.items():
                 print(f"{perc:.6f}  {pop:125}")
-        true_popcounts, changed_parameters, generated_samples = sim_proportional(
+        true_popcounts, changed_parameters, sampled_samples = sim_proportional(
             flowsim=flowsim_tree,
             n_samples=n_samples,
             n_cells=n_cells,
@@ -74,10 +74,10 @@ class GenerateProportional:
             changed_parameters["alpha"].to_csv(f"{save_dir}_parameters.csv")
         if verbose:
             print(true_popcounts.apply(lambda x: x.mean(), axis=1) / n_cells)
-        return true_popcounts, changed_parameters, generated_samples
+        return true_popcounts, changed_parameters, sampled_samples
 
-    def generate(self):
-        return self._generate(
+    def sample(self):
+        return self._sample(
             flowsim_tree=self.flowsim_tree,
             n_samples=self.n_samples,
             n_cells=self.n_cells,
@@ -89,7 +89,7 @@ class GenerateProportional:
             _debugging_only_return_sampled_cell_numbers=self._debugging_only_return_sampled_cell_numbers,
         )
 
-    def generate_customize(
+    def sample_customize(
         self,
         n_samples=None,
         n_cells=None,
@@ -100,7 +100,7 @@ class GenerateProportional:
         save_dir=None,
         _debugging_only_return_sampled_cell_numbers=None,
     ):
-        return self._generate(
+        return self._sample(
             n_samples=self.n_samples if n_samples is None else n_samples,
             n_cells=self.n_cells if n_cells is None else n_cells,
             change_pop_mean_proportional=self.change_pop_mean_proportional
