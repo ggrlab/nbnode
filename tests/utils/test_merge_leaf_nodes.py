@@ -1,9 +1,8 @@
+import os
 from unittest import TestCase
 
-import os
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 
 import nbnode_pyscaffold.nbnode_trees as nbtree
 from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet

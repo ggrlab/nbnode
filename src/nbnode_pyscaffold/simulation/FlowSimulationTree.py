@@ -382,9 +382,8 @@ class BaseFlowSimulationTree:
             n_cells=n_cells,
         )
         tmp_allpops = pd.DataFrame(
-            data=onesample_ncells_perpop, 
-            index=population_parameters["__name"]
-            )
+            data=onesample_ncells_perpop, index=population_parameters["__name"]
+        )
 
         return tmp_allpops[0]  # then it becomes a pd.Series, no pd.DataFrame
 

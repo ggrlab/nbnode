@@ -33,7 +33,6 @@ class TestFlowSimulation(TestCase):
         cellmat.columns = [re.sub("_.*", "", x) for x in cellmat.columns]
         self.cellmat = cellmat
 
-        
         celltree = nbtree.tree_complete_aligned_trunk()
         celltree.data = self.cellmat
         celltree.id_preds(celltree.predict())
@@ -43,7 +42,7 @@ class TestFlowSimulation(TestCase):
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
             include_features="dataset_melanoma_short",
-            verbose=True
+            verbose=True,
         )
 
     def test_tree_simple_predict(self):
@@ -503,9 +502,9 @@ class TestFlowSimulation(TestCase):
 
         # celltree["/AllCells/DP"] is a single node without children
         with self.assertWarns(UserWarning):
-            # Only one single leaf node found, all cells will be simulated from single 
+            # Only one single leaf node found, all cells will be simulated from single
             # node, are you sure that is what you want?
-            # The dirichlet parameter will be 1, only the estimatedcell_distributions 
+            # The dirichlet parameter will be 1, only the estimatedcell_distributions
             # might make sense.
             flowsim = FlowSimulationTreeDirichlet(
                 node_percentages=None,
@@ -519,17 +518,12 @@ class TestFlowSimulation(TestCase):
         celltree.data = self.cellmat
         celltree.id_preds(celltree.predict())
 
-
         leaf_nodes_data = [
             node for node in anytree.PreOrderIter(celltree) if node.is_leaf
         ]
         ncells_per_sample = celltree.data.shape[0]
         ncells_per_node_per_sample = pd.DataFrame(
-            {
-                "single_sample": {
-                    x.get_name_full(): len(x.data) for x in leaf_nodes_data
-                }
-            }
+            {"single_sample": {x.get_name_full(): len(x.data) for x in leaf_nodes_data}}
         )
         #                            single_sample
         # /AllCells/CD4+/CD8-/Tcm                0
@@ -556,11 +550,11 @@ class TestFlowSimulation(TestCase):
         # /AllCells/DP                    0.973974
 
         flowsim = FlowSimulationTreeDirichlet(
-                node_percentages=node_percentages,
-                rootnode=celltree,
-                include_features="dataset_melanoma_short",
-            )
-        
+            node_percentages=node_percentages,
+            rootnode=celltree,
+            include_features="dataset_melanoma_short",
+        )
+
     def test_FlowSimulationTree_verbosity(self):
         celltree = nbtree.tree_complete_aligned_trunk()
         celltree.data = self.cellmat
@@ -571,7 +565,7 @@ class TestFlowSimulation(TestCase):
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
             include_features="dataset_melanoma_short",
-            verbose=True
+            verbose=True,
         )
 
     def test_FlowSimulationTree_sample_populations(self):
@@ -584,7 +578,7 @@ class TestFlowSimulation(TestCase):
             rootnode=celltree,
             data_cellgroup_col=None,  # Then all cells are assumed to come from the same sample
             include_features="dataset_melanoma_short",
-            verbose=True
+            verbose=True,
         )
         assert sum(flowsim.sample_populations(n_cells=10)) == 10
         assert sum(flowsim.sample_populations()) == 10000
@@ -615,14 +609,13 @@ class TestFlowSimulation(TestCase):
         flowsim.set_seed(41237)
         a3 = flowsim.sample(**customized_pop_params)
         assert a1.equals(a3)
-        
+
         customized_pop_params["alpha"] *= 100
         flowsim.set_seed(41237)
         a4 = flowsim.sample(**customized_pop_params)
-        # The underlying population parameters were actively changed, 
+        # The underlying population parameters were actively changed,
         # so the samples should be different
         assert not a1.equals(a4)
-
 
     def test_FST_sample_pop_return_cell_numbers(self):
         flowsim = self.flowsim_trunk
@@ -631,13 +624,14 @@ class TestFlowSimulation(TestCase):
         flowsim.set_seed(41237)
         a5, a5_counts = flowsim.sample(return_sampled_cell_numbers=True)
         flowsim.set_seed(41237)
-        a6, a6_counts = flowsim.sample(return_sampled_cell_numbers=True, use_only_diagonal_covmat=False)
-
+        a6, a6_counts = flowsim.sample(
+            return_sampled_cell_numbers=True, use_only_diagonal_covmat=False
+        )
 
         assert a0_counts.equals(a5_counts)
-        # The cells per population are either sampled with or without (only) diagonal 
+        # The cells per population are either sampled with or without (only) diagonal
         # covariance matrix. That changes how the cells look - but not how many
-        # cells per population. 
+        # cells per population.
         assert not a5.equals(a6)
         assert a5_counts.equals(a6_counts)
 
@@ -646,10 +640,12 @@ class TestFlowSimulation(TestCase):
         flowsim.set_seed(41237)
         a5, a5_counts = flowsim.sample(return_sampled_cell_numbers=True)
         flowsim.set_seed(41237)
-        a6, a6_counts = flowsim.sample(return_sampled_cell_numbers=True, use_only_diagonal_covmat=False)
+        a6, a6_counts = flowsim.sample(
+            return_sampled_cell_numbers=True, use_only_diagonal_covmat=False
+        )
 
-        # The cells per population are either sampled with or without (only) diagonal 
+        # The cells per population are either sampled with or without (only) diagonal
         # covariance matrix. That changes how the cells look - but not how many
-        # cells per population. 
+        # cells per population.
         assert not a5.equals(a6)
         assert a5_counts.equals(a6_counts)
