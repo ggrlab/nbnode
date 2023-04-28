@@ -24,5 +24,6 @@ def sim00_baseline(
         seed_sample_0=seed_sample_0,
         save_dir=save_dir,
         only_return_sampled_cell_numbers=only_return_sampled_cell_numbers,
+        save_changed_parameters=True,
     )
     return proportional_generator.sample()
