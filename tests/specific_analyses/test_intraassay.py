@@ -4,9 +4,9 @@ import os
 import pickle
 
 import numpy as np
-from nbnode.testutil.helpers import find_dirname_above_currentfile
-from nbnode.specific_analyses.intraassay.gate_init import gate_init
-from nbnode.io.pickle_open_dump import pickle_open_dump
+from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
+from nbnode_pyscaffold.specific_analyses.intraassay.gate_init import gate_init
+from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
 
 TESTS_DIR = find_dirname_above_currentfile()
 
@@ -24,6 +24,7 @@ class TestIntraassayData(TestCase):
             self.celltree, node_counts_df, self.flowsim_tree = gate_init(
                 sample_list=[0, 1, 2, 3]
             )
+            os.makedirs("examples/results", exist_ok=True)
             pickle_open_dump(
                 (self.celltree, node_counts_df, self.flowsim_tree),
                 "examples/results/intraassay_gate_init_4samples.pickle",
@@ -66,7 +67,7 @@ class TestIntraassayData(TestCase):
         )
 
     def test_sim00_baseline(self):
-        import nbnode.specific_analyses.intraassay.sims as ia_sims
+        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
 
         (
             true_popcounts_sim00,
@@ -152,7 +153,7 @@ class TestIntraassayData(TestCase):
         )
 
     def test_simulations(self):
-        import nbnode.specific_analyses.intraassay.sims as ia_sims
+        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
 
         n_cells = 1e5
         n_samples = 5
@@ -204,8 +205,8 @@ class TestIntraassayData(TestCase):
 
         import matplotlib.pyplot as plt
 
-        import nbnode.specific_analyses.intraassay.sims as ia_sims
-        from nbnode.utils.merge_leaf_nodes import merge_leaf_nodes
+        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
+        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tcm",
@@ -305,9 +306,9 @@ class TestIntraassayData(TestCase):
             full_flowsim_tree = self.flowsim_tree
 
         import matplotlib.pyplot as plt
-        import nbnode.specific_analyses.intraassay.sims as ia_sims
+        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
 
-        from nbnode.utils.merge_leaf_nodes import merge_leaf_nodes
+        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tem",
@@ -371,9 +372,9 @@ class TestIntraassayData(TestCase):
             full_flowsim_tree = self.flowsim_tree
 
         import matplotlib.pyplot as plt
-        import nbnode.specific_analyses.intraassay.sims as ia_sims
+        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
 
-        from nbnode.utils.merge_leaf_nodes import merge_leaf_nodes
+        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tem",
@@ -432,9 +433,9 @@ class TestIntraassayData(TestCase):
             full_flowsim_tree = self.flowsim_tree
 
         import matplotlib.pyplot as plt
-        import nbnode.specific_analyses.intraassay.sims as ia_sims
+        import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
 
-        from nbnode.utils.merge_leaf_nodes import merge_leaf_nodes
+        from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
 
         relevant_pops = [
             "/AllCells/CD4+/CD8-/Tem",
