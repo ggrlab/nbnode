@@ -1,7 +1,7 @@
 # import datatable
 # import re
 
-# import nbnode_pyscaffold.nbnode_trees as nbtrees
+# import nbnode.nbnode_trees as nbtrees
 # import torch
 # import numpy as np
 

@@ -14,7 +14,7 @@ import pydotplus
 from anytree.exporter import UniqueDotExporter
 from matplotlib.colors import to_hex
 
-from nbnode_pyscaffold.plot.shifted_colormap import shifted_colormap
+from nbnode.plot.shifted_colormap import shifted_colormap
 
 # Set matplotlib backend to "AGG"
 matplotlib.use("AGG")

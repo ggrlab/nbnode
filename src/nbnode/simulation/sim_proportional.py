@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 
 import pandas as pd
 
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 
 
 def sim_proportional(

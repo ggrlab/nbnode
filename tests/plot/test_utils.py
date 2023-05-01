@@ -1,5 +1,5 @@
 def test_flatten():
-    from nbnode_pyscaffold.plot.utils import flatten
+    from nbnode.plot.utils import flatten
 
     assert [] == flatten([[[[]]], [], [[]], [[], []]])  # empty multidimensional list
     assert [1, 2, 3, 4, 5, 6, 7, 8] == flatten(
@@ -15,8 +15,8 @@ def test_plot_save_unified_dot():
     import anytree.exporter as a_exp
     import pydotplus
 
-    import nbnode_pyscaffold.nbnode_trees as nbtree
-    from nbnode_pyscaffold.plot.utils import plot_save_unified
+    import nbnode.nbnode_trees as nbtree
+    from nbnode.plot.utils import plot_save_unified
 
     simpletree = nbtree.tree_simple()
     dot_data = a_exp.UniqueDotExporter(
@@ -40,7 +40,7 @@ def test_plot_save_unified_matplotlib():
 
     import matplotlib.pyplot as plt
 
-    from nbnode_pyscaffold.plot.utils import plot_save_unified
+    from nbnode.plot.utils import plot_save_unified
 
     plt.plot([1, 2, 3, 4])
     plot_save_unified(any_plot=plt, file="tests_output/matplotlib_graph.png")

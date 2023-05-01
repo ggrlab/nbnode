@@ -6,7 +6,7 @@ import matplotlib.cm
 from dtreeviz.trees import DTreeVizAPI
 from pydotplus.graphviz import Dot
 
-from nbnode_pyscaffold.plot.shifted_colormap import shifted_colormap
+from nbnode.plot.shifted_colormap import shifted_colormap
 
 matplotlib.use("AGG")
 

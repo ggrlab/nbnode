@@ -8,8 +8,8 @@ import anytree
 import numpy as np
 import pandas as pd
 
-from nbnode_pyscaffold.nbnode import NBNode
-from nbnode_pyscaffold.nbnode_util import per_node_data_fun
+from nbnode.nbnode import NBNode
+from nbnode.nbnode_util import per_node_data_fun
 
 dirichlet_installed = True
 try:

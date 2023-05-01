@@ -1,21 +1,24 @@
 from typing import Union
 
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.simulation.TreeMeanRelative import TreeMeanRelative
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.simulation.TreeMeanRelative import TreeMeanRelative
 
 
-def sim00_baseline(
+def sim02_temra(
     flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
     n_samples=100,
     n_cells=10000,
     use_only_diagonal_covmat=False,
     verbose=True,
     seed_sample_0=129873,
-    save_dir="sim/sim00_pure_estimate",
+    save_dir="sim/sim02_temra",
     only_return_sampled_cell_numbers=False,
 ):
     proportional_generator = TreeMeanRelative(
-        change_pop_mean_proportional={},
+        change_pop_mean_proportional={
+            # 7.17% --> 33.23%
+            "/AllCells/CD4-/CD8+/Temra": 4.634588563458856,
+        },
         flowsim_tree=flowsim_tree,
         n_samples=n_samples,
         n_cells=n_cells,

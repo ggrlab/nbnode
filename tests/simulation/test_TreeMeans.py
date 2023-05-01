@@ -3,9 +3,9 @@ from unittest import TestCase
 
 import pandas as pd
 
-import nbnode_pyscaffold.nbnode_trees as nbtree
-from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+import nbnode.nbnode_trees as nbtree
+from nbnode.io.pickle_open_dump import pickle_open_dump
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 
 
 class TestTreeMeans(TestCase):
@@ -17,7 +17,7 @@ class TestTreeMeans(TestCase):
 
         import re
 
-        from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
+        from nbnode.testutil.helpers import find_dirname_above_currentfile
 
         TESTS_DIR = find_dirname_above_currentfile()
 
@@ -44,7 +44,7 @@ class TestTreeMeans(TestCase):
         )
 
     def test_TreeMeanDistributionSampler(self):
-        from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import (
+        from nbnode.simulation.TreeMeanDistributionSampler import (
             TreeMeanDistributionSampler,
         )
 
@@ -148,7 +148,7 @@ class TestTreeMeans(TestCase):
         assert all_changed_parameters != []
 
     def test_TreeMeanRelative(self):
-        from nbnode_pyscaffold.simulation.TreeMeanRelative import TreeMeanRelative
+        from nbnode.simulation.TreeMeanRelative import TreeMeanRelative
 
         print("test")
         os.makedirs("tests_output", exist_ok=True)

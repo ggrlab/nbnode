@@ -1,8 +1,8 @@
 =================
-nbnode_pyscaffold
+nbnode
 =================
 
-This is the documentation of **nbnode_pyscaffold**.
+This is the documentation of **nbnode**.
 
 .. note::
 

@@ -15,44 +15,44 @@ RUN git config --global user.name "gunthergl"
 
 
 # Create a working directory
-RUN mkdir /nbnode_pyscaffold
-WORKDIR /nbnode_pyscaffold
+RUN mkdir /nbnode
+WORKDIR /nbnode
 
 # Create a non-root user and switch to it
 RUN adduser --disabled-password --gecos '' --shell /bin/bash nbnode_user
 
 ### Add relevant code sources
 #       Add directories to the container
-ADD src /nbnode_pyscaffold/src
-ADD .git /nbnode_pyscaffold/.git
-# ADD tests /nbnode_pyscaffold/tests
-# ADD container /nbnode_pyscaffold
-# ADD .coveragerc /nbnode_pyscaffold
-# ADD dist /nbnode_pyscaffold/dist
-# ADD docs /nbnode_pyscaffold/docs
+ADD src /nbnode/src
+ADD .git /nbnode/.git
+# ADD tests /nbnode/tests
+# ADD container /nbnode
+# ADD .coveragerc /nbnode
+# ADD dist /nbnode/dist
+# ADD docs /nbnode/docs
 
 #       Add files to the container
-ADD AUTHORS.rst /nbnode_pyscaffold
-ADD CHANGELOG.rst /nbnode_pyscaffold
-ADD CONTRIBUTING.rst /nbnode_pyscaffold
-ADD .gitignore /nbnode_pyscaffold
-ADD LICENSE.txt /nbnode_pyscaffold
-ADD pyproject.toml /nbnode_pyscaffold
-ADD setup.cfg /nbnode_pyscaffold
-ADD setup.py /nbnode_pyscaffold
-ADD tox.ini /nbnode_pyscaffold
-# ADD .isort.cfg /nbnode_pyscaffold
-# ADD .gitlab-ci.yml /nbnode_pyscaffold
-# ADD .pre-commit-config.yaml /nbnode_pyscaffold
-# ADD README.rst /nbnode_pyscaffold
-# ADD .readthedocs.yml /nbnode_pyscaffold
-# ADD .tox /nbnode_pyscaffold
-# ADD removeme_.gitlab-ci.yml /nbnode_pyscaffold
-# ADD .vscode /nbnode_pyscaffold
+ADD AUTHORS.rst /nbnode
+ADD CHANGELOG.rst /nbnode
+ADD CONTRIBUTING.rst /nbnode
+ADD .gitignore /nbnode
+ADD LICENSE.txt /nbnode
+ADD pyproject.toml /nbnode
+ADD setup.cfg /nbnode
+ADD setup.py /nbnode
+ADD tox.ini /nbnode
+# ADD .isort.cfg /nbnode
+# ADD .gitlab-ci.yml /nbnode
+# ADD .pre-commit-config.yaml /nbnode
+# ADD README.rst /nbnode
+# ADD .readthedocs.yml /nbnode
+# ADD .tox /nbnode
+# ADD removeme_.gitlab-ci.yml /nbnode
+# ADD .vscode /nbnode
 
-RUN chown -R nbnode_user:nbnode_user /nbnode_pyscaffold
+RUN chown -R nbnode_user:nbnode_user /nbnode
 
-WORKDIR /nbnode_pyscaffold
+WORKDIR /nbnode
 USER nbnode_user
 
 

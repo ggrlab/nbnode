@@ -1,4 +1,4 @@
-import nbnode_pyscaffold.nbnode_trees as nbtree
+import nbnode.nbnode_trees as nbtree
 
 
 def test_trees_init():

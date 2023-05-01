@@ -151,7 +151,7 @@ build:
     - pipx run coverage html
     # If we run into size limits of the report, see the following issue
     # https://gitlab.com/gitlab-org/gitlab/-/issues/328772/?_gl=1*1am1cwx*_ga*MTMzMTA0NTM5Ni4xNjc2NTM3Mjgw*_ga_ENFH3X7M5Y*MTY4MTkwNDQwNC4xMS4xLjE2ODE5MDY4MjYuMC4wLjA.
-    - pipx run docstr-coverage src/nbnode_pyscaffold --config .docstr.yaml --badge docstr_coverage.svg
+    - pipx run docstr-coverage src/nbnode --config .docstr.yaml --badge docstr_coverage.svg
 
   artifacts:
     paths:
@@ -211,8 +211,8 @@ pages:
   # To locally build the documentation, run
   #   tox -e docs
   # Finally, the documentation is accessible from
-  #   https://ccc_verse.git-pages.uni-regensburg.de/nbnode_pyscaffold
-  # (found by going to https://git.uni-regensburg.de/ccc_verse/nbnode_pyscaffold/pages)
+  #   https://ccc_verse.git-pages.uni-regensburg.de/nbnode
+  # (found by going to https://git.uni-regensburg.de/ccc_verse/nbnode/pages)
 
   rules:
     # The following ensures that the documentation is only run when a commit to the default ("main")

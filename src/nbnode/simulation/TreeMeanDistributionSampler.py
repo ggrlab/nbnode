@@ -5,8 +5,8 @@ from typing import Any, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
 
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.simulation.sim_target import sim_target
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.simulation.sim_target import sim_target
 
 
 class PseudoTorchDistributionNormal:

@@ -1,27 +1,27 @@
 .. These are examples of badges you might want to add to your README:
    please update the URLs accordingly
 
-    .. image:: https://api.cirrus-ci.com/github/<USER>/nbnode_pyscaffold.svg?branch=main
+    .. image:: https://api.cirrus-ci.com/github/<USER>/nbnode.svg?branch=main
         :alt: Built Status
-        :target: https://cirrus-ci.com/github/<USER>/nbnode_pyscaffold
-    .. image:: https://readthedocs.org/projects/nbnode_pyscaffold/badge/?version=latest
+        :target: https://cirrus-ci.com/github/<USER>/nbnode
+    .. image:: https://readthedocs.org/projects/nbnode/badge/?version=latest
         :alt: ReadTheDocs
-        :target: https://nbnode_pyscaffold.readthedocs.io/en/stable/
-    .. image:: https://img.shields.io/coveralls/github/<USER>/nbnode_pyscaffold/main.svg
+        :target: https://nbnode.readthedocs.io/en/stable/
+    .. image:: https://img.shields.io/coveralls/github/<USER>/nbnode/main.svg
         :alt: Coveralls
-        :target: https://coveralls.io/r/<USER>/nbnode_pyscaffold
-    .. image:: https://img.shields.io/pypi/v/nbnode_pyscaffold.svg
+        :target: https://coveralls.io/r/<USER>/nbnode
+    .. image:: https://img.shields.io/pypi/v/nbnode.svg
         :alt: PyPI-Server
-        :target: https://pypi.org/project/nbnode_pyscaffold/
-    .. image:: https://img.shields.io/conda/vn/conda-forge/nbnode_pyscaffold.svg
+        :target: https://pypi.org/project/nbnode/
+    .. image:: https://img.shields.io/conda/vn/conda-forge/nbnode.svg
         :alt: Conda-Forge
-        :target: https://anaconda.org/conda-forge/nbnode_pyscaffold
-    .. image:: https://pepy.tech/badge/nbnode_pyscaffold/month
+        :target: https://anaconda.org/conda-forge/nbnode
+    .. image:: https://pepy.tech/badge/nbnode/month
         :alt: Monthly Downloads
-        :target: https://pepy.tech/project/nbnode_pyscaffold
+        :target: https://pepy.tech/project/nbnode
     .. image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter
         :alt: Twitter
-        :target: https://twitter.com/nbnode_pyscaffold
+        :target: https://twitter.com/nbnode
 
 .. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
     :alt: Project generated with PyScaffold
@@ -30,7 +30,7 @@
 |
 
 =================
-nbnode_pyscaffold
+nbnode
 =================
 
 

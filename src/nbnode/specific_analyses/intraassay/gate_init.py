@@ -3,11 +3,11 @@ from typing import Tuple
 
 import pandas as pd
 
-from nbnode_pyscaffold.apply.count_celltree_df import count_celltree_df
-from nbnode_pyscaffold.apply.gate_csv import gate_csv
-from nbnode_pyscaffold.nbnode import NBNode
-from nbnode_pyscaffold.nbnode_trees import tree_complete_aligned_v2
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.apply.count_celltree_df import count_celltree_df
+from nbnode.apply.gate_csv import gate_csv
+from nbnode.nbnode import NBNode
+from nbnode.nbnode_trees import tree_complete_aligned_v2
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 
 
 def gate_init(
@@ -75,7 +75,7 @@ def gate_init(
 
 
 if __name__ == "__main__":
-    from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
+    from nbnode.io.pickle_open_dump import pickle_open_dump
 
     celltree, node_counts_df, flow_dist = gate_init()
 

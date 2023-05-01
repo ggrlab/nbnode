@@ -4,15 +4,15 @@ from unittest import TestCase
 import numpy as np
 import pandas as pd
 
-import nbnode_pyscaffold.nbnode_trees as nbtree
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
+import nbnode.nbnode_trees as nbtree
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.utils.merge_leaf_nodes import merge_leaf_nodes
 
 
 class TestMergeLeafNodes(TestCase):
     @classmethod
     def setUpClass(self) -> None:
-        from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
+        from nbnode.testutil.helpers import find_dirname_above_currentfile
 
         self.TESTS_DIR = find_dirname_above_currentfile()
         # https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass

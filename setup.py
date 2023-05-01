@@ -1,5 +1,5 @@
 """
-    Setup file for nbnode_pyscaffold.
+    Setup file for nbnode.
     Use setup.cfg to configure your project.
 
     This file was generated with PyScaffold 4.4.
