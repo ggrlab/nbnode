@@ -112,6 +112,8 @@ build:
       - dist
 
 download_big_testdata:
+  trigger: 
+    project: ccc_verse/nbnode
   stage: Download test data
   tags:
     - container_user
