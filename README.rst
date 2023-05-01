@@ -49,19 +49,19 @@ This project has been set up using PyScaffold 4.4. For details and usage
 information on PyScaffold see https://pyscaffold.org/::
 
     pip install pyscaffold
-    putup nbnode_pyscaffold
-    cd nbnode_pyscaffold
-    # Create nbnode_pyscaffold within gitlab, without README
+    putup nbnode
+    cd nbnode
+    # Create nbnode within gitlab, without README
     git branch -m master main
-    git remote add origin git@git.uni-regensburg.de:ccc_verse/nbnode_pyscaffold.git
+    git remote add origin git@git.uni-regensburg.de:ccc_verse/nbnode.git
     git push -u origin --all
-    conda create -y -n nbnode_pyscaffold python=3.8
-    conda activate nbnode_pyscaffold
-    # Select nbnode_pyscaffold as default python interpreter in VsCode
+    conda create -y -n conda_nbnode python=3.8
+    conda activate conda_nbnode
+    # Select conda_nbnode as default python interpreter in VsCode
     #   select a single python file, then on the bottom right, the current python interpreter name
-    #   pops up. Click on it and select the "nbnode_pyscaffold" interpreter.
+    #   pops up. Click on it and select the "conda_nbnode" interpreter.
     # Make sure that the correct pip is used:
-    #   Something like: /home/gugl/.conda_envs/nbnode_pyscaffold/bin/pip
+    #   Something like: /home/gugl/.conda_envs/conda_nbnode/bin/pip
     which pip
     pip install tox
     tox --help
