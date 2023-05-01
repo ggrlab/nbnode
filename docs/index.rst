@@ -35,6 +35,7 @@ Contents
    Authors <authors>
    Changelog <changelog>
    Module Reference <api/modules>
+   notebooks/nbnode-01 <notebooks/nbnode-01>
 
 
 Indices and tables
