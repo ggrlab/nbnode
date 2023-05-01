@@ -1,7 +1,7 @@
 import anytree
 import pandas as pd
 
-from nbnode_pyscaffold.nbnode import NBNode
+from nbnode.nbnode import NBNode
 
 
 def count_celltree_df(
@@ -24,7 +24,7 @@ def count_celltree_df(
 
     Examples:
         >>> import os
-        >>> from nbnode_pyscaffold.apply.gate_csv import gate_csv
+        >>> from nbnode.apply.gate_csv import gate_csv
         >>> rescaled_data_dir = os.path.join(
         ...    "example_data", "asinh.align_manual.CD3_Gate"
         ...    )
@@ -40,7 +40,7 @@ def count_celltree_df(
         >>> print(rescaled_data_dir_files)
         >>> a = gate_csv(csv=rescaled_data_dir_files[0])
         >>> b = gate_csv(csv=rescaled_data_dir_files[0:3])
-        >>> from nbnode_pyscaffold.apply.count_celltree import count_celltree_df
+        >>> from nbnode.apply.count_celltree import count_celltree_df
         >>> print(count_celltree_df(a))
         >>> print(count_celltree_df(b))
     """

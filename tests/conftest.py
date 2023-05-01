@@ -1,5 +1,5 @@
 """
-    Dummy conftest.py for nbnode_pyscaffold.
+    Dummy conftest.py for nbnode.
 
     If you don't know what this is for, just leave it empty.
     Read more about conftest.py under:

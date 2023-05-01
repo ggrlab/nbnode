@@ -2,7 +2,7 @@
 # docstr-coverage docstr_coverage -e ".*/test" --skip-magic --skip-init --badge="docs" --skip-class-def etc...
 
 # paths: # list or string
-#   # - src/nbnode_pyscaffold
+#   # - src/nbnode
 # --badge=<filepath>, -b <filepath> - Generate a docstring coverage percent badge as an SVG saved to a given filepath
 badge: docs # Path
 exclude: .*/test # regex

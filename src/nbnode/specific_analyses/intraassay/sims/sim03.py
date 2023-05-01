@@ -1,7 +1,7 @@
 from typing import Union
 
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.simulation.TreeMeanDistributionSampler import (
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.simulation.TreeMeanDistributionSampler import (
     PseudoTorchDistributionNormal,
     TreeMeanDistributionSampler,
 )

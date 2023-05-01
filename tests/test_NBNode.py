@@ -5,9 +5,9 @@ import anytree
 import anytree.exporter as a_exp
 import pandas as pd
 
-import nbnode_pyscaffold.nbnode_trees as nbtree
-from nbnode_pyscaffold.nbnode import NBNode
-from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
+import nbnode.nbnode_trees as nbtree
+from nbnode.nbnode import NBNode
+from nbnode.testutil.helpers import find_dirname_above_currentfile
 
 TESTS_DIR = find_dirname_above_currentfile()
 
@@ -438,7 +438,7 @@ class TestNBNode(TestCase):
     def test_plot_NBNode_tree_coloring(self):
         import pydotplus
 
-        from nbnode_pyscaffold.plot.utils import plot_save_unified
+        from nbnode.plot.utils import plot_save_unified
 
         simpletree = nbtree.tree_simple()
         dot_data = a_exp.UniqueDotExporter(
@@ -705,7 +705,7 @@ class TestNBNode(TestCase):
         # dotexported =
         mytree.export_dot()
         graph = mytree.graph_from_dot(mytree)
-        from nbnode_pyscaffold.plot.utils import plot_save_unified
+        from nbnode.plot.utils import plot_save_unified
 
         graph = mytree.graph_from_dot(mytree, title="My Title")
         plot_save_unified(
@@ -756,7 +756,7 @@ class TestNBNode(TestCase):
         graph = celltree.graph_from_dot(
             celltree, fillcolor_node_attribute="fake_activation_mean"
         )
-        from nbnode_pyscaffold.plot.utils import plot_save_unified
+        from nbnode.plot.utils import plot_save_unified
 
         plot_save_unified(any_plot=graph, file="tests_output/fake_activation_mean.pdf")
 
@@ -814,7 +814,7 @@ class TestNBNode(TestCase):
             test_id_2=2,
         )
         graph = celltree.graph_from_dot(celltree, fillcolor_node_attribute="mean_act")
-        from nbnode_pyscaffold.plot.utils import plot_save_unified
+        from nbnode.plot.utils import plot_save_unified
 
         plot_save_unified(
             any_plot=graph, file="tests_output/graph_text_attributes_default.pdf"
@@ -909,7 +909,7 @@ class TestNBNode(TestCase):
             fillcolor_node_attribute="mean_act",
             node_text_attributes={"name": "{}", "mean_act": "{:.2f}"},
         )
-        from nbnode_pyscaffold.plot.utils import plot_save_unified
+        from nbnode.plot.utils import plot_save_unified
 
         plot_save_unified(any_plot=graph_stump, file="tests_output/graph_stump.pdf")
         plot_save_unified(

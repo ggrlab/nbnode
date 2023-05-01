@@ -1,6 +1,6 @@
 import anytree
 
-from nbnode_pyscaffold.nbnode import NBNode
+from nbnode.nbnode import NBNode
 
 
 def tree_simple() -> NBNode:

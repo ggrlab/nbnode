@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-import nbnode_pyscaffold.specific_analyses.intraassay.sims as ia_sims
-from nbnode_pyscaffold.io.pickle_open_dump import pickle_open_dump
-from nbnode_pyscaffold.specific_analyses.intraassay.gate_init import gate_init
-from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
-from nbnode_pyscaffold.utils.merge_leaf_nodes import merge_leaf_nodes
+import nbnode.specific_analyses.intraassay.sims as ia_sims
+from nbnode.io.pickle_open_dump import pickle_open_dump
+from nbnode.specific_analyses.intraassay.gate_init import gate_init
+from nbnode.testutil.helpers import find_dirname_above_currentfile
+from nbnode.utils.merge_leaf_nodes import merge_leaf_nodes
 
 TESTS_DIR = find_dirname_above_currentfile()
 
@@ -487,7 +487,7 @@ class TestIntraassayData(TestCase):
     def test_sim_target(self):
         import shutil
 
-        from nbnode_pyscaffold.simulation.sim_target import sim_target
+        from nbnode.simulation.sim_target import sim_target
 
         # test the default settings
         shutil.rmtree("sim/intraassay/sim00_target", ignore_errors=True)
@@ -642,7 +642,7 @@ class TestIntraassayData(TestCase):
     def test_sim_proportional(self):
         import shutil
 
-        from nbnode_pyscaffold.simulation.sim_proportional import sim_proportional
+        from nbnode.simulation.sim_proportional import sim_proportional
 
         # test the default settings
         shutil.rmtree("sim/intraassay/sim00_baseline", ignore_errors=True)

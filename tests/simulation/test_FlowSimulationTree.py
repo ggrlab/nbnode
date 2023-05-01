@@ -6,10 +6,10 @@ import anytree
 import numpy as np
 import pandas as pd
 
-import nbnode_pyscaffold.nbnode_trees as nbtree
-from nbnode_pyscaffold.nbnode import NBNode
-from nbnode_pyscaffold.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
-from nbnode_pyscaffold.testutil.helpers import find_dirname_above_currentfile
+import nbnode.nbnode_trees as nbtree
+from nbnode.nbnode import NBNode
+from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.testutil.helpers import find_dirname_above_currentfile
 
 TESTS_DIR = find_dirname_above_currentfile()
 
