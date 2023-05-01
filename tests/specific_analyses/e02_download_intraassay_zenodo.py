@@ -7,6 +7,7 @@ ACCESS_TOKEN = "ZENODO_ACCESS_TOKEN"
 record_id = "7883353"
 
 r = requests.get(f"https://zenodo.org/api/records/{record_id}", params={'access_token': ACCESS_TOKEN})
+print(r.json())
 download_urls = [f['links']['self'] for f in r.json()['files']]
 filenames = [f['key'] for f in r.json()['files']]
 
