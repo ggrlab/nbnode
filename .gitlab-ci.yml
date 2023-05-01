@@ -118,9 +118,9 @@ download_big_testdata:
   image: $LATEST_IMAGE
   script:
     - pip install -U requests
-    - |
+    - >
       python -c "
-        ACCESS_TOKEN = $ZENODO_ACCESS_TOKEN
+        ACCESS_TOKEN = "$ZENODO_ACCESS_TOKEN"
         import requests
         print(requests.get('https://zenodo.org/record/7883353/files/Inter%20Assay%20Donor%2001%20Tube%2001%20T%20cell%20001%20CD3.csv?download=1').content)
       "
