@@ -1,0 +1,17 @@
+stages:
+  - Download test data
+
+download_big_testdata:
+  needs: []
+  stage: Download test data
+  trigger: 
+    project: ccc_verse/nbnode
+  forward:
+    pipeline_variables: true
+  tags:
+    - container_user
+  image: $LATEST_IMAGE
+  script:
+    - pip install -U requests
+    - sed --in-place s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/ tests/specific_analyses/e02_download_intraassay_zenodo.py
+    - python tests/specific_analyses/e02_download_intraassay.py
