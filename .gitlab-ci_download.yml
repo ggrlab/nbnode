@@ -10,5 +10,5 @@ download_big_testdata:
   script:
     - pip install -U requests
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e02_download_intraassay_zenodo.py
-    - cat tests/specific_analyses/e02_download_intraassay_zenodo.py
+    # - cat tests/specific_analyses/e02_download_intraassay_zenodo.py  # only for testing
     - python tests/specific_analyses/e02_download_intraassay_zenodo.py
