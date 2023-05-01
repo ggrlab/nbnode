@@ -72,13 +72,98 @@ information on PyScaffold see https://pyscaffold.org/::
     pre-commit autoupdate
 
 
+Getting started
+====
+Optional: Create a (conda) environment and activate it.
+
+.. code-block:: bash
+    conda create -y -n conda_nbnode python=3.8
+    conda activate conda_nbnode
+
+Install and use nbnode install it from source. 
+.. code-block:: bash
+    git clone https://github.com/ggrlab/nbnode
+    cd nbnode
+    pip install --upgrade pip
+    pip install . 
+
+Base-functionality of the package is to enable non-binary trees. The following creates
+a tree with a root node ``a`` and three children ``a0``, ``a1`` and ``a2``. ``a1`` is the only child with another child ``a1a``.
+
+.. code-block::
+    a
+    ├── a0
+    ├── a1
+    │   └── a1a
+    └── a2
+
+A basic non-binary node (``NBNode``) consists of four important attributes:
+
+    - ``name`` The name of the node. This is the only mandatory attribute.
+    - ``parent`` The parent node of this node.
+    - ``decision_name`` The name of the value leading to this node. 
+    - ``decision_value`` The value leading to this node.
+
+The name of the node must only be unique within all childs of the parent node.
+The ``decision_name`` and ``decision_value`` are the named values leading to this node. Note that 
+``decision_name`` must be a string, but ``decision_value`` can be anything, including strings, integers, floats, etc.
+
+To build the tree above, we can use the following code:
+
+
+.. code-block:: python
+    # Create the root node "a"
+    mytree = NBNode("a")
+    # Create the node "a0" which 
+    #  - Is a child of "mytree" 
+    #  - Has the decision_name "m1" 
+    #  - Has the decision_value -1
+    # a0 =
+    NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
+
+    a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
+    
+    # Create the node "a2" which 
+    #  - Is a child of "mytree" 
+    #  - Has the decision_name "m3" 
+    #  - Has the decision_value "another"
+    # a2 =
+    NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
+    # a1a =
+    NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
+    return mytree
+
+We can check if the previous tree was built correctly: 
+
+.. code-block:: python
+    mytree.pretty_print("__long__")
+    #    a (counter:0, decision_name:None, decision_value:None)
+    #    ├── a0 (counter:0, decision_name:m1, decision_value:-1)
+    #    ├── a1 (counter:0, decision_name:m1, decision_value:1)
+    #    │   └── a1a (counter:0, decision_name:m2, decision_value:test)
+    #    └── a2 (counter:0, decision_name:m3, decision_value:another)
+    #    
+
+Finally, we use the tree to predict the final node of a new data point.
+The following values, supplied as two lists ``values`` and ``names`` are used to predict the final node.
+
+.. code-block:: python
+    single_prediction = mytree.predict(
+        values=[1, "test", 2], names=["m1", "m2", "m3"]
+    )
+    print(single_prediction)
 
 Tests
 ====
 For some tests you need data files, which are not included in the repository.
 Especially all tests in `tests/specific_analyses` need data.
-You can obtain the data by running the following command in the root directory of the repository:
+You can obtain the data by downloading the data from zenodo: 
 
-```
-bash tests/specific_analyses/e01_download_intraassay.sh
-```
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7883353.svg
+   :target: https://doi.org/10.5281/zenodo.7883353
+
+.. code-block:: bash 
+    pip install requests
+    python tests/specific_analyses/e02_download_intraassay_zenodo.py
+
+
