@@ -115,7 +115,7 @@ build:
 download_big_testdata:
   needs: []
   stage: Download test data
-  trigger: 
+  trigger:
     include: .gitlab-ci_download.yml
 
 # download-child:
