@@ -4,10 +4,6 @@ stages:
 download_big_testdata:
   needs: []
   stage: Download test data
-  trigger: 
-    project: ccc_verse/nbnode
-  forward:
-    pipeline_variables: true
   tags:
     - container_user
   image: $LATEST_IMAGE
