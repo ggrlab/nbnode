@@ -77,11 +77,13 @@ Getting started
 Optional: Create a (conda) environment and activate it.
 
 .. code-block:: bash
+
     conda create -y -n conda_nbnode python=3.8
     conda activate conda_nbnode
 
 Install and use nbnode install it from source. 
 .. code-block:: bash
+
     git clone https://github.com/ggrlab/nbnode
     cd nbnode
     pip install --upgrade pip
@@ -91,6 +93,7 @@ Base-functionality of the package is to enable non-binary trees. The following c
 a tree with a root node ``a`` and three children ``a0``, ``a1`` and ``a2``. ``a1`` is the only child with another child ``a1a``.
 
 .. code-block::
+
     a
     ├── a0
     ├── a1
@@ -112,13 +115,14 @@ To build the tree above, we can use the following code:
 
 
 .. code-block:: python
+    
+    from nbnode import NBNode
     # Create the root node "a"
     mytree = NBNode("a")
     # Create the node "a0" which 
     #  - Is a child of "mytree" 
     #  - Has the decision_name "m1" 
     #  - Has the decision_value -1
-    # a0 =
     NBNode("a0", parent=mytree, decision_value=-1, decision_name="m1")
 
     a1 = NBNode("a1", parent=mytree, decision_value=1, decision_name="m1")
@@ -127,31 +131,40 @@ To build the tree above, we can use the following code:
     #  - Is a child of "mytree" 
     #  - Has the decision_name "m3" 
     #  - Has the decision_value "another"
-    # a2 =
     NBNode("a2", parent=mytree, decision_value="another", decision_name="m3")
-    # a1a =
     NBNode("a1a", parent=a1, decision_value="test", decision_name="m2")
-    return mytree
 
 We can check if the previous tree was built correctly: 
 
 .. code-block:: python
+
     mytree.pretty_print("__long__")
     #    a (counter:0, decision_name:None, decision_value:None)
     #    ├── a0 (counter:0, decision_name:m1, decision_value:-1)
     #    ├── a1 (counter:0, decision_name:m1, decision_value:1)
     #    │   └── a1a (counter:0, decision_name:m2, decision_value:test)
     #    └── a2 (counter:0, decision_name:m3, decision_value:another)
-    #    
 
 Finally, we use the tree to predict the final node of a new data point.
 The following values, supplied as two lists ``values`` and ``names`` are used to predict the final node.
 
 .. code-block:: python
+
     single_prediction = mytree.predict(
         values=[1, "test", 2], names=["m1", "m2", "m3"]
     )
     print(single_prediction)
+
+
+Tutorials 
+====
+.. * [Part 1 - Non-binary node ](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part01-sample-class.ipynb)
+.. * [Part 2 - transforms Module & Matrix Class](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part02-transforms-module-matrix-class.ipynb)
+.. * [Part 3 - GatingStrategy & GatingResults Classes](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part03-gating-strategy-and-gating-results-classes.ipynb)
+.. * [Part 4 - gates Module](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part04-gates-module.ipynb)
+.. * [Part 5 - Session Class](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part05-session-class.ipynb)
+.. * [Part 6 - Workspace Class](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part06-workspace-class.ipynb)
+
 
 Tests
 ====
