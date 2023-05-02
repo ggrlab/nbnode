@@ -96,6 +96,10 @@ def gate_csv(
     celltree.id_preds(predicted_nodes_all, reset_ids=True)
 
     if verbose:
+        print("    Count cells based on ids. celltree.count(use_ids=True)")
+    celltree.count(use_ids=True)
+
+    if verbose:
         print("    Set celltree.data")
     celltree.data = data_all
     return celltree

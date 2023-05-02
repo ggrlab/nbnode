@@ -16,7 +16,7 @@ class TreeMeanRelative:
         n_samples=100,
         n_cells=10000,
         use_only_diagonal_covmat=False,
-        verbose=True,
+        verbose=False,
         seed_sample_0=129873,
         save_dir="sim/sim00_pure_estimate",
         only_return_sampled_cell_numbers=False,

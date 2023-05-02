@@ -63,7 +63,7 @@ class TreeMeanDistributionSampler:
         n_samples=100,
         n_cells=10000,
         use_only_diagonal_covmat=False,
-        verbose=True,
+        verbose=False,
         seed_sample_0=129873,
         save_dir="sim/sim00_m0.sd1",
         only_return_sampled_cell_numbers=False,
@@ -136,9 +136,12 @@ class TreeMeanDistributionSampler:
 
             target_percentage = float(target_mean_dist.sample())
             all_targets += [
-                max(
-                    minimum_target_mean_proportion,
-                    target_percentage / 100.0,
+                min(
+                    1 - minimum_target_mean_proportion,
+                    max(
+                        minimum_target_mean_proportion,
+                        target_percentage / 100.0,
+                    ),
                 )
             ]
             true_popcounts, changed_parameters, sampled_samples = sim_target(
@@ -154,6 +157,7 @@ class TreeMeanDistributionSampler:
                 sample_name=f"sample_{sample_i}",
                 only_return_sampled_cell_numbers=_only_return_sampled_cell_numbers,
                 save_changed_parameters=save_changed_parameters,
+                verbose=verbose,
             )
             if all_true_popcounts is None:
                 all_true_popcounts = true_popcounts
