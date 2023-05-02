@@ -30,19 +30,17 @@
 |
 
 =================
-nbnode
+NBNode
 =================
 
 
-    Add a short description here!
+    A python package for non-binary trees and simulation of flow cytometry data.
 
 
-A longer description of your project goes here...
+NBNode enables non-binary decision trees with multiple decisions at each node.
+Additionally it enables a dirichlet distribution based simulation of flow cytometry data.
 
-
-.. _pyscaffold-notes:
-
-Note
+Package setup
 ====
 
 This project has been set up using PyScaffold 4.4. For details and usage
@@ -71,23 +69,15 @@ information on PyScaffold see https://pyscaffold.org/::
     pip install pre-commit
     pre-commit autoupdate
 
+Tutorials
+=========
 
-Getting started
-====
+See documentation. 
 
-
-Tutorials 
-====
-.. * [Part 1 - Non-binary node ](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part01-sample-class.ipynb)
-.. * [Part 2 - transforms Module & Matrix Class](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part02-transforms-module-matrix-class.ipynb)
-.. * [Part 3 - GatingStrategy & GatingResults Classes](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part03-gating-strategy-and-gating-results-classes.ipynb)
-.. * [Part 4 - gates Module](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part04-gates-module.ipynb)
-.. * [Part 5 - Session Class](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part05-session-class.ipynb)
-.. * [Part 6 - Workspace Class](https://github.com/whitews/FlowKit/blob/master/docs/notebooks/flowkit-tutorial-part06-workspace-class.ipynb)
 
 
 Tests
-====
+========
 For some tests you need data files, which are not included in the repository.
 Especially all tests in `tests/specific_analyses` need data.
 You can obtain the data by downloading the data from zenodo: 
@@ -96,6 +86,7 @@ You can obtain the data by downloading the data from zenodo:
    :target: https://doi.org/10.5281/zenodo.7883353
 
 .. code-block:: bash 
+
     pip install requests
     python tests/specific_analyses/e02_download_intraassay_zenodo.py
 
