@@ -6,6 +6,7 @@ docs/docstr_coverage_badge.svg
 example_data/
 examples/results/
 sim/
+_version.py
 
 # Temporary and binary files
 *~
