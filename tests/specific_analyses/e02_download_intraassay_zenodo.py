@@ -16,9 +16,12 @@ filenames = [f["key"] for f in r.json()["files"]]
 print(r.status_code)
 print(download_urls)
 
-os.makedirs("example_data/asinh.align_manual.CD3_Gate", exist_ok=True)
+
+outdir = "example_data/asinh.align_manual.CD3_Gate"
+os.makedirs(outdir, exist_ok=True)
+
 for filename, url in zip(filenames, download_urls):
     print("Downloading:", filename)
     r = requests.get(url, params={"access_token": ACCESS_TOKEN})
-    with open(filename, "wb") as f:
+    with open(os.path.join(outdir, filename), "wb") as f:
         f.write(r.content)
