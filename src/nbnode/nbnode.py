@@ -454,6 +454,7 @@ class NBNode(anytree.Node):
         minmax: str = "equal",
         fillcolor_missing_val: str = "#91FF9D",
         node_text_attributes: Union[List[str], Dict[str, str]] = "default",
+        cmap: str = matplotlib.cm.RdBu_r,
     ):
         """See `NBNode._graph_from_dot`.
 
@@ -468,6 +469,7 @@ class NBNode(anytree.Node):
             minmax=minmax,
             fillcolor_missing_val=fillcolor_missing_val,
             node_text_attributes=node_text_attributes,
+            cmap=cmap
         )
 
     @staticmethod
@@ -481,6 +483,7 @@ class NBNode(anytree.Node):
         minmax: str = "equal",
         fillcolor_missing_val: str = "#91FF9D",
         node_text_attributes: Union[List[str], Dict[str, str]] = "default",
+        cmap: str = matplotlib.cm.RdBu_r,
     ) -> pydotplus.Dot:
         """Make a pydotplus.Dot from a NBNode tree.
 
@@ -535,6 +538,10 @@ class NBNode(anytree.Node):
                     attributes.
 
                 Defaults to "default".
+            cmap (str, optional):
+                The colormap which should be used for the fillcolor.
+
+                Defaults to matplotlib.cm.RdBu_r.
 
         Returns:
             pydotplus.Dot: A graphviz Dot element, therefore a plot.
@@ -615,7 +622,7 @@ class NBNode(anytree.Node):
                     "max": np.max(np.max(all_values_concat), 0),
                 }
         new_cmap = shifted_colormap(
-            cmap=matplotlib.cm.RdBu_r,
+            cmap=cmap,
             min_val=vminmax["min"],
             max_val=vminmax["max"],
             name="NoName",
