@@ -442,8 +442,31 @@ class NBNode(anytree.Node):
                 id(node)
             )  # That is how UniqueDotExporter gets his values
 
-    @staticmethod
     def graph_from_dot(
+        self: "NBNode",
+        tree: "NBNode" = None,
+        exported_dot_graph: str = None,
+        title: str = None,
+        fillcolor_node_attribute: str = "height",
+        custom_min_max_dict: Dict[str, float] = None,
+        minmax: str = "equal",
+        fillcolor_missing_val: str = "#91FF9D",
+        node_text_attributes: Union[List[str], Dict[str, str]] = "default",
+    ):
+        return self._graph_from_dot(
+            tree=tree if tree is not None else self,
+            exported_dot_graph=exported_dot_graph,
+            title=title,
+            fillcolor_node_attribute=fillcolor_node_attribute,
+            custom_min_max_dict=custom_min_max_dict,
+            minmax=minmax,
+            fillcolor_missing_val=fillcolor_missing_val,
+            node_text_attributes=node_text_attributes,
+        )
+
+    @staticmethod
+    def _graph_from_dot(
+    # def graph_from_dot(
         tree: "NBNode",
         exported_dot_graph: str = None,
         title: str = None,
