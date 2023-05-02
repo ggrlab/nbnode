@@ -121,18 +121,29 @@ class NBNode(anytree.Node):
         """Predicts the endnode (leaf) of the tree given the values.
 
         Args:
-            values:
+            values: 
+                Either a list or a dict of values. If a dict is given, the keys of 
+                the dict are used as names. This is used to identify the correct _exact_
+                value for the decision node defined by ``self.decision_value``.
             names:
+                If values is a list, names is a list of the names of the values.
+                This is used to identify the correct value for the decision node defined
+                by ``self.decision_name``.
             allow_unfitting_data:
-            False:
-                If the data you gave was not possible to fit in the tree raises a
-                ValueError.
-            True:
-                If the data you gave was not possible to fit in the tree returns None.
+                If True, returns None if the data you gave was not possible to fit in
+                the tree. If False, raises a ValueError.
+                Useful if decision values only fit partly to the tree but perfectly 
+                (completely) to another branch of the tree.
+            allow_part_predictions:
+                If True, returns all (potentially multiple!) nodes that fit the given
+                values. They do not have to be leaf nodes.
+                If False, returns only the first node that fits the given values.
+                
         Returns:
-            Either a single WNode instance (the leaf node) or if multiple leaf nodes
+            Either a single NBNode instance (the leaf node) or if multiple leaf nodes
             fit, all of them as a list.
         """
+
         if isinstance(values, dict):
             names = list(values.keys())
             values = list(values.values())
@@ -926,7 +937,12 @@ class NBNode(anytree.Node):
             node_self.ids += other_new_ids
         return self
 
-    def __len__(self):
+    def __len__(self) -> int:
+        """Get the number of nodes in the tree.
+
+        Returns:
+            int: The number of nodes in the tree.
+        """
         length = 0
         for node in anytree.iterators.PreOrderIter(self):
             length += 1
@@ -1047,6 +1063,17 @@ class NBNode(anytree.Node):
         return self_tmp
 
     def __eq__(self, other) -> bool:
+        """Check if two NBNodes are equal.
+
+        Args:
+            other (NBnode): Other NBnode to compare with.
+
+        Returns:
+            bool: 
+                True if the two NBNodes are equal regarding structure and the attributes
+                name, decision_name, decision_value, counter, ids.
+                False otherwise.
+        """
         if not isinstance(other, NBNode):
             return False
         if not self.eq_structure(other):
@@ -1207,6 +1234,17 @@ class NBNode(anytree.Node):
         return full_name[:-1]  # remove the last "/"
 
     def __getitem__(self, nbnode_full_name: str) -> "NBNode":
+        """Get a node by its full name (including the root node "/")
+
+        Args:
+            nbnode_full_name (str): Full name of the node.
+
+        Raises:
+            ValueError: If the selector is not a string with a full name from some node
+
+        Returns:
+            NBNode: The node with the given full name.
+        """
         if nbnode_full_name == 0:
             # This happens if printing predicted nodes (which are a pandas.DataFrame)
             #   predicted_nodes = celltree_decision.predict(tmp_data)
