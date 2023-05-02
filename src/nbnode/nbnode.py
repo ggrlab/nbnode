@@ -419,11 +419,13 @@ class NBNode(anytree.Node):
         Returns:
             str: A string with the exported dot graph in dot format
         """
+        if self.id_unique_dot_exporter:
+            self.set_uniquedotexporter_ids()
         if unique_dot_exporter_kwargs == "default":
             unique_dot_exporter_kwargs = {
                 "options": ['node [shape=box, style="filled", color="black"];'],
                 "nodeattrfunc": lambda node: 'label="{}", fillcolor="white"'.format(
-                    node.name
+                    node.id_unique_dot_exporter
                 ),
             }
         dot_data = UniqueDotExporter(self, **unique_dot_exporter_kwargs)
@@ -447,12 +449,16 @@ class NBNode(anytree.Node):
         tree: "NBNode" = None,
         exported_dot_graph: str = None,
         title: str = None,
-        fillcolor_node_attribute: str = "height",
+        fillcolor_node_attribute: str = "counter",
         custom_min_max_dict: Dict[str, float] = None,
         minmax: str = "equal",
         fillcolor_missing_val: str = "#91FF9D",
         node_text_attributes: Union[List[str], Dict[str, str]] = "default",
     ):
+        """See `NBNode._graph_from_dot`.
+
+        If no ``tree`` is given, self is used.
+        """
         return self._graph_from_dot(
             tree=tree if tree is not None else self,
             exported_dot_graph=exported_dot_graph,
@@ -470,7 +476,7 @@ class NBNode(anytree.Node):
         tree: "NBNode",
         exported_dot_graph: str = None,
         title: str = None,
-        fillcolor_node_attribute: str = "height",
+        fillcolor_node_attribute: str = "counter",
         custom_min_max_dict: Dict[str, float] = None,
         minmax: str = "equal",
         fillcolor_missing_val: str = "#91FF9D",
@@ -491,7 +497,7 @@ class NBNode(anytree.Node):
             fillcolor_node_attribute (str, optional):
                 The (str) name of each node containing the numeric value how the node
                 should be colored.
-                Defaults to "height".
+                Defaults to "counter".
             custom_min_max_dict (Dict[str, float], optional):
                 You can give a custom dict with the min and max values for the
                 fillcolor_node_attribute in the colorbar range.
