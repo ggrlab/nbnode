@@ -2,4 +2,4 @@
 Contributors
 ============
 
-* gunthergl_r2 <gunthergl@gmx.net>
+* GuntherGl <gunthergl@gmx.net>
