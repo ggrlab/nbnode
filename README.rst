@@ -72,7 +72,7 @@ information on PyScaffold see https://pyscaffold.org/::
 Tutorials
 =========
 
-See documentation. 
+See [documentation](https://ccc_verse.git-pages.uni-regensburg.de/nbnode). 
 
 
 
