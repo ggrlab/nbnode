@@ -14,6 +14,35 @@ def sim00_baseline(
     save_dir="sim/sim00_pure_estimate",
     only_return_sampled_cell_numbers=False,
 ):
+    """Baseline simulation
+
+    Generates a TreeMeanRelative simulation with the same mean as the original
+    simulation.
+
+    Args:
+        flowsim_tree (Union[str, FlowSimulationTreeDirichlet]):
+            See ``TreeMeanRelative``.
+        n_samples (int, optional):
+            See ``TreeMeanRelative``. Defaults to 100.
+        n_cells (int, optional):
+            See ``TreeMeanRelative``. Defaults to 10000.
+        use_only_diagonal_covmat (bool, optional):
+            See ``TreeMeanRelative``. Defaults to False.
+        verbose (bool, optional):
+            See ``TreeMeanRelative``. Defaults to True.
+        seed_sample_0 (int, optional):
+            See ``TreeMeanRelative``. Defaults to 129873.
+        save_dir (str, optional):
+            See ``TreeMeanRelative``.
+            Defaults to "sim/sim00_pure_estimate".
+        only_return_sampled_cell_numbers (bool, optional):
+            See ``TreeMeanRelative``.
+            Defaults to False.
+
+    Returns:
+        Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]: 
+            From proportional_generator.sample()
+    """
     proportional_generator = TreeMeanRelative(
         change_pop_mean_proportional={},
         flowsim_tree=flowsim_tree,

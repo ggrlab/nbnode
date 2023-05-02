@@ -13,6 +13,16 @@ from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 def gate_init(
     sample_list=None,
 ) -> Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]:
+    """Gate the intraassay samples and generate the Dirichlet-based simulation.
+
+    Args:
+        sample_list (_type_, optional): 
+            If given, only the samples with the given indices are gated.
+            Defaults to None.
+    Returns:
+        Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]: 
+            The gated celltree, the gated counts and the Dirichlet-based simulation.
+    """
     # 1. Prepare the samples for gating
     rescaled_data_dir = os.path.join("example_data", "asinh.align_manual.CD3_Gate")
     if not os.path.exists(rescaled_data_dir):

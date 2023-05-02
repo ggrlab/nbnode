@@ -78,7 +78,7 @@ class TreeMeanRelative:
             print(true_popcounts.apply(lambda x: x.mean(), axis=1) / n_cells)
         return true_popcounts, changed_parameters, sampled_samples
 
-    def sample(self):
+    def sample(self) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
         return self._sample(
             flowsim_tree=self.flowsim_tree,
             n_samples=self.n_samples,
@@ -103,7 +103,7 @@ class TreeMeanRelative:
         save_dir=None,
         _only_return_sampled_cell_numbers=None,
         save_changed_parameters=False,
-    ):
+    ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
         return self._sample(
             n_samples=self.n_samples if n_samples is None else n_samples,
             n_cells=self.n_cells if n_cells is None else n_cells,
