@@ -3,10 +3,51 @@
 requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "nbnode"
+description = "A python package for non-binary trees and simulation of flow cytometry data."
+authors = [
+    {name="gunthergl", email="gunthergl@gmx.net"}
+    ]
+readme="README.rst"
+requires-python=">=3.7"
+keywords = ["Decision tree", "non-binary", "cytometry", "python", "simulation"]
+license = {file="LICENSE.txt"}
+classifiers = [
+    "Development Status :: 5 - Production",
+    "Programming Language :: Python",
+    ]
+dynamic=["version"]
+dependencies=[
+
+    'importlib-metadata; python_version<"3.8"',
+    # see https://github.com/pandas-dev/pandas/issues/42748
+    "pandas>=1.2",
+    "pydotplus",
+    "datatable",
+    "anytree",
+    "matplotlib",
+     # with 1.19.4 there is an issue under windows when installing flowio
+    "numpy>=1.21.1",
+    "dirichlet",
+    "dtreeviz"
+]
+
+[project.urls] 
+"Homepage"="https://github.com/ggrlab/nbnode/"
+"Documentation" = "https://ccc_verse.git-pages.uni-regensburg.de/nbnode/"
+#    Source = https://github.com/pyscaffold/pyscaffold/
+#    Changelog = https://pyscaffold.org/en/latest/changelog.html
+#    Tracker = https://github.com/pyscaffold/pyscaffold/issues
+#    Conda-Forge = https://anaconda.org/conda-forge/pyscaffold
+#    Download = https://pypi.org/project/PyScaffold/#files
+#    Twitter = https://twitter.com/PyScaffold
+
 [tool.setuptools_scm]
 # For smarter version schemes and other configuration options,
 # check out https://github.com/pypa/setuptools_scm
 version_scheme = "no-guess-dev"
+# write_to = "nbnode/_version.py"
 
 [tool.pytest.ini_options]
 pythonpath = [
