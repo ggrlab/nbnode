@@ -21,6 +21,7 @@ matplotlib.use("AGG")
 
 
 class NBNode(anytree.Node):
+    """Non-binary node class, inherits from anytree.Node."""
     def __init__(
         self,
         name,

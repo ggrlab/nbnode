@@ -23,6 +23,16 @@ try:
     import torch.distributions as D
 
     def mean_dist_fun(original_mean: float) -> D.Distribution:
+        """A function that returns a distribution with a set mean.
+
+        Args:
+            original_mean (float): The mean of the normal distribution
+
+        Returns:
+            D.Distribution: 
+                A distribution with the mean set to original_mean and a 
+                standard deviation of 1.
+        """
         # You can also set that a lambda-function, e.g.
         #   lambda original_mean: D.Normal(loc=original_mean + 0, scale=1)
         return D.Normal(loc=original_mean + 0, scale=1)
@@ -70,6 +80,34 @@ class TreeMeanDistributionSampler:
         save_changed_parameters=False,
         minimum_target_mean_proportion=1e-9,
     ) -> None:
+        """A class synthesizing cytometry samples with a distribution for the mean of a population.
+
+
+        Args:
+            flowsim_tree (Union[str, FlowSimulationTreeDirichlet]): 
+                A FlowSimulationTreeDirichlet object or a path to a pickle file.
+
+            population_name_to_change (str): 
+                The name of the population that is to be changed.
+
+            mean_distribution (_type_, optional): 
+                A function that returns a distribution for a given value, the original
+                mean **percentage** of a distribution. The function should take a
+                float as input and return a distribution. 
+                The target mean of population_name_to_change is sampled from this 
+                distribution and the corresponding concentration parameter of the 
+                dirichlet distribution is calculated. 
+                Defaults to mean_dist_fun.
+            n_samples (int, optional): _description_. Defaults to 100.
+            n_cells (int, optional): _description_. Defaults to 10000.
+            use_only_diagonal_covmat (bool, optional): _description_. Defaults to False.
+            verbose (bool, optional): _description_. Defaults to False.
+            seed_sample_0 (int, optional): _description_. Defaults to 129873.
+            save_dir (str, optional): _description_. Defaults to "sim/sim00_m0.sd1".
+            only_return_sampled_cell_numbers (bool, optional): _description_. Defaults to False.
+            save_changed_parameters (bool, optional): _description_. Defaults to False.
+            minimum_target_mean_proportion (_type_, optional): _description_. Defaults to 1e-9.
+        """
         if isinstance(flowsim_tree, str):
             with open(
                 flowsim_tree,
