@@ -26,6 +26,8 @@ def test_plot_save_unified_dot():
     )
     dotdata_str = "\n".join([x for x in dot_data])
     # print(dotdata_str)
+
+    os.makedirs("tests_output", exist_ok=True)
     graph: pydotplus.Dot = pydotplus.graph_from_dot_data(dotdata_str)
     plot_save_unified(
         any_plot=graph, file="tests_output/pydotplus_graph_nocolor_NOTpdf.NOTpdf"
@@ -42,6 +44,7 @@ def test_plot_save_unified_matplotlib():
 
     from nbnode.plot.utils import plot_save_unified
 
+    os.makedirs("tests_output", exist_ok=True)
     plt.plot([1, 2, 3, 4])
     plot_save_unified(any_plot=plt, file="tests_output/matplotlib_graph.png")
     assert os.path.exists("tests_output/matplotlib_graph.png")
