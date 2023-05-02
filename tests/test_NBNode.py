@@ -1370,3 +1370,18 @@ class TestNBNode(TestCase):
         # in the root node.
         assert celltree_trunk.data.equals(self.cellmat)
         assert celltree_trunk._data.equals(self.cellmat)
+
+    def test_plot_after_math(self):
+        celltree_trunk = nbtree.tree_complete_aligned_trunk()
+        celltree_trunk.data = self.cellmat
+        celltree_trunk.id_preds(celltree_trunk.predict())
+
+        # so.. that works
+        celltree_trunk = celltree_trunk +1
+        dotgraph = celltree_trunk.graph_from_dot(fillcolor_node_attribute="counter")
+
+        # but that didnt work because UniqueDotExporter set new node names
+        # which is ommitted now. 
+        celltree_trunk = celltree_trunk +1
+        dotgraph = celltree_trunk.graph_from_dot(fillcolor_node_attribute="counter")
+
