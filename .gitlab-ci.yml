@@ -124,6 +124,7 @@ download_big_testdata:
     - pip install -U requests
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
     - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
+    - rm -rf /runner_docker_cache/example_data
     - mv example_data /runner_docker_cache/
     - ls /runner_docker_cache
 
@@ -141,9 +142,7 @@ download_big_testdata:
     - container_user
   script:
     - ln -s /cache/example_data example_data
-    - ls -lath
     - ls -lath example_data/
-    - ls -lath example_data/asinh.align_manual.CD3_Gate/
     # If graphviz is not installed, install it. It assumes that you are root
     # which is the case for the standard python:x.x docker images
     # In my cases, I assume graphviz is already installed (and you are non-root)
