@@ -2,7 +2,12 @@ import copy
 import warnings
 from abc import abstractmethod
 from importlib.metadata import PackageNotFoundError
-from typing import Any, Dict, List, Literal, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 import anytree
 import numpy as np

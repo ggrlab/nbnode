@@ -3,7 +3,12 @@ import inspect
 import re
 import warnings
 from collections import Counter
-from typing import Any, Dict, List, Literal, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 import anytree
 import datatable
