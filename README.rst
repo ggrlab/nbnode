@@ -50,7 +50,7 @@ Installation
     git clone https://git.uni-regensburg.de/ccc_verse/nbnode
     cd nbnode
     pip install --upgrade pip
-    pip install . 
+    pip install .
 
 
 Tutorials
