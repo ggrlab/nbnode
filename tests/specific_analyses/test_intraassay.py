@@ -26,9 +26,18 @@ class TestIntraassayData(TestCase):
         #   2) Test coverage will not be complete
         debugging = False
         if not debugging:
+            print("Running gate_init() on 4 samples")
             # 4 samples just to speed up things
             self.celltree, node_counts_df, self.flowsim_tree = gate_init(
-                sample_list=[0, 1, 2, 3]
+                sample_list=[
+                    os.path.join("example_data", "asinh.align_manual.CD3_Gate", file_x)
+                    for file_x in [
+                        "Inter Assay Donor 05 Tube 03 T cell 003 CD3.csv",
+                        "Inter Assay Donor 04 Tube 05 T cell 012 CD3.csv",
+                        "Inter_Assay Donor 08 Tube 05 T cell 011 CD3.csv",
+                        "Inter Assay Donor 02 Tube 05 T cell 011 CD3.csv",
+                    ]
+                ]
             )
         else:
             try:
@@ -39,7 +48,17 @@ class TestIntraassayData(TestCase):
             except FileNotFoundError:
                 # 4 samples just to speed up things
                 self.celltree, node_counts_df, self.flowsim_tree = gate_init(
-                    sample_list=[0, 1, 2, 3]
+                    sample_list=[
+                        os.path.join(
+                            "example_data", "asinh.align_manual.CD3_Gate", file_x
+                        )
+                        for file_x in [
+                            "Inter Assay Donor 05 Tube 03 T cell 003 CD3.csv",
+                            "Inter Assay Donor 04 Tube 05 T cell 012 CD3.csv",
+                            "Inter_Assay Donor 08 Tube 05 T cell 011 CD3.csv",
+                            "Inter Assay Donor 02 Tube 05 T cell 011 CD3.csv",
+                        ]
+                    ]
                 )
                 os.makedirs("examples/results", exist_ok=True)
                 pickle_open_dump(
