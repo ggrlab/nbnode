@@ -652,6 +652,7 @@ class TestIntraassayData(TestCase):
             simulated_samples,
         ) = sim_proportional(flowsim=self.flowsim_tree, n_samples=2)
         assert os.path.exists("sim/intraassay/sim00_baseline")
+        print(simulated_cell_populations)
         assert simulated_cell_populations.shape == (81, 2)
         assert all(simulated_cell_populations.sum() == 25000)
         assert len(os.listdir("sim/intraassay/sim00_baseline")) == 2
