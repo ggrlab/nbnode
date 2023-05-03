@@ -110,7 +110,8 @@ class TreeMeanDistributionSampler:
         save_changed_parameters=False,
         minimum_target_mean_proportion=1e-9,
     ) -> None:
-        """A class synthesizing cytometry samples with a distribution for the mean of a population.
+        """A class synthesizing cytometry samples with a distribution for the mean of 
+        a population.
 
 
         Args:
@@ -216,14 +217,13 @@ class TreeMeanDistributionSampler:
 
         Returns:
             Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-
                 - A dataframe with the sampled cell numbers.
-                - A dictionary with the parameters of the
-                dirichlet distribution.
+                - A dictionary with the parameters of the dirichlet distribution.
                 - A list of dataframes with the sampled cell matrices
-                    (n_cells X features) for each sample.
+                  (n_cells X features) for each sample.
                 - A list of the target means for each sample. 
-                    This is the used ``original_mean``
+                  This is the used ``original_mean``
+
         """
         if save_dir is not None:
             os.makedirs(save_dir, exist_ok=True)
@@ -303,12 +303,11 @@ class TreeMeanDistributionSampler:
 
         Returns:
             Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-
                 - A dataframe with the sampled cell numbers.
-                - A dictionary with the parameters of the
-                dirichlet distribution.
+                - A dictionary with the parameters of the dirichlet distribution.
                 - A list of dataframes with the sampled cell matrices
-                    (n_cells X features) for each sample.
+                  (n_cells X features) for each sample.
+
         """
         return self._sample(
             flowsim_tree=self.flowsim_tree,

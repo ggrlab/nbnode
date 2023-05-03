@@ -107,12 +107,11 @@ class TreeMeanRelative:
 
             Returns:
                 Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-
                     - A dataframe with the sampled cell numbers.
                     - A dictionary with the parameters of the
-                    dirichlet distribution.
+                      dirichlet distribution.
                     - A list of dataframes with the sampled cell matrices
-                        (n_cells X features) for each sample.
+                      (n_cells X features) for each sample.
         """
         if save_dir is not None:
             os.makedirs(save_dir, exist_ok=True)
@@ -146,12 +145,11 @@ class TreeMeanRelative:
 
             Returns:
                 Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-
                     - A dataframe with the sampled cell numbers.
                     - A dictionary with the parameters of the
-                    dirichlet distribution.
+                      dirichlet distribution.
                     - A list of dataframes with the sampled cell matrices
-                        (n_cells X features) for each sample.
+                      (n_cells X features) for each sample.
         """
         return self._sample(
             flowsim_tree=self.flowsim_tree,
@@ -188,12 +186,11 @@ class TreeMeanRelative:
 
             Returns:
                 Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-
                     - A dataframe with the sampled cell numbers.
                     - A dictionary with the parameters of the
-                    dirichlet distribution.
+                      dirichlet distribution.
                     - A list of dataframes with the sampled cell matrices
-                        (n_cells X features) for each sample.
+                      (n_cells X features) for each sample.
         """
         return self._sample(
             n_samples=self.n_samples if n_samples is None else n_samples,
