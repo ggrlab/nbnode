@@ -22,15 +22,45 @@ matplotlib.use("AGG")
 
 class NBNode(anytree.Node):
     """Non-binary node class, inherits from anytree.Node."""
+
     def __init__(
         self,
-        name,
-        parent=None,
-        decision_value=None,
-        decision_name=None,
-        decision_cutoff=None,
+        name: str,
+        parent: "NBNode" = None,
+        decision_value: Any = None,
+        decision_name: str = None,
+        decision_cutoff: float = None,
         **kwargs,
     ):
+        """Non-binary node class, inherits from anytree.Node.
+
+        Args:
+            name (str):
+                The name of the node. Should be unique within the children of a parent node.
+            parent (NBNode, optional):
+                The parent node. Defaults to None.
+            decision_value (Any, optional):
+            The value leading to this node.
+                Can be anything, including single values, strings, numbers, lists,
+                dicts, etc. NBNode uses exact equality to determine which child node to
+                take.
+
+                Defaults to None.
+            decision_name (str, optional):
+                The name of the value leading to this node. Defaults to None.
+            decision_cutoff (float, optional): 
+                The cutoff value for the ``decision_value``. If the ``decision_value`` is
+                numeric, then the ``decision_value`` is compared to the decision_cutoff and
+                returns::
+                
+                    1       if value >= cutoff
+                    -1      if value < cutoff
+                    value   if cutoff is None
+                
+                Then ``decision_value`` should then be either 1 or -1 such that 
+                after the comparison, the ``decision_value`` is either 1 or -1.
+                Defaults to None.
+        """
         super(NBNode, self).__init__(name=name, parent=parent, **kwargs)
         self.parent = parent
         self.decision_name = decision_name
@@ -122,8 +152,8 @@ class NBNode(anytree.Node):
         """Predicts the endnode (leaf) of the tree given the values.
 
         Args:
-            values: 
-                Either a list or a dict of values. If a dict is given, the keys of 
+            values:
+                Either a list or a dict of values. If a dict is given, the keys of
                 the dict are used as names. This is used to identify the correct _exact_
                 value for the decision node defined by ``self.decision_value``.
             names:
@@ -133,13 +163,13 @@ class NBNode(anytree.Node):
             allow_unfitting_data:
                 If True, returns None if the data you gave was not possible to fit in
                 the tree. If False, raises a ValueError.
-                Useful if decision values only fit partly to the tree but perfectly 
+                Useful if decision values only fit partly to the tree but perfectly
                 (completely) to another branch of the tree.
             allow_part_predictions:
                 If True, returns all (potentially multiple!) nodes that fit the given
                 values. They do not have to be leaf nodes.
                 If False, returns only the first node that fits the given values.
-                
+
         Returns:
             Either a single NBNode instance (the leaf node) or if multiple leaf nodes
             fit, all of them as a list.
@@ -481,12 +511,12 @@ class NBNode(anytree.Node):
             minmax=minmax,
             fillcolor_missing_val=fillcolor_missing_val,
             node_text_attributes=node_text_attributes,
-            cmap=cmap
+            cmap=cmap,
         )
 
     @staticmethod
     def _graph_from_dot(
-    # def graph_from_dot(
+        # def graph_from_dot(
         tree: "NBNode",
         exported_dot_graph: str = None,
         title: str = None,
@@ -1070,7 +1100,7 @@ class NBNode(anytree.Node):
             other (NBnode): Other NBnode to compare with.
 
         Returns:
-            bool: 
+            bool:
                 True if the two NBNodes are equal regarding structure and the attributes
                 name, decision_name, decision_value, counter, ids.
                 False otherwise.

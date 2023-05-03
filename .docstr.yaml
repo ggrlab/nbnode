@@ -12,11 +12,11 @@ skip_magic: True # Boolean
 # Ignore module docstrings (at the top of files)
 skip_file_doc: True # Boolean
 # Ignore __init__ methods
-skip_init: True # Boolean
+skip_init: False # Boolean
 #  Ignore docstrings of class definitions
-skip_class_def: False # Boolean
+skip_class_def: True # Boolean
 # Ignore private functions (starting with a single underscore)
-skip_private: True # Boolean
+skip_private: False # Boolean
 #  Follow symlinks
 follow_links: True # Boolean
 # Exit with code 0 if no Python files are found (default: exit code 1)
