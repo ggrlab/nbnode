@@ -1,5 +1,5 @@
 import os
-from typing import Tuple
+from typing import List, Tuple
 
 import pandas as pd
 
@@ -11,13 +11,13 @@ from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 
 
 def gate_init(
-    sample_list=None,
+    sample_list: List[str]=None,
 ) -> Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]:
     """Gate the intraassay samples and generate the Dirichlet-based simulation.
 
     Args:
-        sample_list (_type_, optional):
-            If given, only the samples with the given indices are gated.
+        sample_list (List[str], optional):
+            If given, only the samples with the file names indices are gated.
             Defaults to None.
     Returns:
         Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]:
@@ -54,7 +54,7 @@ def gate_init(
 
     # 2. Mainly for testing: select only a subset of samples
     if sample_list is not None:
-        all_files = [all_files[i] for i in sample_list]
+        all_files = [x for x in sample_list if x in all_files]
 
     # 3. Gate the samples
     celltree_gated = gate_csv(
