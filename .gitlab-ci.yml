@@ -141,7 +141,8 @@ download_big_testdata:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
   script:
-    - ln -s /cache/example_data example_data
+    - ln -s /runner_docker_cache/example_data example_data
+    - ls -lath
     - ls -lath example_data/
     # If graphviz is not installed, install it. It assumes that you are root
     # which is the case for the standard python:x.x docker images
