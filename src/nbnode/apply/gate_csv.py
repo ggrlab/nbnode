@@ -72,7 +72,7 @@ def gate_csv(
         if new_colnames is not None:
             loaded_csv.columns = new_colnames
         # The name of the sample is necessary later in FlowSimulationTreeDirichlet
-        loaded_csv["sample"] = path_x
+        loaded_csv["sample_name"] = path_x
 
         # Per row of the loaded csv, get the end node of the celltree
         predicted_nodes = celltree.predict(values=loaded_csv)

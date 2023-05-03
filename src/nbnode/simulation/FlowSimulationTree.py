@@ -29,7 +29,7 @@ class BaseFlowSimulationTree:
     def __init__(
         self,
         rootnode: NBNode,
-        data_cellgroup_col: str = "sample",
+        data_cellgroup_col: str = "sample_name",
         node_percentages: Optional[pd.DataFrame] = None,
         seed: int = 12987,
         include_features: List[str] = "dataset_melanoma",
@@ -49,10 +49,10 @@ class BaseFlowSimulationTree:
                 If "None" and node_percentages=None, all cells are assumed to come from
                 a single sample.
 
-                Defaults to "sample".
+                Defaults to "sample_name".
             node_percentages (Optional[pd.DataFrame], optional):
                 If node_percentages is not given, node.data MUST contain a column which
-                identifies groups of cells (default: "sample"). This can replace the
+                identifies groups of cells (default: "sample_name"). This can replace the
                 re-calculation of the node percentages from the ``.data``.
 
                 Defaults to None.
@@ -107,7 +107,7 @@ class BaseFlowSimulationTree:
         if node_percentages is None:
             # If node_percentages is not given, node.data MUST contain
             # a column which identifies
-            # groups of cells (default: "sample")
+            # groups of cells (default: "sample_name")
             if data_cellgroup_col is not None:
                 ncells_per_sample = rootnode.data[data_cellgroup_col].value_counts()
                 ncells_per_node_per_sample = [
@@ -550,7 +550,7 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
     def __init__(
         self,
         rootnode: NBNode,
-        data_cellgroup_col: str = "sample",
+        data_cellgroup_col: str = "sample_name",
         node_percentages: pd.DataFrame = None,
         seed: int = 12987,
         include_features="dataset_melanoma",

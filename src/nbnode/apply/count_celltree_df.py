@@ -8,7 +8,7 @@ def count_celltree_df(
     celltree_gated: NBNode,
 ) -> pd.DataFrame:
     """
-        Count the number of rows in node.data (per node) grouped by "sample" and concat
+        Count the number of rows in node.data (per node) grouped by "sample_name" and concat
         them into a dataframe
 
     Args:
@@ -47,7 +47,7 @@ def count_celltree_df(
     celltree_gated.count(use_ids=True)
     node_counts_dict = {}
     for node in anytree.PreOrderIter(celltree_gated):
-        node_counts = node.data["sample"].value_counts()
+        node_counts = node.data["sample_name"].value_counts()
         node_counts_dict[node.get_name_full()] = node_counts
     node_counts_df = pd.concat(node_counts_dict, axis=1)
     node_counts_df = node_counts_df.fillna(0).astype("int32")

@@ -75,7 +75,7 @@ def gate_init(
         rootnode=celltree_gated,
         include_features=new_colnames,
         node_percentages=None,
-        data_cellgroup_col="sample",  # is the default
+        data_cellgroup_col="sample_name",  # is the default
     )
 
     # 5. Extract the gated counts
