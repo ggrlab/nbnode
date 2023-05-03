@@ -73,9 +73,9 @@ def sim_target(
     Returns:
         Tuple:
 
-            - pd.DataFrame:   
+            - pd.DataFrame:
                 The true number of generated cells per leaf-population.
-            - Dict:           
+            - Dict:
                 A deep copy of `flowsim.population_parameters`.
             - List[pd.DataFrame]:
                 The generated samples (n cells X p markers), potentially also saved

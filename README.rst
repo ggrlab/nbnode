@@ -72,7 +72,7 @@ information on PyScaffold see https://pyscaffold.org/::
 Tutorials
 =========
 
-See [documentation](https://ccc_verse.git-pages.uni-regensburg.de/nbnode). 
+See [documentation](https://ccc_verse.git-pages.uni-regensburg.de/nbnode).
 
 
 
@@ -80,14 +80,12 @@ Tests
 ========
 For some tests you need data files, which are not included in the repository.
 Especially all tests in `tests/specific_analyses` need data.
-You can obtain the data by downloading the data from zenodo: 
+You can obtain the data by downloading the data from zenodo:
 
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7883353.svg
    :target: https://doi.org/10.5281/zenodo.7883353
 
-.. code-block:: bash 
+.. code-block:: bash
 
     pip install requests
     python tests/specific_analyses/e02_download_intraassay_zenodo.py
-
-

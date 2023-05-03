@@ -16,11 +16,11 @@ def gate_init(
     """Gate the intraassay samples and generate the Dirichlet-based simulation.
 
     Args:
-        sample_list (_type_, optional): 
+        sample_list (_type_, optional):
             If given, only the samples with the given indices are gated.
             Defaults to None.
     Returns:
-        Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]: 
+        Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]:
             The gated celltree, the gated counts and the Dirichlet-based simulation.
     """
     # 1. Prepare the samples for gating

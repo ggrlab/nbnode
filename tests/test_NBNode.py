@@ -1377,11 +1377,10 @@ class TestNBNode(TestCase):
         celltree_trunk.id_preds(celltree_trunk.predict())
 
         # so.. that works
-        celltree_trunk = celltree_trunk +1
+        celltree_trunk = celltree_trunk + 1
         dotgraph = celltree_trunk.graph_from_dot(fillcolor_node_attribute="counter")
 
         # but that didnt work because UniqueDotExporter set new node names
-        # which is ommitted now. 
-        celltree_trunk = celltree_trunk +1
+        # which is ommitted now.
+        celltree_trunk = celltree_trunk + 1
         dotgraph = celltree_trunk.graph_from_dot(fillcolor_node_attribute="counter")
-

@@ -9,8 +9,8 @@ from nbnode.simulation.sim_proportional import sim_proportional
 
 
 class TreeMeanRelative:
-    """Sample from a tree with a relative change in a population.
-    """
+    """Sample from a tree with a relative change in a population."""
+
     def __init__(
         self,
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
@@ -101,17 +101,17 @@ class TreeMeanRelative:
         _only_return_sampled_cell_numbers=False,
         save_changed_parameters=False,
     ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-        """ A static method to sample with a relative change in a population mean.
+        """A static method to sample with a relative change in a population mean.
 
-            See the __init__ method for the description of the arguments.
+        See the __init__ method for the description of the arguments.
 
-            Returns:
-                Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-                    - A dataframe with the sampled cell numbers.
-                    - A dictionary with the parameters of the
-                      dirichlet distribution.
-                    - A list of dataframes with the sampled cell matrices
-                      (n_cells X features) for each sample.
+        Returns:
+            Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
+                - A dataframe with the sampled cell numbers.
+                - A dictionary with the parameters of the
+                  dirichlet distribution.
+                - A list of dataframes with the sampled cell matrices
+                  (n_cells X features) for each sample.
         """
         if save_dir is not None:
             os.makedirs(save_dir, exist_ok=True)
@@ -139,17 +139,17 @@ class TreeMeanRelative:
         return true_popcounts, changed_parameters, sampled_samples
 
     def sample(self) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-        """ A method to sample with a relative change in a population mean.
+        """A method to sample with a relative change in a population mean.
 
-            See the __init__ method for the description of the arguments.
+        See the __init__ method for the description of the arguments.
 
-            Returns:
-                Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-                    - A dataframe with the sampled cell numbers.
-                    - A dictionary with the parameters of the
-                      dirichlet distribution.
-                    - A list of dataframes with the sampled cell matrices
-                      (n_cells X features) for each sample.
+        Returns:
+            Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
+                - A dataframe with the sampled cell numbers.
+                - A dictionary with the parameters of the
+                  dirichlet distribution.
+                - A list of dataframes with the sampled cell matrices
+                  (n_cells X features) for each sample.
         """
         return self._sample(
             flowsim_tree=self.flowsim_tree,
@@ -176,21 +176,21 @@ class TreeMeanRelative:
         _only_return_sampled_cell_numbers=None,
         save_changed_parameters=False,
     ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-        """ A customizable method to sample with a relative change in a population mean.
+        """A customizable method to sample with a relative change in a population mean.
 
-            See the __init__ method for the description of the arguments.
-            In contrast to ``.sample()``, this method allows to change each parameter
-            individually.
-            If any argument is not given, the default value set in __init__ method
-            will be used.
+        See the __init__ method for the description of the arguments.
+        In contrast to ``.sample()``, this method allows to change each parameter
+        individually.
+        If any argument is not given, the default value set in __init__ method
+        will be used.
 
-            Returns:
-                Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
-                    - A dataframe with the sampled cell numbers.
-                    - A dictionary with the parameters of the
-                      dirichlet distribution.
-                    - A list of dataframes with the sampled cell matrices
-                      (n_cells X features) for each sample.
+        Returns:
+            Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
+                - A dataframe with the sampled cell numbers.
+                - A dictionary with the parameters of the
+                  dirichlet distribution.
+                - A list of dataframes with the sampled cell matrices
+                  (n_cells X features) for each sample.
         """
         return self._sample(
             n_samples=self.n_samples if n_samples is None else n_samples,

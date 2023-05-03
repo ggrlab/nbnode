@@ -22,15 +22,16 @@ class PseudoTorchDistributionNormal:
         new_value_from_distribution = mean_distribution.sample()
 
     """
-    def __init__(self, loc:float, scale:float):
+
+    def __init__(self, loc: float, scale: float):
         """Initialize the normal distribution with location and scale parameters.
 
 
         Args:
-            loc (float): 
+            loc (float):
                 Mean ('centre') of the distribution.
-            scale (float): 
-                Standard deviation (spread or 'width') of the distribution. 
+            scale (float):
+                Standard deviation (spread or 'width') of the distribution.
                 Must be non-negative.
         """
         self.loc = loc
@@ -92,9 +93,10 @@ except ImportError:
 
 
 class TreeMeanDistributionSampler:
-    """A class synthesizing cytometry samples with a 
+    """A class synthesizing cytometry samples with a
     distribution for the mean of a population.
     """
+
     def __init__(
         self,
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
@@ -110,7 +112,7 @@ class TreeMeanDistributionSampler:
         save_changed_parameters=False,
         minimum_target_mean_proportion=1e-9,
     ) -> None:
-        """A class synthesizing cytometry samples with a distribution for the mean of 
+        """A class synthesizing cytometry samples with a distribution for the mean of
         a population.
 
 
@@ -221,7 +223,7 @@ class TreeMeanDistributionSampler:
                 - A dictionary with the parameters of the dirichlet distribution.
                 - A list of dataframes with the sampled cell matrices
                   (n_cells X features) for each sample.
-                - A list of the target means for each sample. 
+                - A list of the target means for each sample.
                   This is the used ``original_mean``
 
         """
@@ -296,7 +298,7 @@ class TreeMeanDistributionSampler:
         )
 
     def sample(self):
-        """Synthesize cytometry samples with a 
+        """Synthesize cytometry samples with a
         distribution for the mean of a population.
 
         See the __init__ method for the description of the arguments.

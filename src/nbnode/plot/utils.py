@@ -49,11 +49,11 @@ class LinearShiftedColormap:
         """Initialize a LinearShiftedColormap.
 
         Args:
-            range_min (float, optional): 
+            range_min (float, optional):
                 The minimum value of the colormap. Defaults to -1.
-            range_max (float, optional): 
+            range_max (float, optional):
                 The maximum value of the colormap. Defaults to 1.
-            base_cmap (_type_, optional): 
+            base_cmap (_type_, optional):
                 The base colormap to use. You can use any colormap from matplotlib::
 
                     import matplotlib as mpl
@@ -62,7 +62,7 @@ class LinearShiftedColormap:
                     shifted_cmap = LinearShiftedColormap(base_cmap=new_base_cmap)
 
                 Defaults to matplotlib.cm.RdBu_r.
-            name (str, optional): 
+            name (str, optional):
                 The name of the colormap. Defaults to "shifted".
         """
         self.cmap = shifted_colormap(
