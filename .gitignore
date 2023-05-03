@@ -4,6 +4,7 @@ tests_output/
 .testmondata*
 docs/docstr_coverage_badge.svg
 example_data/
+asinh.align_manual.CD3_Gate.zip
 examples/results/
 sim/
 _version.py
