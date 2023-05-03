@@ -11,7 +11,7 @@ import matplotlib
 import numpy as np
 import pandas as pd
 import pydotplus
-from anytree.exporter import UniqueDotExporter
+from anytree.exporter import DotExporter
 from matplotlib.colors import to_hex
 
 from nbnode.plot.shifted_colormap import shifted_colormap
@@ -444,11 +444,11 @@ class NBNode(anytree.Node):
             return applied_fun_dict
 
     def export_dot(self, unique_dot_exporter_kwargs: Dict = "default") -> str:
-        """Convenience wrapper around anytree.UniqueDotExporter.
+        """Convenience wrapper around anytree.DotExporter.
 
         Args:
             unique_dot_exporter_kwargs (Dict, optional):
-                Arguments to anytree.UniqueDotExporter.
+                Arguments to anytree.DotExporter.
                 Defaults to "default"::
 
                     unique_dot_exporter_kwargs = {
@@ -462,30 +462,35 @@ class NBNode(anytree.Node):
         Returns:
             str: A string with the exported dot graph in dot format
         """
-        if self.id_unique_dot_exporter:
-            self.set_uniquedotexporter_ids()
+        if self.id_unique_dot_exporter is None:
+            self.set_DotExporter_ids()
         if unique_dot_exporter_kwargs == "default":
             unique_dot_exporter_kwargs = {
                 "options": ['node [shape=box, style="filled", color="black"];'],
                 "nodeattrfunc": lambda node: 'label="{}", fillcolor="white"'.format(
-                    node.id_unique_dot_exporter
+                    node.name
                 ),
             }
-        dot_data = UniqueDotExporter(self, **unique_dot_exporter_kwargs)
+        # dot_data = DotExporter(self, **unique_dot_exporter_kwargs)
+        dot_data = DotExporter(
+            self,
+            nodenamefunc=lambda node: node.id_unique_dot_exporter,
+            **unique_dot_exporter_kwargs,
+        )
         dotdata_str = "\n".join([x for x in dot_data])
         return dotdata_str
 
-    def set_uniquedotexporter_ids(self):
+    def set_DotExporter_ids(self):
         """Create unique ids for each node.
 
-        UniqueDotExporter needs unique ids for each node. I set them to the
+        DotExporter needs unique ids for each node. I set them to the
         hex(id(node)) to make sure they are unique.
 
         """
         for node in anytree.iterators.PreOrderIter(self):
             node.id_unique_dot_exporter = hex(
                 id(node)
-            )  # That is how UniqueDotExporter gets his values
+            )  # That is how DotExporter gets his values
 
     def graph_from_dot(
         self: "NBNode",
@@ -595,7 +600,7 @@ class NBNode(anytree.Node):
         if exported_dot_graph is None:
             exported_dot_graph = tree.export_dot()
         if tree.id_unique_dot_exporter is None:
-            tree.set_uniquedotexporter_ids()
+            tree.set_DotExporter_ids()
 
         graph: pydotplus.Dot = pydotplus.graph_from_dot_data(exported_dot_graph)
         nodes = graph.get_node_list()
@@ -638,6 +643,8 @@ class NBNode(anytree.Node):
                 current_matching_tree_node = anytree.search.find_by_attr(
                     node=tree, value=current_node_name, name="id_unique_dot_exporter"
                 )
+                if current_matching_tree_node is None:
+                    raise ValueError("Node not found in tree!")
                 node_values.append(
                     getattr(current_matching_tree_node, fillcolor_node_attribute)
                 )
