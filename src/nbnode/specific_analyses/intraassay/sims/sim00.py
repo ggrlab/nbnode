@@ -40,7 +40,7 @@ def sim00_baseline(
             Defaults to False.
 
     Returns:
-        Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]: 
+        Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
             From proportional_generator.sample()
     """
     proportional_generator = TreeMeanRelative(

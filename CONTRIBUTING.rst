@@ -47,7 +47,7 @@ by adding missing information and correcting mistakes.
 This means that the docs are kept in the same repository as the project code, and
 that any documentation update is done in the same way was a code contribution.
 
-We use mainly reStructuredText_ for the documentation. 
+We use mainly reStructuredText_ for the documentation.
 
 .. tip::
     Please notice that the `GitHub web interface`_ provides a quick way of
@@ -78,12 +78,12 @@ or open the generated ``docs/_build/html/index.html`` file in your browser.
 Code Contributions
 ==================
 
-In general, ``nbnode`` follows has two main components. 
+In general, ``nbnode`` follows has two main components.
 
 1. The ``NBnode`` class, which is the main class that is used to create a
     ``nbnode`` object. This class is defined in the ``nbnode.py`` file.
 
-2. The ``FlowSimulationTreeDirichlet`` class built on ``NBNode`` simulating (flow) cytometry data. 
+2. The ``FlowSimulationTreeDirichlet`` class built on ``NBNode`` simulating (flow) cytometry data.
     This class is defined in the ``flow_simulation_tree_dirichlet.py`` file.
 
 

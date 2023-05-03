@@ -42,8 +42,8 @@ def per_node_data_fun(
     """per_node_data_fun.
 
     To be used in NBnode.node.apply() to apply a function to the data of
-    each node. 
-    
+    each node.
+
 
     Args:
         x (pd.DataFrame):

@@ -48,16 +48,16 @@ class NBNode(anytree.Node):
                 Defaults to None.
             decision_name (str, optional):
                 The name of the value leading to this node. Defaults to None.
-            decision_cutoff (float, optional): 
+            decision_cutoff (float, optional):
                 The cutoff value for the ``decision_value``. If the ``decision_value`` is
                 numeric, then the ``decision_value`` is compared to the decision_cutoff and
                 returns::
-                
+
                     1       if value >= cutoff
                     -1      if value < cutoff
                     value   if cutoff is None
-                
-                Then ``decision_value`` should then be either 1 or -1 such that 
+
+                Then ``decision_value`` should then be either 1 or -1 such that
                 after the comparison, the ``decision_value`` is either 1 or -1.
                 Defaults to None.
         """

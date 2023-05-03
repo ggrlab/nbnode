@@ -20,6 +20,7 @@ except ImportError:
 
 class BaseFlowSimulationTree:
     """Base class for flow simulation."""
+
     def __init__(
         self,
         rootnode: NBNode,
@@ -206,7 +207,7 @@ class BaseFlowSimulationTree:
 
             If no distribution can be estimated (less than 2 cells),
             the node is removed from the simulation.
-            
+
         Args:
             nodes (List[NBNode]):
                 A list of nodes whose distribution should be estimated.
@@ -285,7 +286,7 @@ class BaseFlowSimulationTree:
 
         Returns:
 
-            Dict[str, Any]:: 
+            Dict[str, Any]::
 
                 {
                     # __name must be given
@@ -330,7 +331,7 @@ class BaseFlowSimulationTree:
                 The name of the population which should be removed from the
                 population_parameters.
 
-        Example:: 
+        Example::
 
             self.population_parameters["__name"].remove(population_name)
             self.population_parameters["mean"].drop(
@@ -449,11 +450,11 @@ class BaseFlowSimulationTree:
         """Generate number of cells according to leaf node population distributions.
 
         Args:
-            n_cells (int, optional): 
+            n_cells (int, optional):
                 Number of cells to sample. Defaults to 10000.
 
         Returns:
-            pd.Series: 
+            pd.Series:
                 A pandas Series with the number of cells per population.
         """
         if len(population_parameters) == 0:
@@ -483,19 +484,19 @@ class BaseFlowSimulationTree:
         """Sample cells from the tree.
 
         Args:
-            n_cells (int, optional): 
+            n_cells (int, optional):
                 Number of cells to sample from the tree. Defaults to 10000.
-            return_sampled_cell_numbers (bool, optional): 
+            return_sampled_cell_numbers (bool, optional):
                 Whether to return the number of cells sampled per population
-                as well as the sampled cells themselves. 
+                as well as the sampled cells themselves.
                 Defaults to False.
-            use_only_diagonal_covmat (bool, optional): 
+            use_only_diagonal_covmat (bool, optional):
                 Whether to use only the diagonal of the covariance matrix
-                when sampling cells. 
+                when sampling cells.
                 Defaults to True.
 
         Returns:
-            Union[Tuple[pd.DataFrame, pd.Series], pd.DataFrame]: 
+            Union[Tuple[pd.DataFrame, pd.Series], pd.DataFrame]:
                 If `return_sampled_cell_numbers` is True, a tuple with the
                 sampled cells and the number of cells sampled per population
                 is returned. Otherwise, only the sampled cells are returned.
@@ -540,6 +541,7 @@ class BaseFlowSimulationTree:
 
 class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
     """Simulate a tree of cell populations using the Dirichlet distribution."""
+
     def __init__(
         self,
         rootnode: NBNode,
@@ -551,9 +553,9 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
     ) -> None:
         """Simulate a tree of cell populations using the Dirichlet distribution.
 
-            See ``BaseFlowSimulationTree`` for more information.
-            The distribution of the number of cells per population is estimated
-            using the Dirichlet distribution.
+        See ``BaseFlowSimulationTree`` for more information.
+        The distribution of the number of cells per population is estimated
+        using the Dirichlet distribution.
 
         """
         if not dirichlet_installed:
@@ -646,12 +648,12 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
                     - alpha: The alpha parameter of the Dirichlet distribution
                     - __name: The name of the population
 
-                
-            n_cells (int): 
+
+            n_cells (int):
                 The number of cells to generate
 
         Returns:
-            pd.DataFrame: 
+            pd.DataFrame:
                 A dataframe with the generated cells per population
         """
         onesample_ncells_perpop = self._rng.dirichlet(
@@ -698,13 +700,13 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
         corresponds to a population. The larger the value, the more cells
         will be generated for that population.
 
-        ``alpha_all`` are the concentration parameters for all, including the 
+        ``alpha_all`` are the concentration parameters for all, including the
         intermediate populations.
 
         Returns:
-            pd.Series: 
-                A series (named) of alpha parameters per cell population 
-                (including intermediate populations). 
+            pd.Series:
+                A series (named) of alpha parameters per cell population
+                (including intermediate populations).
         """
         all_alphas = copy.deepcopy(self.population_parameters["alpha"])
         # node_names = list(all_alphas.index)
@@ -720,16 +722,18 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
                 all_alphas[node.get_name_full()] = current_sum
         return all_alphas
 
-    def pop_leafnode_names(self, population_node_full_name: Union[str, NBNode]) -> List[str]:
+    def pop_leafnode_names(
+        self, population_node_full_name: Union[str, NBNode]
+    ) -> List[str]:
         """Get the names of the leaf nodes of any intermediate population
 
         Args:
-            population_node_full_name (Union[str, NBNode]): 
-                The get_name_full() of a population, or the node itself. 
+            population_node_full_name (Union[str, NBNode]):
+                The get_name_full() of a population, or the node itself.
 
         Returns:
-            List[str]: 
-                A list of the get_name_full() of the leaf nodes below the given 
+            List[str]:
+                A list of the get_name_full() of the leaf nodes below the given
                 population.
 
         """
@@ -750,11 +754,11 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
         """Get the alpha parameter of the Dirichlet distribution for a given population
 
         Args:
-            population_node_full_name (str): 
-                The get_name_full() of a population or the node itself. 
+            population_node_full_name (str):
+                The get_name_full() of a population or the node itself.
 
         Returns:
-            float: 
+            float:
                 The alpha parameter of the Dirichlet distribution for the given
                 population.
         """
@@ -780,10 +784,10 @@ class FlowSimulationTreeDirichlet(BaseFlowSimulationTree):
         """Set the new mean of the Dirichlet distribution for a given population
 
         Args:
-            population_node_full_name (str): 
+            population_node_full_name (str):
                 The get_name_full() of a population or the node itself.
 
-            percentage (float): 
+            percentage (float):
                 The new percentage of cells that should be generated for the
                 given population. Must be between 0 and 1.
 
