@@ -125,7 +125,7 @@ download_big_testdata:
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
     - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
   cache:
-    path:
+    paths:
       - example_data/
 
 
@@ -137,7 +137,7 @@ download_big_testdata:
     - download_big_testdata
     - check
   cache:
-    path:
+    paths:
       - example_data/
   stage: Test
   tags:
