@@ -1,6 +1,7 @@
 # From https://github.com/zenodo/zenodo/issues/1888
-import zipfile
 import io
+import zipfile
+
 import requests
 
 ACCESS_TOKEN = "ZENODO_ACCESS_TOKEN"
@@ -22,9 +23,10 @@ filenames = [f["key"] for f in r.json()["files"]]
 #         f.write(r.content)
 
 
-my_zipfile = [(fn, url) for fn, url in zip(filenames, download_urls) if fn.endswith(".zip")][0]
+my_zipfile = [
+    (fn, url) for fn, url in zip(filenames, download_urls) if fn.endswith(".zip")
+][0]
 print("Downloading:", my_zipfile[0])
 r = requests.get(my_zipfile[1], params={"access_token": ACCESS_TOKEN})
 z = zipfile.ZipFile(io.BytesIO(r.content))
 z.extractall("example_data")
-
