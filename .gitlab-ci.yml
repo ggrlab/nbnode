@@ -133,6 +133,8 @@ download_big_testdata:
     - build
     - download_big_testdata
     - check
+  dependencies:
+    - download_big_testdata
   stage: Test
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
