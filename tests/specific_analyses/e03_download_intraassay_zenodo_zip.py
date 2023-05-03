@@ -1,6 +1,7 @@
 # From https://github.com/zenodo/zenodo/issues/1888
 import io
 import zipfile
+
 import requests
 
 ACCESS_TOKEN = "ZENODO_ACCESS_TOKEN"
@@ -21,7 +22,7 @@ filenames = [f["key"] for f in r.json()["files"]]
 #     with open(os.path.join(outdir, filename), "wb") as f:
 #         f.write(r.content)
 
-for single_json_file in r.json()["files"]: 
+for single_json_file in r.json()["files"]:
     if single_json_file["key"].endswith(".zip"):
         my_zipfile = {
             "filename": single_json_file["key"],
