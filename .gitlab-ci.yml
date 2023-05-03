@@ -57,6 +57,7 @@ default:
 
 ########### Build containers ##########
 latest_container:
+  needs: []
   rules:
     # The following ensures that the documentation is only run when a commit to the default ("main")
     # branch is done
@@ -67,7 +68,6 @@ latest_container:
     # https://stackoverflow.com/questions/51814625/gitlab-docker-auth-config-not-working
     - mkdir -p $HOME/.docker
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
-  needs: []
   tags:
     - container_builder
   stage: Build container
@@ -88,6 +88,7 @@ latest_container:
     - docker push $current_container_name
 
 check:
+  needs: []
   stage: Pre-commit and build package
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
@@ -98,6 +99,7 @@ check:
     - pipx run pre-commit run --all-files --show-diff-on-failure
 
 build:
+  needs: []
   stage: Pre-commit and build package
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
@@ -121,14 +123,15 @@ download_big_testdata:
   script:
     - pip install -U requests
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e02_download_intraassay_zenodo.py
-    # - cat tests/specific_analyses/e02_download_intraassay_zenodo.py  # only for testing
-    - python tests/specific_analyses/e02_download_intraassay_zenodo.py
+    - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
 
 
 # download-child:
 
 .general_test:
-  dependencies: [build, download_big_testdata]
+  needs:
+    - build
+    - download_big_testdata
   stage: Test
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
@@ -225,6 +228,7 @@ latest:
 #     - tox -e publish
 
 pages:
+  needs: []
   # To locally build the documentation, run
   #   tox -e docs
   # Finally, the documentation is accessible from
