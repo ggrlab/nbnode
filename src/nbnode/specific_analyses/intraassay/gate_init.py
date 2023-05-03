@@ -11,7 +11,7 @@ from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
 
 
 def gate_init(
-    sample_list: List[str]=None,
+    sample_list: List[str] = None,
 ) -> Tuple[NBNode, pd.DataFrame, FlowSimulationTreeDirichlet]:
     """Gate the intraassay samples and generate the Dirichlet-based simulation.
 
