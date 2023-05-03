@@ -115,8 +115,15 @@ build:
 download_big_testdata:
   needs: []
   stage: Download test data
-  trigger:
-    include: .gitlab-ci_download.yml
+  tags:
+    - container_user
+  image: $LATEST_IMAGE
+  script:
+    - pip install -U requests
+    - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e02_download_intraassay_zenodo.py
+    # - cat tests/specific_analyses/e02_download_intraassay_zenodo.py  # only for testing
+    - python tests/specific_analyses/e02_download_intraassay_zenodo.py
+
 
 # download-child:
 
