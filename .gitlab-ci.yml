@@ -122,7 +122,7 @@ download_big_testdata:
   image: $LATEST_IMAGE
   script:
     - pip install -U requests
-    - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e02_download_intraassay_zenodo.py
+    - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
     - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
 
 

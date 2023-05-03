@@ -1,5 +1,4 @@
 # From https://github.com/zenodo/zenodo/issues/1888
-import os
 import zipfile
 import io
 import requests
