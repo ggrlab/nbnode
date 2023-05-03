@@ -10,7 +10,7 @@ record_id = "7890571"
 r = requests.get(
     f"https://zenodo.org/api/records/{record_id}", params={"access_token": ACCESS_TOKEN}
 )
-print(r.json())
+# print(r.json())
 download_urls = [f["links"]["self"] for f in r.json()["files"]]
 filenames = [f["key"] for f in r.json()["files"]]
 # outdir = "example_data/asinh.align_manual.CD3_Gate"
