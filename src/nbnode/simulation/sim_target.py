@@ -26,11 +26,14 @@ def sim_target(
         This function simulates new cells (`n_cells`) for `n_samples` samples according
         to the given flow simulation `flowsim`.
 
-            1. flowsim.reset_populations() (for consistency)
-            2. For every list element in change_pop_mean_target,
-            change all contained populations (keys) to their respective
-            mean proportions (values). Values outside (0, 1) are not allowed.
-            Todo: Further documentation!
+        1. flowsim.reset_populations() (for consistency)
+        2. For every list element in change_pop_mean_target,
+           change all contained populations (keys) to their respective
+           mean proportions (values). Values outside (0, 1) are not allowed.
+        3. For every sample: flowsim.simulate_cells(n_cells).
+        4. Return the true number of generated cells per leaf-population,
+           a deep copy of `flowsim.population_parameters` and the
+           generated samples. If `save_dir` is given, the samples are also saved.
 
     Args:
         n_samples (int, optional):
@@ -49,8 +52,7 @@ def sim_target(
             Defaults to True.
         change_pop_mean_target (List[Dict[str, float]]):
             A dictionary of which cell population(s) should be changed to which mean
-            proportion of
-            all cells. floats should be between (0, 1)
+            proportion of all cells. floats should be between (0, 1)
 
         save_dir (str, optional):
             If given, the created samples (n cells X p markers) are saved into that
@@ -67,11 +69,15 @@ def sim_target(
         only_return_sampled_cell_numbers (bool):
             If true, only the number of cells per population are returned,
             not the actual samples.
+
     Returns:
         Tuple:
-            pd.DataFrame:   The true number of generated cells per leaf-population.
-            Dict:           A dee copy of `flowsim.population_parameters`
-            List[pd.DataFrame]:
+
+            - pd.DataFrame:   
+                The true number of generated cells per leaf-population.
+            - Dict:           
+                A deep copy of `flowsim.population_parameters`.
+            - List[pd.DataFrame]:
                 The generated samples (n cells X p markers), potentially also saved
                 into the given save_dir as f"sample_{sample_i}.csv".
 

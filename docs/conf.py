@@ -273,6 +273,12 @@ latex_documents = [
 # If false, no module index is generated.
 # latex_domain_indices = True
 
+# autodoc_default_options = {
+#     "members": True,
+#     "undoc-members": True,
+#     "private-members": True
+# }
+
 # -- External mapping --------------------------------------------------------
 python_version = ".".join(map(str, sys.version_info[0:2]))
 intersphinx_mapping = {

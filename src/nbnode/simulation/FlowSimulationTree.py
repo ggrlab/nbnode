@@ -206,6 +206,7 @@ class BaseFlowSimulationTree:
 
             If no distribution can be estimated (less than 2 cells),
             the node is removed from the simulation.
+            
         Args:
             nodes (List[NBNode]):
                 A list of nodes whose distribution should be estimated.
@@ -284,7 +285,8 @@ class BaseFlowSimulationTree:
 
         Returns:
 
-            Dict[str, Any]:
+            Dict[str, Any]:: 
+
                 {
                     # __name must be given
                     "__name": list(population_means.index),
@@ -292,7 +294,7 @@ class BaseFlowSimulationTree:
                     "cov": population_cov,      # distribution parameter
                 }
 
-        Example:
+        Example::
 
             # Calculate mean and covariance for each of the populations
             # (rows of node_percentages)
@@ -328,7 +330,8 @@ class BaseFlowSimulationTree:
                 The name of the population which should be removed from the
                 population_parameters.
 
-        Example:
+        Example:: 
+
             self.population_parameters["__name"].remove(population_name)
             self.population_parameters["mean"].drop(
                 population_name, inplace=True
@@ -339,6 +342,7 @@ class BaseFlowSimulationTree:
             self.population_parameters["cov"].drop(
                 population_name, inplace=True, axis=1
             )
+
         """
 
     def reset_populations(self):
@@ -404,7 +408,8 @@ class BaseFlowSimulationTree:
 
         Returns:
             List[int]: List of percentages per cell population
-        Example:
+
+        Example::
 
             # 1. Generate random percentages for each population
             random_mean = self._rng.multivariate_normal(
