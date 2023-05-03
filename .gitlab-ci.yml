@@ -134,6 +134,7 @@ download_big_testdata:
     - download_big_testdata
     - check
   dependencies:
+    - build
     - download_big_testdata
   stage: Test
   tags:
