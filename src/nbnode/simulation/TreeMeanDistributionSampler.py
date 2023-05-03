@@ -10,11 +10,38 @@ from nbnode.simulation.sim_target import sim_target
 
 
 class PseudoTorchDistributionNormal:
-    def __init__(self, loc, scale):
+    """A class that mimics the torch.distributions.Distribution class.
+
+    This class is used as a fallback if torch is not installed. It is used
+    within TreeMeanDistributionSampler to sample a new mean for a population
+    that is to be changed.
+
+    So the calls are::
+
+        mean_distribution = PseudoTorchDistributionNormal(loc=new_mean, scale=1)
+        new_value_from_distribution = mean_distribution.sample()
+
+    """
+    def __init__(self, loc:float, scale:float):
+        """Initialize the normal distribution with location and scale parameters.
+
+
+        Args:
+            loc (float): 
+                Mean ('centre') of the distribution.
+            scale (float): 
+                Standard deviation (spread or 'width') of the distribution. 
+                Must be non-negative.
+        """
         self.loc = loc
         self.scale = scale
 
-    def sample(self):
+    def sample(self) -> float:
+        """Sample a value from a normal distribution with the given parameters.
+
+        Returns:
+            float: A value from a normal distribution with the given parameters.
+        """
         return np.random.normal(loc=self.loc, scale=self.scale, size=1)
 
 
@@ -29,8 +56,8 @@ try:
             original_mean (float): The mean of the normal distribution
 
         Returns:
-            D.Distribution: 
-                A distribution with the mean set to original_mean and a 
+            D.Distribution:
+                A distribution with the mean set to original_mean and a
                 standard deviation of 1.
         """
         # You can also set that a lambda-function, e.g.
@@ -65,6 +92,9 @@ except ImportError:
 
 
 class TreeMeanDistributionSampler:
+    """A class synthesizing cytometry samples with a 
+    distribution for the mean of a population.
+    """
     def __init__(
         self,
         flowsim_tree: Union[str, FlowSimulationTreeDirichlet],
@@ -84,29 +114,60 @@ class TreeMeanDistributionSampler:
 
 
         Args:
-            flowsim_tree (Union[str, FlowSimulationTreeDirichlet]): 
+            flowsim_tree (Union[str, FlowSimulationTreeDirichlet]):
                 A FlowSimulationTreeDirichlet object or a path to a pickle file.
 
-            population_name_to_change (str): 
+            population_name_to_change (str):
                 The name of the population that is to be changed.
 
-            mean_distribution (_type_, optional): 
+            mean_distribution (_type_, optional):
                 A function that returns a distribution for a given value, the original
                 mean **percentage** of a distribution. The function should take a
-                float as input and return a distribution. 
-                The target mean of population_name_to_change is sampled from this 
-                distribution and the corresponding concentration parameter of the 
-                dirichlet distribution is calculated. 
+                float as input and return a distribution. The input will be
+                ``original_mean * 100``, after the ``original_mean`` is expected to be
+                proportions.
+                The target mean of population_name_to_change is sampled from this
+                distribution and the corresponding concentration parameter of the
+                dirichlet distribution is calculated.
                 Defaults to mean_dist_fun.
-            n_samples (int, optional): _description_. Defaults to 100.
-            n_cells (int, optional): _description_. Defaults to 10000.
-            use_only_diagonal_covmat (bool, optional): _description_. Defaults to False.
-            verbose (bool, optional): _description_. Defaults to False.
-            seed_sample_0 (int, optional): _description_. Defaults to 129873.
-            save_dir (str, optional): _description_. Defaults to "sim/sim00_m0.sd1".
-            only_return_sampled_cell_numbers (bool, optional): _description_. Defaults to False.
-            save_changed_parameters (bool, optional): _description_. Defaults to False.
-            minimum_target_mean_proportion (_type_, optional): _description_. Defaults to 1e-9.
+            n_samples (int, optional):
+                The number of samples to be drawn from the dirichlet distribution.
+                Defaults to 100.
+            n_cells (int, optional):
+                The number of cells per sample. Defaults to 10000.
+                Defaults to 10000.
+            use_only_diagonal_covmat (bool, optional):
+                Whether to use only the diagonal of the covariance matrix.
+                Defaults to False (=Do use the complete covariance matrix).
+            verbose (bool, optional):
+                Verbosity. Defaults to False.
+            seed_sample_0 (int, optional):
+                The seed for the first sample. All further sample seeds are incremented by
+                1 per sample.
+                Defaults to 129873.
+            save_dir (str, optional):
+                The directory to save the samples to.
+
+                Defaults to "sim/sim00_m0.sd1". The default means reflects
+                a mean shift of 0 from the original mean and a standard deviation of 1.
+            only_return_sampled_cell_numbers (bool, optional):
+                Whether to return only the sampled cell numbers, not creating the
+                actual samples. Defaults to False.
+            save_changed_parameters (bool, optional):
+                Whether to save the changed (concentration) parameters
+                of the dirichlet distribution.
+                Defaults to False.
+            minimum_target_mean_proportion (_type_, optional):
+                The minimum proportion of the original mean that is allowed for the
+                new mean. If the new mean is smaller than this proportion, the
+                ``minimum_target_mean_proportion`` is used instead.
+
+                At the same time, ``1-minimum_target_mean_proportion`` is the maximum
+                proportion of the original mean that is allowed for the new mean.
+                If the new mean is larger than this proportion,
+                ``1-minimum_target_mean_proportion`` is used instead.
+
+                Defaults to 1e-9.
         """
         if isinstance(flowsim_tree, str):
             with open(
@@ -148,7 +209,22 @@ class TreeMeanDistributionSampler:
         _only_return_sampled_cell_numbers=False,
         save_changed_parameters=False,
         minimum_target_mean_proportion=1e-9,
-    ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
+    ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame], List[float]]:
+        """A static function synthesizing cytometry samples with a distribution for the mean of a population.
+
+        See the __init__ method for the description of the arguments.
+
+        Returns:
+            Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
+
+                - A dataframe with the sampled cell numbers.
+                - A dictionary with the parameters of the
+                dirichlet distribution.
+                - A list of dataframes with the sampled cell matrices
+                    (n_cells X features) for each sample.
+                - A list of the target means for each sample. 
+                    This is the used ``original_mean``
+        """
         if save_dir is not None:
             os.makedirs(save_dir, exist_ok=True)
         if verbose:
@@ -220,6 +296,20 @@ class TreeMeanDistributionSampler:
         )
 
     def sample(self):
+        """Synthesize cytometry samples with a 
+        distribution for the mean of a population.
+
+        See the __init__ method for the description of the arguments.
+
+        Returns:
+            Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:
+
+                - A dataframe with the sampled cell numbers.
+                - A dictionary with the parameters of the
+                dirichlet distribution.
+                - A list of dataframes with the sampled cell matrices
+                    (n_cells X features) for each sample.
+        """
         return self._sample(
             flowsim_tree=self.flowsim_tree,
             n_samples=self.n_samples,
