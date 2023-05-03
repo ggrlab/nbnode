@@ -124,9 +124,7 @@ download_big_testdata:
     - pip install -U requests
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
     - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
-  cache:
-    paths:
-      - example_data/
+    - mv example_data /cache/
 
 
 # download-child:
@@ -136,14 +134,12 @@ download_big_testdata:
     - build
     - download_big_testdata
     - check
-  cache:
-    paths:
-      - example_data/
   stage: Test
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
     - container_user
   script:
+    - ln -s /cache/example_data example_data
     - ls -lath
     - ls -lath example_data/
     - ls -lath example_data/asinh.align_manual.CD3_Gate/
