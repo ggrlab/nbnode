@@ -1,7 +1,6 @@
 import copy
 import warnings
 from abc import abstractmethod
-from importlib.metadata import PackageNotFoundError
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 try:
@@ -13,6 +12,7 @@ import anytree
 import numpy as np
 import pandas as pd
 
+from nbnode import PackageNotFoundError
 from nbnode.nbnode import NBNode
 from nbnode.nbnode_util import per_node_data_fun
 
