@@ -1,28 +1,3 @@
-.. todo:: THIS IS SUPPOSED TO BE AN EXAMPLE. MODIFY IT ACCORDING TO YOUR NEEDS!
-
-   The document assumes you are using a source repository service that promotes a
-   contribution model similar to `GitHub's fork and pull request workflow`_.
-   While this is true for the majority of services (like GitHub, GitLab,
-   BitBucket), it might not be the case for private repositories (e.g., when
-   using Gerrit).
-
-   Also notice that the code examples might refer to GitHub URLs or the text
-   might use GitHub specific terminology (e.g., *Pull Request* instead of *Merge
-   Request*).
-
-   Please make sure to check the document having these assumptions in mind
-   and update things accordingly.
-
-.. todo:: Provide the correct links/replacements at the bottom of the document.
-
-.. todo:: You might want to have a look on `PyScaffold's contributor's guide`_,
-
-   especially if your project is open source. The text should be very similar to
-   this template, but there are a few extra contents that you might decide to
-   also include, like mentioning labels of your issue tracker or automated
-   releases.
-
-
 ============
 Contributing
 ============
@@ -268,27 +243,27 @@ Maintainer tasks
 Releases
 --------
 
-.. todo:: This section assumes you are using PyPI to publicly release your package.
+.. .. todo:: This section assumes you are using PyPI to publicly release your package.
 
-   If instead you are using a different/private package index, please update
-   the instructions accordingly.
+..    If instead you are using a different/private package index, please update
+..    the instructions accordingly.
 
-If you are part of the group of maintainers and have correct user permissions
-on PyPI_, the following steps can be used to release a new version for
-``nbnode``:
+.. If you are part of the group of maintainers and have correct user permissions
+.. on PyPI_, the following steps can be used to release a new version for
+.. ``nbnode``:
 
-#. Make sure all unit tests are successful.
-#. Tag the current commit on the main branch with a release tag, e.g., ``v1.2.3``.
-#. Push the new tag to the upstream repository_, e.g., ``git push upstream v1.2.3``
-#. Clean up the ``dist`` and ``build`` folders with ``tox -e clean``
-   (or ``rm -rf dist build``)
-   to avoid confusion with old builds and Sphinx docs.
-#. Run ``tox -e build`` and check that the files in ``dist`` have
-   the correct version (no ``.dirty`` or git_ hash) according to the git_ tag.
-   Also check the sizes of the distributions, if they are too big (e.g., >
-   500KB), unwanted clutter may have been accidentally included.
-#. Run ``tox -e publish -- --repository pypi`` and check that everything was
-   uploaded to PyPI_ correctly.
+.. #. Make sure all unit tests are successful.
+.. #. Tag the current commit on the main branch with a release tag, e.g., ``v1.2.3``.
+.. #. Push the new tag to the upstream repository_, e.g., ``git push upstream v1.2.3``
+.. #. Clean up the ``dist`` and ``build`` folders with ``tox -e clean``
+..    (or ``rm -rf dist build``)
+..    to avoid confusion with old builds and Sphinx docs.
+.. #. Run ``tox -e build`` and check that the files in ``dist`` have
+..    the correct version (no ``.dirty`` or git_ hash) according to the git_ tag.
+..    Also check the sizes of the distributions, if they are too big (e.g., >
+..    500KB), unwanted clutter may have been accidentally included.
+.. #. Run ``tox -e publish -- --repository pypi`` and check that everything was
+..    uploaded to PyPI_ correctly.
 
 
 
@@ -299,7 +274,6 @@ on PyPI_, the following steps can be used to release a new version for
 
 
 .. <-- start -->
-.. todo:: Please review and change the following definitions:
 
 .. |the repository service| replace:: GitHub
 .. |contribute button| replace:: "Create pull request"
