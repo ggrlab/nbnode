@@ -124,10 +124,9 @@ download_big_testdata:
     - pip install -U requests
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
     - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
-  artifacts:
-    paths:
+  cache:
+    path:
       - example_data/
-    expire_in: 1h10min
 
 
 # download-child:
@@ -137,9 +136,9 @@ download_big_testdata:
     - build
     - download_big_testdata
     - check
-  dependencies:
-    - build
-    - download_big_testdata
+  cache:
+    path:
+      - example_data/
   stage: Test
   tags:
     # Then my local gitlab-runner "runner_docker" knows he should take it
