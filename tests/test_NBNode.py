@@ -1384,3 +1384,4 @@ class TestNBNode(TestCase):
         # which is ommitted now.
         celltree_trunk = celltree_trunk + 1
         dotgraph = celltree_trunk.graph_from_dot(fillcolor_node_attribute="counter")
+        print(dotgraph)

@@ -145,8 +145,8 @@ class TreeMeanDistributionSampler:
             verbose (bool, optional):
                 Verbosity. Defaults to False.
             seed_sample_0 (int, optional):
-                The seed for the first sample. All further sample seeds are incremented by
-                1 per sample.
+                The seed for the first sample. All further sample seeds are incremented
+                by 1 per sample.
                 Defaults to 129873.
             save_dir (str, optional):
                 The directory to save the samples to.
@@ -213,7 +213,8 @@ class TreeMeanDistributionSampler:
         save_changed_parameters=False,
         minimum_target_mean_proportion=1e-9,
     ) -> Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame], List[float]]:
-        """A static function synthesizing cytometry samples with a distribution for the mean of a population.
+        """A static function synthesizing cytometry samples with a distribution for
+        the mean of a population.
 
         See the __init__ method for the description of the arguments.
 
