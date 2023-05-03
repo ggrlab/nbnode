@@ -1,7 +1,6 @@
 # From https://github.com/zenodo/zenodo/issues/1888
 import io
 import zipfile
-
 import requests
 
 ACCESS_TOKEN = "ZENODO_ACCESS_TOKEN"
@@ -22,11 +21,16 @@ filenames = [f["key"] for f in r.json()["files"]]
 #     with open(os.path.join(outdir, filename), "wb") as f:
 #         f.write(r.content)
 
+for single_json_file in r.json()["files"]: 
+    if single_json_file["key"].endswith(".zip"):
+        my_zipfile = {
+            "filename": single_json_file["key"],
+            "url": single_json_file["links"]["self"],
+            "checksum": single_json_file["checksum"],
+        }
+    # print(single_json_file)
 
-my_zipfile = [
-    (fn, url) for fn, url in zip(filenames, download_urls) if fn.endswith(".zip")
-][0]
-print("Downloading:", my_zipfile[0])
-r = requests.get(my_zipfile[1], params={"access_token": ACCESS_TOKEN})
+print("Downloading:", my_zipfile["filename"])
+r = requests.get(my_zipfile["url"], params={"access_token": ACCESS_TOKEN})
 z = zipfile.ZipFile(io.BytesIO(r.content))
 z.extractall("example_data")
