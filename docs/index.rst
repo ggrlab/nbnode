@@ -1,6 +1,6 @@
-=================
+=====================
 NBNode Documentation
-=================
+=====================
 
 .. This is the documentation of **nbnode**.
 
@@ -31,7 +31,6 @@ NBNode Documentation
 
     Overview <readme>
     Tutorials <notebooks>
-
     Contributions & Help <contributing>
     License <license>
     Authors <authors>
@@ -39,13 +38,12 @@ NBNode Documentation
     Module Reference <api/modules>
 
 
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
+* :doc:`Module Reference <./api/modules>`
 
 .. _toctree: https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html
 .. _reStructuredText: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
