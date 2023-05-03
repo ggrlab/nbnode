@@ -40,6 +40,25 @@ NBNode
 NBNode enables non-binary decision trees with multiple decisions at each node.
 Additionally it enables a dirichlet distribution based simulation of flow cytometry data.
 
+Installation
+============
+
+.. code-block:: bash
+
+    conda create -y -n conda_nbnode python=3.8
+    conda activate conda_nbnode
+    git clone https://git.uni-regensburg.de/ccc_verse/nbnode
+    cd nbnode
+    pip install --upgrade pip
+    pip install . 
+
+
+Tutorials
+=========
+
+See the documentation and the (within) presented jupyter notebooks https://ccc_verse.git-pages.uni-regensburg.de/nbnode
+
+
 Package setup
 =============
 
@@ -69,10 +88,6 @@ information on PyScaffold see https://pyscaffold.org/::
     pip install pre-commit
     pre-commit autoupdate
 
-Tutorials
-=========
-
-See [documentation](https://ccc_verse.git-pages.uni-regensburg.de/nbnode).
 
 
 
@@ -82,8 +97,8 @@ For some tests you need data files, which are not included in the repository.
 Especially all tests in `tests/specific_analyses` need data.
 You can obtain the data by downloading the data from zenodo:
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7883353.svg
-   :target: https://doi.org/10.5281/zenodo.7883353
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7890571.svg
+   :target: https://doi.org/10.5281/zenodo.7890571
 
 .. code-block:: bash
 
