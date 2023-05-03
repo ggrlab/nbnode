@@ -41,7 +41,7 @@ NBNode enables non-binary decision trees with multiple decisions at each node.
 Additionally it enables a dirichlet distribution based simulation of flow cytometry data.
 
 Package setup
-====
+=============
 
 This project has been set up using PyScaffold 4.4. For details and usage
 information on PyScaffold see https://pyscaffold.org/::
