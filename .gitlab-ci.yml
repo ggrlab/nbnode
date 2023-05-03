@@ -124,9 +124,10 @@ download_big_testdata:
     - pip install -U requests
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
     - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
-    - ls -lath
-    - ls -lath example_data/
-    - ls -lath example_data/asinh.align_manual.CD3_Gate/
+  artifacts:
+    paths:
+      - example_data/
+    expire_in: 1h10min
 
 
 # download-child:
