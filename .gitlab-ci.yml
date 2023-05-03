@@ -124,7 +124,8 @@ download_big_testdata:
     - pip install -U requests
     - sed --in-place "s/ZENODO_ACCESS_TOKEN/$ZENODO_ACCESS_TOKEN/" tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
     - python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
-    - mv example_data /cache/
+    - mv example_data /runner_docker_cache
+    - ls /runner_docker_cache
 
 
 # download-child:
