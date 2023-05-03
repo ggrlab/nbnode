@@ -36,7 +36,8 @@ class NBNode(anytree.Node):
 
         Args:
             name (str):
-                The name of the node. Should be unique within the children of a parent node.
+                The name of the node. Should be unique within the children of a
+                parent node.
             parent (NBNode, optional):
                 The parent node. Defaults to None.
             decision_value (Any, optional):
@@ -49,9 +50,9 @@ class NBNode(anytree.Node):
             decision_name (str, optional):
                 The name of the value leading to this node. Defaults to None.
             decision_cutoff (float, optional):
-                The cutoff value for the ``decision_value``. If the ``decision_value`` is
-                numeric, then the ``decision_value`` is compared to the decision_cutoff and
-                returns::
+                The cutoff value for the ``decision_value``. If the ``decision_value``
+                is numeric, then the ``decision_value`` is compared to the
+                decision_cutoff and returns::
 
                     1       if value >= cutoff
                     -1      if value < cutoff
