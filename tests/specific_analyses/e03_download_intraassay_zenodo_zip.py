@@ -4,11 +4,12 @@ import zipfile
 
 import requests
 
-ACCESS_TOKEN = "ZENODO_ACCESS_TOKEN"
+# ACCESS_TOKEN = "ZENODO_ACCESS_TOKEN"  # is public now
 record_id = "7890571"
 
 r = requests.get(
-    f"https://zenodo.org/api/records/{record_id}", params={"access_token": ACCESS_TOKEN}
+    f"https://zenodo.org/api/records/{record_id}",
+    # params={"access_token": ACCESS_TOKEN}
 )
 # print(r.json())
 download_urls = [f["links"]["self"] for f in r.json()["files"]]
@@ -32,6 +33,9 @@ for single_json_file in r.json()["files"]:
     # print(single_json_file)
 
 print("Downloading:", my_zipfile["filename"])
-r = requests.get(my_zipfile["url"], params={"access_token": ACCESS_TOKEN})
+r = requests.get(
+    my_zipfile["url"],
+    # params={"access_token": ACCESS_TOKEN}
+)
 z = zipfile.ZipFile(io.BytesIO(r.content))
 z.extractall("example_data")
