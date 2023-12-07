@@ -52,8 +52,28 @@ jobs:
           path: dist/
           retention-days: 1
 
+  download_big_testdata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download test data
+        run: >-
+          pipx run --python '3.11'
+          pipx install requests
+          python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
+      - name: Store the test data for use in other stages
+        uses: actions/upload-artifact@v3
+        with:
+          name: example_data
+          path: example_data/
+          retention-days: 1
+
+
+
   test:
-    needs: prepare
+    needs:
+      - prepare
+      - download_big_testdata
     strategy:
       matrix:
         python:
