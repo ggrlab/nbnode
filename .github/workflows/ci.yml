@@ -59,7 +59,7 @@ jobs:
       - name: Download test data
         run: >-
           pipx install requests
-          python tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
+          pipx run tests/specific_analyses/e03_download_intraassay_zenodo_zip.py
       - name: Store the test data for use in other stages
         uses: actions/upload-artifact@v3
         with:
