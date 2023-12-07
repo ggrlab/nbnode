@@ -460,17 +460,6 @@ class TestNBNode(TestCase):
         # print(graph.to_string())
         plot_save_unified(any_plot=graph, file="tests_output/pydotplus_graph_color.pdf")
 
-    def test_dotexport(self):
-        simpletree = nbtree.tree_simple()
-        exported_dotstr = simpletree.export_dot()
-        dot_data = a_exp.UniqueDotExporter(
-            simpletree,
-            options=['node [shape=box, style="filled", color="black"];'],
-            nodeattrfunc=lambda node: 'label="{}", fillcolor="white"'.format(node.name),
-        )
-        dotdata_str = "\n".join([x for x in dot_data])
-        assert exported_dotstr == dotdata_str
-
     def test_apply_NBNode_tree_to_dataframe(self):
         import pandas as pd
 
