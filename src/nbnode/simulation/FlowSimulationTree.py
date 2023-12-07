@@ -52,8 +52,8 @@ class BaseFlowSimulationTree:
                 Defaults to "sample_name".
             node_percentages (Optional[pd.DataFrame], optional):
                 If node_percentages is not given, node.data MUST contain a column which
-                identifies groups of cells (default: "sample_name"). This can replace the
-                re-calculation of the node percentages from the ``.data``.
+                identifies groups of cells (default: "sample_name"). This can replace 
+                the re-calculation of the node percentages from the ``.data``.
 
                 Defaults to None.
             seed (int, optional):

@@ -8,8 +8,8 @@ def count_celltree_df(
     celltree_gated: NBNode,
 ) -> pd.DataFrame:
     """
-        Count the number of rows in node.data (per node) grouped by "sample_name" and concat
-        them into a dataframe
+        Count the number of rows in node.data (per node) grouped by 
+        "sample_name" and concat them into a dataframe
 
     Args:
         celltree_gated (NBNode):

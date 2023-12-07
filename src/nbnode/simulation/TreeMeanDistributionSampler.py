@@ -263,10 +263,12 @@ class TreeMeanDistributionSampler:
             ]
             true_popcounts, changed_parameters, sampled_samples = sim_target(
                 flowsim=flowsim_tree,
-                change_pop_mean_target=[{
-                    # Use the max to omit negative and 0 values
-                    population_name_to_change: all_targets[-1],
-                }],
+                change_pop_mean_target=[
+                    {
+                        # Use the max to omit negative and 0 values
+                        population_name_to_change: all_targets[-1],
+                    }
+                ],
                 n_cells=n_cells,
                 use_only_diagonal_covmat=use_only_diagonal_covmat,
                 seed_sample_0=seed_sample_0 + sample_i,
