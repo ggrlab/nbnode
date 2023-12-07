@@ -2,9 +2,7 @@
 Changelog
 =========
 
-Version 1.0
-===========
+Version 1.0.2
+=============
 
-- Feature A added
-- FIX: nasty bug #1729 fixed
-- add your changes here!
+- Update to github-ci
