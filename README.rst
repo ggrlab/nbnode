@@ -88,6 +88,10 @@ information on PyScaffold see https://pyscaffold.org/::
     pip install pre-commit
     pre-commit autoupdate
 
+Migration to github:
+
+    putup --update . --github
+
 
 
 
