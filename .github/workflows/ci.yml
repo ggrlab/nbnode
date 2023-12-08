@@ -84,13 +84,20 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v3
+      # https://github.com/marketplace/actions/setup-graphviz
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
       - uses: actions/setup-python@v4
         id: setup-python
         with:
           python-version: ${{ matrix.python }}
+      # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts#passing-data-between-jobs-in-a-workflow
       - name: Retrieve pre-built distribution files
         uses: actions/download-artifact@v3
         with: {name: python-distribution-files, path: dist/}
+      - name: Retrieve downloaded big test files
+        uses: actions/download-artifact@v3
+        with: {name: example_data, path: example_data/}
       - name: Run tests
         run: >-
           pipx run --python '${{ steps.setup-python.outputs.python-path }}'
