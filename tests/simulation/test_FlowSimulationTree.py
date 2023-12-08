@@ -323,13 +323,13 @@ class TestFlowSimulation(TestCase):
             - flowsim.population_parameters["alpha"]["/AllCells/not CD45"]
         )
         assert flowsim.pop_mean("/AllCells") == 1
-        assert (
-            flowsim.pop_mean("/AllCells/CD45+")
-            == (
+        assert np.isclose(
+            flowsim.pop_mean("/AllCells/CD45+"),
+            (
                 flowsim.precision
                 - flowsim.population_parameters["alpha"]["/AllCells/not CD45"]
             )
-            / flowsim.precision
+            / flowsim.precision,
         )
 
     def test_FlowSimulationTree_report_all_alpha(self):
@@ -399,10 +399,10 @@ class TestFlowSimulation(TestCase):
             flowsim.new_pop_mean("/AllCells/not CD45", percentage=-0.1)
 
         flowsim.new_pop_mean("/AllCells/not CD45", percentage=0.1)
-        assert flowsim.pop_mean("/AllCells/not CD45") == 0.1
+        assert np.isclose(flowsim.pop_mean("/AllCells/not CD45"), 0.1)
 
         flowsim.new_pop_mean("/AllCells/CD45+/CD3+", percentage=0.1)
-        assert flowsim.pop_mean("/AllCells/CD45+/CD3+") == 0.1
+        assert np.isclose(flowsim.pop_mean("/AllCells/CD45+/CD3+"), 0.1)
 
     def test_FlowSimulationTree_report_parameters(self):
         yternary = pd.read_csv(
@@ -457,15 +457,15 @@ class TestFlowSimulation(TestCase):
             # all cells are assumed to come from the same sample
             data_cellgroup_col=None,
         )
-        assert flowsim.pop_mean("/AllCells/not CD45") == 0.28343526674499486
+        assert np.isclose(flowsim.pop_mean("/AllCells/not CD45"), 0.28343526674499486)
         flowsim.reset_populations()
-        assert flowsim.pop_mean("/AllCells/not CD45") == 0.28343526674499486
+        assert np.isclose(flowsim.pop_mean("/AllCells/not CD45"), 0.28343526674499486)
 
         flowsim.new_pop_mean("/AllCells/not CD45", percentage=0.1)
-        assert flowsim.pop_mean("/AllCells/not CD45") == 0.1
+        assert np.isclose(flowsim.pop_mean("/AllCells/not CD45"), 0.1)
 
         flowsim.reset_populations()
-        assert flowsim.pop_mean("/AllCells/not CD45") == 0.28343526674499486
+        assert np.isclose(flowsim.pop_mean("/AllCells/not CD45"), 0.28343526674499486)
 
     def test_FlowSimulationTree_nodata_noids(self):
         celltree = nbtree.tree_complete_aligned()

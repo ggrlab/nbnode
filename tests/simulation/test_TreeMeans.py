@@ -80,7 +80,7 @@ class TestTreeMeans(TestCase):
                         "/AllCells/DP": 98,
                     },
                 }
-            )
+            ).astype(int)
         )
         assert all_changed_parameters == []
         assert len(all_sampled_samples) == 2
