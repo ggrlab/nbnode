@@ -69,6 +69,8 @@ jobs:
 
   # Starting point from: https://coderefinery.github.io/documentation/gh_workflow/
   docs:
+    permissions:
+        contents: write
     runs-on: ubuntu-latest
     needs:
       - prepare
