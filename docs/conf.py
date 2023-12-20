@@ -74,8 +74,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "nbsphinx",
 ]
-# https://nbsphinx.readthedocs.io/en/0.2.7/allow-errors.html
-nbsphinx_allow_errors = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
