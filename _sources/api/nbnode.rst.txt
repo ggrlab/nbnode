@@ -1,0 +1,51 @@
+nbnode package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   nbnode.apply
+   nbnode.io
+   nbnode.plot
+   nbnode.simulation
+   nbnode.specific_analyses
+   nbnode.testutil
+   nbnode.utils
+
+Submodules
+----------
+
+nbnode.nbnode module
+--------------------
+
+.. automodule:: nbnode.nbnode
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.nbnode\_trees module
+---------------------------
+
+.. automodule:: nbnode.nbnode_trees
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.nbnode\_util module
+--------------------------
+
+.. automodule:: nbnode.nbnode_util
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode
+   :members:
+   :undoc-members:
+   :show-inheritance:

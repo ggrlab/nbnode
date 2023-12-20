@@ -1,0 +1,29 @@
+nbnode.testutil package
+=======================
+
+Submodules
+----------
+
+nbnode.testutil.get\_licenses module
+------------------------------------
+
+.. automodule:: nbnode.testutil.get_licenses
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.testutil.helpers module
+------------------------------
+
+.. automodule:: nbnode.testutil.helpers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode.testutil
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,29 @@
+nbnode.specific\_analyses.intraassay package
+============================================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   nbnode.specific_analyses.intraassay.sims
+
+Submodules
+----------
+
+nbnode.specific\_analyses.intraassay.gate\_init module
+------------------------------------------------------
+
+.. automodule:: nbnode.specific_analyses.intraassay.gate_init
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode.specific_analyses.intraassay
+   :members:
+   :undoc-members:
+   :show-inheritance:

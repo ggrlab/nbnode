@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nbnode.plot.shifted_colormap &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=233b9934" />
+    <script src="../../../_static/documentation_options.js?v=42336cb0"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nbnode.plot.shifted_colormap</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">Colormap</span><span class="p">,</span> <span class="n">LinearSegmentedColormap</span>
+
+
+<div class="viewcode-block" id="shifted_colormap">
+<a class="viewcode-back" href="../../../api/nbnode.plot.html#nbnode.plot.shifted_colormap.shifted_colormap">[docs]</a>
+<span class="k">def</span> <span class="nf">shifted_colormap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Colormap</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to offset the &quot;center&quot; of a colormap.</span>
+
+<span class="sd">    Useful for data with a negative min and positive max and you want the middle of the</span>
+<span class="sd">    colormap&#39;s dynamic range to be at zero.</span>
+
+<span class="sd">    Adapted from</span>
+<span class="sd">    https://stackoverflow.com/questions/7404116/defining-the-midpoint-of-a-colormap-in-matplotlib</span>
+<span class="sd">    Post of DaveTheScientist</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">      cmap :</span>
+<span class="sd">        The matplotlib colormap to be altered.</span>
+<span class="sd">      start :</span>
+<span class="sd">        Offset from lowest point in the colormap&#39;s range.</span>
+<span class="sd">        Defaults to 0.0 (no lower ofset). Should be between</span>
+<span class="sd">        0.0 and `midpoint`.</span>
+<span class="sd">      midpoint :</span>
+<span class="sd">        The new center of the colormap. Defaults to</span>
+<span class="sd">        0.5 (no shift). Should be between 0.0 and 1.0. In</span>
+<span class="sd">        general, this should be  1 - vmax/(vmax + abs(vmin))</span>
+<span class="sd">        For example if your data range from -15.0 to +5.0 and</span>
+<span class="sd">        you want the center of the colormap at 0.0, `midpoint`</span>
+<span class="sd">        should be set to  1 - 5/(5 + 15)) or 0.75</span>
+<span class="sd">      stop :</span>
+<span class="sd">        Offset from highets point in the colormap&#39;s range.</span>
+<span class="sd">        Defaults to 1.0 (no upper ofset). Should be between</span>
+<span class="sd">        `midpoint` and 1.0.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Colormap: _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span>
+    <span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">min_val</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">max_val</span><span class="p">)</span>  <span class="c1"># Edit #2</span>
+    <span class="c1"># sometimes, the values are all exactly identical (or 0)</span>
+    <span class="c1"># Therefore, add a small value that we never have a division through zero.</span>
+    <span class="n">midpoint</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">max_val</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">min_val</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.0001</span><span class="p">)</span>
+
+    <span class="n">cdict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;red&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;green&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;blue&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+    <span class="c1"># regular index to compute the colors</span>
+    <span class="n">reg_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="mi">257</span><span class="p">)</span>
+
+    <span class="c1"># shifted index to match the data</span>
+    <span class="n">shift_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">midpoint</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">129</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ri</span><span class="p">,</span> <span class="n">si</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">reg_index</span><span class="p">,</span> <span class="n">shift_index</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">si</span> <span class="o">-</span> <span class="n">midpoint</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">:</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># 0.5 = original midpoint.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">ri</span><span class="p">)</span>
+        <span class="n">cdict</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">si</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+        <span class="n">cdict</span><span class="p">[</span><span class="s2">&quot;green&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">si</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g</span><span class="p">))</span>
+        <span class="n">cdict</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">si</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+        <span class="n">cdict</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">si</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
+
+    <span class="n">newcmap</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cdict</span><span class="p">)</span>
+    <span class="c1"># plt.register_cmap(cmap=newcmap)   # I think I do not need the registering after</span>
+    <span class="c1"># I overgive the colormaps anyways</span>
+    <span class="c1"># and do NOT refer to them by their name.</span>
+
+    <span class="k">return</span> <span class="n">newcmap</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nbnode.simulation.TreeMeanDistributionSampler &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=233b9934" />
+    <script src="../../../_static/documentation_options.js?v=42336cb0"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nbnode.simulation.TreeMeanDistributionSampler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">nbnode.simulation.FlowSimulationTree</span> <span class="kn">import</span> <span class="n">FlowSimulationTreeDirichlet</span>
+<span class="kn">from</span> <span class="nn">nbnode.simulation.sim_target</span> <span class="kn">import</span> <span class="n">sim_target</span>
+
+
+<div class="viewcode-block" id="PseudoTorchDistributionNormal">
+<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.PseudoTorchDistributionNormal">[docs]</a>
+<span class="k">class</span> <span class="nc">PseudoTorchDistributionNormal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class that mimics the torch.distributions.Distribution class.</span>
+
+<span class="sd">    This class is used as a fallback if torch is not installed. It is used</span>
+<span class="sd">    within TreeMeanDistributionSampler to sample a new mean for a population</span>
+<span class="sd">    that is to be changed.</span>
+
+<span class="sd">    So the calls are::</span>
+
+<span class="sd">        mean_distribution = PseudoTorchDistributionNormal(loc=new_mean, scale=1)</span>
+<span class="sd">        new_value_from_distribution = mean_distribution.sample()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the normal distribution with location and scale parameters.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            loc (float):</span>
+<span class="sd">                Mean (&#39;centre&#39;) of the distribution.</span>
+<span class="sd">            scale (float):</span>
+<span class="sd">                Standard deviation (spread or &#39;width&#39;) of the distribution.</span>
+<span class="sd">                Must be non-negative.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+
+<div class="viewcode-block" id="PseudoTorchDistributionNormal.sample">
+<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.PseudoTorchDistributionNormal.sample">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sample a value from a normal distribution with the given parameters.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: A value from a normal distribution with the given parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">torch</span>
+    <span class="kn">import</span> <span class="nn">torch.distributions</span> <span class="k">as</span> <span class="nn">D</span>
+
+    <span class="k">def</span> <span class="nf">mean_dist_fun</span><span class="p">(</span><span class="n">original_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">D</span><span class="o">.</span><span class="n">Distribution</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that returns a distribution with a set mean.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            original_mean (float): The mean of the normal distribution</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            D.Distribution:</span>
+<span class="sd">                A distribution with the mean set to original_mean and a</span>
+<span class="sd">                standard deviation of 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># You can also set that a lambda-function, e.g.</span>
+        <span class="c1">#   lambda original_mean: D.Normal(loc=original_mean + 0, scale=1)</span>
+        <span class="k">return</span> <span class="n">D</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">original_mean</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+
+<div class="viewcode-block" id="mean_dist_fun">
+<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.mean_dist_fun">[docs]</a>
+    <span class="k">def</span> <span class="nf">mean_dist_fun</span><span class="p">(</span><span class="n">original_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PseudoTorchDistributionNormal</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A function that returns a distribution for the new mean.</span>
+
+<span class="sd">        This is a fallback function that is used if torch is not installed.</span>
+<span class="sd">        Within TreeMeanDistributionSampler, this function is used to sample a</span>
+<span class="sd">        distribution for the new mean. The distribution is then used to sample</span>
+<span class="sd">        a new mean for the population that is to be changed.</span>
+
+<span class="sd">        So the calls are::</span>
+
+<span class="sd">            mean_distribution = mean_dist_fun(new_mean)</span>
+<span class="sd">            new_value_from_distribution = mean_distribution.sample()</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            original_mean (float): The mean of the normal distribution</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Pseudo-D.Distribution:</span>
+<span class="sd">                Mimics the torch.distributions.Distribution class in the sense that</span>
+<span class="sd">                it has a sample() method that returns a new value from the distribution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">PseudoTorchDistributionNormal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">original_mean</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TreeMeanDistributionSampler">
+<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.TreeMeanDistributionSampler">[docs]</a>
+<span class="k">class</span> <span class="nc">TreeMeanDistributionSampler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class synthesizing cytometry samples with a</span>
+<span class="sd">    distribution for the mean of a population.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">flowsim_tree</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FlowSimulationTreeDirichlet</span><span class="p">],</span>
+        <span class="n">population_name_to_change</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">mean_distribution</span><span class="o">=</span><span class="n">mean_dist_fun</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">n_cells</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+        <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">seed_sample_0</span><span class="o">=</span><span class="mi">129873</span><span class="p">,</span>
+        <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;sim/sim00_m0.sd1&quot;</span><span class="p">,</span>
+        <span class="n">only_return_sampled_cell_numbers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">save_changed_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">minimum_target_mean_proportion</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A class synthesizing cytometry samples with a distribution for the mean of</span>
+<span class="sd">        a population.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            flowsim_tree (Union[str, FlowSimulationTreeDirichlet]):</span>
+<span class="sd">                A FlowSimulationTreeDirichlet object or a path to a pickle file.</span>
+
+<span class="sd">            population_name_to_change (str):</span>
+<span class="sd">                The name of the population that is to be changed.</span>
+
+<span class="sd">            mean_distribution (_type_, optional):</span>
+<span class="sd">                A function that returns a distribution for a given value, the original</span>
+<span class="sd">                mean **percentage** of a distribution. The function should take a</span>
+<span class="sd">                float as input and return a distribution. The input will be</span>
+<span class="sd">                ``original_mean * 100``, after the ``original_mean`` is expected to be</span>
+<span class="sd">                proportions.</span>
+<span class="sd">                The target mean of population_name_to_change is sampled from this</span>
+<span class="sd">                distribution and the corresponding concentration parameter of the</span>
+<span class="sd">                dirichlet distribution is calculated.</span>
+<span class="sd">                Defaults to mean_dist_fun.</span>
+<span class="sd">            n_samples (int, optional):</span>
+<span class="sd">                The number of samples to be drawn from the dirichlet distribution.</span>
+<span class="sd">                Defaults to 100.</span>
+<span class="sd">            n_cells (int, optional):</span>
+<span class="sd">                The number of cells per sample. Defaults to 10000.</span>
+<span class="sd">                Defaults to 10000.</span>
+<span class="sd">            use_only_diagonal_covmat (bool, optional):</span>
+<span class="sd">                Whether to use only the diagonal of the covariance matrix.</span>
+<span class="sd">                Defaults to False (=Do use the complete covariance matrix).</span>
+<span class="sd">            verbose (bool, optional):</span>
+<span class="sd">                Verbosity. Defaults to False.</span>
+<span class="sd">            seed_sample_0 (int, optional):</span>
+<span class="sd">                The seed for the first sample. All further sample seeds are incremented</span>
+<span class="sd">                by 1 per sample.</span>
+<span class="sd">                Defaults to 129873.</span>
+<span class="sd">            save_dir (str, optional):</span>
+<span class="sd">                The directory to save the samples to.</span>
+
+<span class="sd">                Defaults to &quot;sim/sim00_m0.sd1&quot;. The default means reflects</span>
+<span class="sd">                a mean shift of 0 from the original mean and a standard deviation of 1.</span>
+<span class="sd">            only_return_sampled_cell_numbers (bool, optional):</span>
+<span class="sd">                Whether to return only the sampled cell numbers, not creating the</span>
+<span class="sd">                actual samples. Defaults to False.</span>
+<span class="sd">            save_changed_parameters (bool, optional):</span>
+<span class="sd">                Whether to save the changed (concentration) parameters</span>
+<span class="sd">                of the dirichlet distribution.</span>
+<span class="sd">                Defaults to False.</span>
+<span class="sd">            minimum_target_mean_proportion (_type_, optional):</span>
+<span class="sd">                The minimum proportion of the original mean that is allowed for the</span>
+<span class="sd">                new mean. If the new mean is smaller than this proportion, the</span>
+<span class="sd">                ``minimum_target_mean_proportion`` is used instead.</span>
+
+<span class="sd">                At the same time, ``1-minimum_target_mean_proportion`` is the maximum</span>
+<span class="sd">                proportion of the original mean that is allowed for the new mean.</span>
+<span class="sd">                If the new mean is larger than this proportion,</span>
+<span class="sd">                ``1-minimum_target_mean_proportion`` is used instead.</span>
+
+<span class="sd">                Defaults to 1e-9.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">flowsim_tree</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">flowsim_tree</span><span class="p">,</span>
+                <span class="s2">&quot;rb&quot;</span><span class="p">,</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">flowsim_tree</span><span class="p">:</span> <span class="n">FlowSimulationTreeDirichlet</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flowsim_tree</span> <span class="o">=</span> <span class="n">flowsim_tree</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">n_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span> <span class="o">=</span> <span class="n">n_cells</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_only_diagonal_covmat</span> <span class="o">=</span> <span class="n">use_only_diagonal_covmat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed_sample_0</span> <span class="o">=</span> <span class="n">seed_sample_0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span> <span class="o">=</span> <span class="n">save_dir</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_name_to_change</span> <span class="o">=</span> <span class="n">population_name_to_change</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_mean</span> <span class="o">=</span> <span class="n">flowsim_tree</span><span class="o">.</span><span class="n">pop_mean</span><span class="p">(</span>
+            <span class="n">population_node_full_name</span><span class="o">=</span><span class="n">population_name_to_change</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_distribution</span> <span class="o">=</span> <span class="n">mean_distribution</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_changed_parameters</span> <span class="o">=</span> <span class="n">save_changed_parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_only_return_sampled_cell_numbers</span> <span class="o">=</span> <span class="n">only_return_sampled_cell_numbers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minimum_target_mean_proportion</span> <span class="o">=</span> <span class="n">minimum_target_mean_proportion</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_sample</span><span class="p">(</span>
+        <span class="n">flowsim_tree</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FlowSimulationTreeDirichlet</span><span class="p">],</span>
+        <span class="n">population_name_to_change</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">original_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">mean_distribution</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">n_cells</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+        <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">seed_sample_0</span><span class="o">=</span><span class="mi">129873</span><span class="p">,</span>
+        <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;sim/sim00_pure_estimate&quot;</span><span class="p">,</span>
+        <span class="n">_only_return_sampled_cell_numbers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">save_changed_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">minimum_target_mean_proportion</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A static function synthesizing cytometry samples with a distribution for</span>
+<span class="sd">        the mean of a population.</span>
+
+<span class="sd">        See the __init__ method for the description of the arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:</span>
+<span class="sd">                - A dataframe with the sampled cell numbers.</span>
+<span class="sd">                - A dictionary with the parameters of the dirichlet distribution.</span>
+<span class="sd">                - A list of dataframes with the sampled cell matrices</span>
+<span class="sd">                  (n_cells X features) for each sample.</span>
+<span class="sd">                - A list of the target means for each sample.</span>
+<span class="sd">                  This is the used ``original_mean``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pop</span><span class="p">,</span> <span class="n">perc</span> <span class="ow">in</span> <span class="n">flowsim_tree</span><span class="o">.</span><span class="n">mean_leafs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">perc</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">pop</span><span class="si">:</span><span class="s2">125</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># *100 to have the distribution work on the mean proportion in percentages</span>
+        <span class="n">target_mean_dist</span> <span class="o">=</span> <span class="n">mean_distribution</span><span class="p">(</span><span class="n">original_mean</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">all_true_popcounts</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">all_changed_parameters</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">all_sampled_samples</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">all_targets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">sample_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="c1"># Set a seed for the target value of the sample. (reproducibility)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed_sample_0</span> <span class="o">+</span> <span class="n">sample_i</span> <span class="o">+</span> <span class="mi">12947</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+                <span class="c1"># Then torch is not installed and the</span>
+                <span class="k">pass</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed_sample_0</span> <span class="o">+</span> <span class="n">sample_i</span> <span class="o">+</span> <span class="mi">12947</span><span class="p">)</span>
+            <span class="c1"># raise ValueError(seed_sample_0 + sample_i + 12947)</span>
+
+            <span class="n">target_percentage</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">target_mean_dist</span><span class="o">.</span><span class="n">sample</span><span class="p">())</span>
+            <span class="n">all_targets</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="nb">min</span><span class="p">(</span>
+                    <span class="mi">1</span> <span class="o">-</span> <span class="n">minimum_target_mean_proportion</span><span class="p">,</span>
+                    <span class="nb">max</span><span class="p">(</span>
+                        <span class="n">minimum_target_mean_proportion</span><span class="p">,</span>
+                        <span class="n">target_percentage</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">true_popcounts</span><span class="p">,</span> <span class="n">changed_parameters</span><span class="p">,</span> <span class="n">sampled_samples</span> <span class="o">=</span> <span class="n">sim_target</span><span class="p">(</span>
+                <span class="n">flowsim</span><span class="o">=</span><span class="n">flowsim_tree</span><span class="p">,</span>
+                <span class="n">change_pop_mean_target</span><span class="o">=</span><span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="c1"># Use the max to omit negative and 0 values</span>
+                        <span class="n">population_name_to_change</span><span class="p">:</span> <span class="n">all_targets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="n">n_cells</span><span class="o">=</span><span class="n">n_cells</span><span class="p">,</span>
+                <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="n">use_only_diagonal_covmat</span><span class="p">,</span>
+                <span class="n">seed_sample_0</span><span class="o">=</span><span class="n">seed_sample_0</span> <span class="o">+</span> <span class="n">sample_i</span><span class="p">,</span>
+                <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
+                <span class="n">sample_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;sample_</span><span class="si">{</span><span class="n">sample_i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">only_return_sampled_cell_numbers</span><span class="o">=</span><span class="n">_only_return_sampled_cell_numbers</span><span class="p">,</span>
+                <span class="n">save_changed_parameters</span><span class="o">=</span><span class="n">save_changed_parameters</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">all_true_popcounts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">all_true_popcounts</span> <span class="o">=</span> <span class="n">true_popcounts</span>
+                <span class="n">all_changed_parameters</span> <span class="o">=</span> <span class="n">changed_parameters</span>
+                <span class="n">all_sampled_samples</span> <span class="o">=</span> <span class="n">sampled_samples</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_true_popcounts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">all_true_popcounts</span><span class="p">,</span> <span class="n">true_popcounts</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)</span>
+                <span class="n">all_changed_parameters</span> <span class="o">+=</span> <span class="n">changed_parameters</span>
+                <span class="n">all_sampled_samples</span> <span class="o">+=</span> <span class="n">sampled_samples</span>
+        <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_true_popcounts</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_dir</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">all_true_popcounts</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_cells</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">all_true_popcounts</span><span class="p">,</span>
+            <span class="n">all_changed_parameters</span><span class="p">,</span>
+            <span class="n">all_sampled_samples</span><span class="p">,</span>
+            <span class="n">all_targets</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="TreeMeanDistributionSampler.sample">
+<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.TreeMeanDistributionSampler.sample">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Synthesize cytometry samples with a</span>
+<span class="sd">        distribution for the mean of a population.</span>
+
+<span class="sd">        See the __init__ method for the description of the arguments.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:</span>
+<span class="sd">                - A dataframe with the sampled cell numbers.</span>
+<span class="sd">                - A dictionary with the parameters of the dirichlet distribution.</span>
+<span class="sd">                - A list of dataframes with the sampled cell matrices</span>
+<span class="sd">                  (n_cells X features) for each sample.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample</span><span class="p">(</span>
+            <span class="n">flowsim_tree</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">flowsim_tree</span><span class="p">,</span>
+            <span class="n">n_samples</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">,</span>
+            <span class="n">n_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cells</span><span class="p">,</span>
+            <span class="n">population_name_to_change</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">population_name_to_change</span><span class="p">,</span>
+            <span class="n">original_mean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">original_mean</span><span class="p">,</span>
+            <span class="n">mean_distribution</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_distribution</span><span class="p">,</span>
+            <span class="c1"># change_pop_mean_proportional=self.change_pop_mean_proportional,</span>
+            <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_only_diagonal_covmat</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="n">seed_sample_0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed_sample_0</span><span class="p">,</span>
+            <span class="n">save_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span>
+            <span class="n">_only_return_sampled_cell_numbers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_only_return_sampled_cell_numbers</span><span class="p">,</span>
+            <span class="n">save_changed_parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save_changed_parameters</span><span class="p">,</span>
+            <span class="n">minimum_target_mean_proportion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">minimum_target_mean_proportion</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

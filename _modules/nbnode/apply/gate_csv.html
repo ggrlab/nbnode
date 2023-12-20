@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nbnode.apply.gate_csv &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=233b9934" />
+    <script src="../../../_static/documentation_options.js?v=42336cb0"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nbnode.apply.gate_csv</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtrees</span>
+
+
+<div class="viewcode-block" id="gate_csv">
+<a class="viewcode-back" href="../../../api/nbnode.apply.html#nbnode.apply.gate_csv.gate_csv">[docs]</a>
+<span class="k">def</span> <span class="nf">gate_csv</span><span class="p">(</span>
+    <span class="n">csv</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="n">celltree</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">new_colnames</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;FS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FS.0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD45RA&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CCR7&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD28&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PD1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD27&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD8&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD57&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CD45&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        csv (Union[str, List[str]]):</span>
+<span class="sd">            Path to a single .csv file or a list of .csv files</span>
+<span class="sd">        celltree (str, optional): _description_. Defaults to &quot;default&quot;.</span>
+<span class="sd">        new_colnames (List[str]):</span>
+<span class="sd">            vector of new colnames for the csvs. Usually used to make the colnames of</span>
+<span class="sd">            the csvs matching to the celltree.</span>
+<span class="sd">        verbose (bool, optional): _description_. Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        _type_: _description_</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; rescaled_data_dir = os.path.join(</span>
+<span class="sd">        ...     &quot;example_data&quot;, &quot;asinh.align_manual.CD3_Gate&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; if not os.path.exists(rescaled_data_dir):</span>
+<span class="sd">        ...     raise FileNotFoundError(</span>
+<span class="sd">        ...         rescaled_data_dir,</span>
+<span class="sd">        ...         &quot; has not been found, did you run tests/examples/e01_download.sh?&quot;,</span>
+<span class="sd">        ...         )</span>
+<span class="sd">        &gt;&gt;&gt; rescaled_data_dir_files = [os.path.join(rescaled_data_dir, file_x)</span>
+<span class="sd">        ... for file_x in os.listdir(rescaled_data_dir)]</span>
+<span class="sd">        &gt;&gt;&gt; print(rescaled_data_dir_files)</span>
+<span class="sd">        &gt;&gt;&gt; gate_csv(csv=rescaled_data_dir_files[0])</span>
+<span class="sd">        &gt;&gt;&gt; gate_csv(csv=rescaled_data_dir_files[0:3])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">celltree</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+        <span class="n">celltree</span> <span class="o">=</span> <span class="n">nbtrees</span><span class="o">.</span><span class="n">tree_complete_aligned_v2</span><span class="p">()</span>
+
+    <span class="c1"># If the csv is a single file, it is of instance string,</span>
+    <span class="c1"># therefore encase it inside a list to iterate over</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">csv</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">csv</span> <span class="o">=</span> <span class="p">[</span><span class="n">csv</span><span class="p">]</span>
+
+    <span class="n">data_all</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">predicted_nodes_all</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">path_x</span> <span class="ow">in</span> <span class="n">csv</span><span class="p">:</span>
+        <span class="c1"># path_x = os.path.join(rescaled_data_dir, file_x)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">path_x</span><span class="p">)</span>
+        <span class="c1"># Read the csv</span>
+        <span class="n">loaded_csv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_x</span><span class="p">)</span>
+        <span class="c1"># Rename the columns such that they match the names of celltree</span>
+        <span class="k">if</span> <span class="n">new_colnames</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">loaded_csv</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">new_colnames</span>
+        <span class="c1"># The name of the sample is necessary later in FlowSimulationTreeDirichlet</span>
+        <span class="n">loaded_csv</span><span class="p">[</span><span class="s2">&quot;sample_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">path_x</span>
+
+        <span class="c1"># Per row of the loaded csv, get the end node of the celltree</span>
+        <span class="n">predicted_nodes</span> <span class="o">=</span> <span class="n">celltree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">loaded_csv</span><span class="p">)</span>
+        <span class="n">predicted_nodes_all</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">predicted_nodes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data_all</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data_all</span> <span class="o">=</span> <span class="n">loaded_csv</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data_all</span><span class="p">,</span> <span class="n">loaded_csv</span><span class="p">])</span>
+
+    <span class="c1"># data_all</span>
+    <span class="c1">#   contains all loaded csvs rbound</span>
+    <span class="c1"># predicted_nodes_all</span>
+    <span class="c1">#   contains all predicted end nodes in the same order as data_all</span>
+    <span class="c1">#  (first row of data_all is the first element of predicted_nodes_all)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Set celltree.id_preds() based on predicted_nodes_all&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Given a list of nodes, enumerate through them and assign this</span>
+    <span class="c1"># (`enumerate(node_list)`)</span>
+    <span class="c1"># number to self.ids.</span>
+    <span class="n">celltree</span><span class="o">.</span><span class="n">id_preds</span><span class="p">(</span><span class="n">predicted_nodes_all</span><span class="p">,</span> <span class="n">reset_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Count cells based on ids. celltree.count(use_ids=True)&quot;</span><span class="p">)</span>
+    <span class="n">celltree</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">use_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Set celltree.data&quot;</span><span class="p">)</span>
+    <span class="n">celltree</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data_all</span>
+    <span class="k">return</span> <span class="n">celltree</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

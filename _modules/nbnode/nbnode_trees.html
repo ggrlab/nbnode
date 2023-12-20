@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nbnode.nbnode_trees &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=233b9934" />
+    <script src="../../_static/documentation_options.js?v=42336cb0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nbnode.nbnode_trees</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">anytree</span>
+
+<span class="kn">from</span> <span class="nn">nbnode.nbnode</span> <span class="kn">import</span> <span class="n">NBNode</span>
+
+
+<div class="viewcode-block" id="tree_simple">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_simple">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_simple</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple tree for testing.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            a (counter:0, decision_name:None, decision_value:None)</span>
+<span class="sd">            ├── a0 (counter:0, decision_name:m1, decision_value:-1)</span>
+<span class="sd">            ├── a1 (counter:0, decision_name:m1, decision_value:1)</span>
+<span class="sd">            │   └── a1a (counter:0, decision_name:m2, decision_value:test)</span>
+<span class="sd">            └── a2 (counter:0, decision_name:m3, decision_value:another)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mytree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># a0 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+    <span class="c1"># a2 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;another&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m3&quot;</span><span class="p">)</span>
+    <span class="c1"># a1a =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1a&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+    <span class="c1"># a0, a1, a2, a1a = a0, a1, a2, a1a  # make flake happy</span>
+    <span class="k">return</span> <span class="n">mytree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_simpleB">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_simpleB">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_simpleB</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Another simple tree for testing.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            a (counter:0, decision_name:None, decision_value:None)</span>
+<span class="sd">            ├── a0 (counter:0, decision_name:m1, decision_value:-1)</span>
+<span class="sd">            ├── a1 (counter:0, decision_name:m1, decision_value:1)</span>
+<span class="sd">            │   ├── a1a (counter:0, decision_name:m2, decision_value:test)</span>
+<span class="sd">            │   └── a1b (counter:0, decision_name:m2, decision_value:tmp)</span>
+<span class="sd">            └── a2 (counter:0, decision_name:m3, decision_value:another)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mytree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># a0 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+    <span class="c1"># a2 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;another&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m3&quot;</span><span class="p">)</span>
+    <span class="c1"># a1a =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1a&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1b&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">[</span><span class="s2">&quot;/a/a1&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mytree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_complex">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_complex">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_complex</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complex tree to use with yternary.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            AllCells (counter:0, decision_name:None, decision_value:None)</span>
+<span class="sd">            ├── not CD45 (counter:0, decision_name:CD45, decision_value:-1)</span>
+<span class="sd">            └── CD45+ (counter:0, decision_name:CD45, decision_value:1)</span>
+<span class="sd">                ├── not CD3 (counter:0, decision_name:CD3, decision_value:-1)</span>
+<span class="sd">                │   ├── not MNC (counter:0, decision_name:MNC, decision_value:-1)</span>
+<span class="sd">                │   └── MNCs (counter:0, decision_name:MNC, decision_value:1)</span>
+<span class="sd">                │       ├── other (counter:0, decision_name:CD4, decision_value:-1)</span>
+<span class="sd">                │       └── Monocytes (counter:0, decision_name:CD4, decision_value:1)</span>
+<span class="sd">                └── CD3+ (counter:0, decision_name:CD3, decision_value:1)</span>
+<span class="sd">                    ├── DN (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],</span>
+<span class="sd">                            decision_value:[-1, -1])</span>
+<span class="sd">                    ├── DP (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],</span>
+<span class="sd">                            decision_value:[1, 1])</span>
+<span class="sd">                    ├── CD4-/CD8+ (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],</span>
+<span class="sd">                                    decision_value:[-1, 1])</span>
+<span class="sd">                    └── CD4+/CD8- (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],</span>
+<span class="sd">                                    decision_value:[1, -1])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">celltree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;AllCells&quot;</span><span class="p">,</span>
+        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;not CD45&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;CD45&quot;</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;CD45+&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;CD45&quot;</span><span class="p">,</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">NBNode</span><span class="p">(</span>
+                        <span class="s2">&quot;not CD3&quot;</span><span class="p">,</span>
+                        <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;CD3&quot;</span><span class="p">,</span>
+                        <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">NBNode</span><span class="p">(</span>
+                                <span class="s2">&quot;not MNC&quot;</span><span class="p">,</span>
+                                <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;MNC&quot;</span><span class="p">,</span>
+                                <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="p">),</span>
+                            <span class="n">NBNode</span><span class="p">(</span>
+                                <span class="s2">&quot;MNCs&quot;</span><span class="p">,</span>
+                                <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;MNC&quot;</span><span class="p">,</span>
+                                <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+                                    <span class="n">NBNode</span><span class="p">(</span>
+                                        <span class="s2">&quot;other&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span>
+                                    <span class="p">),</span>
+                                    <span class="n">NBNode</span><span class="p">(</span>
+                                        <span class="s2">&quot;Monocytes&quot;</span><span class="p">,</span>
+                                        <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span>
+                                        <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="p">),</span>
+                                <span class="p">],</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">NBNode</span><span class="p">(</span>
+                        <span class="s2">&quot;CD3+&quot;</span><span class="p">,</span>
+                        <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;CD3&quot;</span><span class="p">,</span>
+                        <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+                            <span class="n">NBNode</span><span class="p">(</span>
+                                <span class="s2">&quot;DN&quot;</span><span class="p">,</span>
+                                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="p">),</span>
+                            <span class="n">NBNode</span><span class="p">(</span>
+                                <span class="s2">&quot;DP&quot;</span><span class="p">,</span>
+                                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                            <span class="p">),</span>
+                            <span class="n">NBNode</span><span class="p">(</span>
+                                <span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span>
+                                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                            <span class="p">),</span>
+                            <span class="n">NBNode</span><span class="p">(</span>
+                                <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">,</span>
+                                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">celltree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_complete_cell">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_complete_cell">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_complete_cell</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete tree for T-cell panel of Beckman Coulter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            AllCells ()</span>
+<span class="sd">            ├── not CD45 ()</span>
+<span class="sd">            └── CD45+ ()</span>
+<span class="sd">                ├── not CD3 ()</span>
+<span class="sd">                │   ├── not MNC ()</span>
+<span class="sd">                │   └── MNCs ()</span>
+<span class="sd">                │       ├── other ()</span>
+<span class="sd">                │       └── Monocytes ()</span>
+<span class="sd">                └── CD3+ ()</span>
+<span class="sd">                    ├── DN ()</span>
+<span class="sd">                    ├── DP ()</span>
+<span class="sd">                    ├── CD4-/CD8+ ()</span>
+<span class="sd">                    │   ├── naive ()</span>
+<span class="sd">                    │   │   ├── CD27+/CD28+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   ├── CD27+/CD28- ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   ├── CD27-/CD28+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   └── CD27-/CD28- ()</span>
+<span class="sd">                    │   │       ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │       ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │       ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │       └── CD57-/PD1- ()</span>
+<span class="sd">                    │   ├── Tcm ()</span>
+<span class="sd">                    │   │   ├── CD27+/CD28+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   ├── CD27+/CD28- ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   ├── CD27-/CD28+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   └── CD27-/CD28- ()</span>
+<span class="sd">                    │   │       ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │       ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │       ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │       └── CD57-/PD1- ()</span>
+<span class="sd">                    │   ├── Temra ()</span>
+<span class="sd">                    │   │   ├── CD27+/CD28+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   ├── CD27+/CD28- ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   ├── CD27-/CD28+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │   │   └── CD27-/CD28- ()</span>
+<span class="sd">                    │   │       ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │   │       ├── CD57+/PD1- ()</span>
+<span class="sd">                    │   │       ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │   │       └── CD57-/PD1- ()</span>
+<span class="sd">                    │   └── Tem ()</span>
+<span class="sd">                    │       ├── CD27+/CD28+ ()</span>
+<span class="sd">                    │       │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │       │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │       │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │       │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │       ├── CD27+/CD28- ()</span>
+<span class="sd">                    │       │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │       │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │       │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │       │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │       ├── CD27-/CD28+ ()</span>
+<span class="sd">                    │       │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │       │   ├── CD57+/PD1- ()</span>
+<span class="sd">                    │       │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │       │   └── CD57-/PD1- ()</span>
+<span class="sd">                    │       └── CD27-/CD28- ()</span>
+<span class="sd">                    │           ├── CD57+/PD1+ ()</span>
+<span class="sd">                    │           ├── CD57+/PD1- ()</span>
+<span class="sd">                    │           ├── CD57-/PD1+ ()</span>
+<span class="sd">                    │           └── CD57-/PD1- ()</span>
+<span class="sd">                    └── CD4+/CD8- ()</span>
+<span class="sd">                        ├── naive ()</span>
+<span class="sd">                        │   ├── CD27+/CD28+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   ├── CD27+/CD28- ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   ├── CD27-/CD28+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   └── CD27-/CD28- ()</span>
+<span class="sd">                        │       ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │       ├── CD57+/PD1- ()</span>
+<span class="sd">                        │       ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │       └── CD57-/PD1- ()</span>
+<span class="sd">                        ├── Tcm ()</span>
+<span class="sd">                        │   ├── CD27+/CD28+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   ├── CD27+/CD28- ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   ├── CD27-/CD28+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   └── CD27-/CD28- ()</span>
+<span class="sd">                        │       ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │       ├── CD57+/PD1- ()</span>
+<span class="sd">                        │       ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │       └── CD57-/PD1- ()</span>
+<span class="sd">                        ├── Temra ()</span>
+<span class="sd">                        │   ├── CD27+/CD28+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   ├── CD27+/CD28- ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   ├── CD27-/CD28+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │   │   ├── CD57+/PD1- ()</span>
+<span class="sd">                        │   │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │   │   └── CD57-/PD1- ()</span>
+<span class="sd">                        │   └── CD27-/CD28- ()</span>
+<span class="sd">                        │       ├── CD57+/PD1+ ()</span>
+<span class="sd">                        │       ├── CD57+/PD1- ()</span>
+<span class="sd">                        │       ├── CD57-/PD1+ ()</span>
+<span class="sd">                        │       └── CD57-/PD1- ()</span>
+<span class="sd">                        └── Tem ()</span>
+<span class="sd">                            ├── CD27+/CD28+ ()</span>
+<span class="sd">                            │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                            │   ├── CD57+/PD1- ()</span>
+<span class="sd">                            │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                            │   └── CD57-/PD1- ()</span>
+<span class="sd">                            ├── CD27+/CD28- ()</span>
+<span class="sd">                            │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                            │   ├── CD57+/PD1- ()</span>
+<span class="sd">                            │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                            │   └── CD57-/PD1- ()</span>
+<span class="sd">                            ├── CD27-/CD28+ ()</span>
+<span class="sd">                            │   ├── CD57+/PD1+ ()</span>
+<span class="sd">                            │   ├── CD57+/PD1- ()</span>
+<span class="sd">                            │   ├── CD57-/PD1+ ()</span>
+<span class="sd">                            │   └── CD57-/PD1- ()</span>
+<span class="sd">                            └── CD27-/CD28- ()</span>
+<span class="sd">                                ├── CD57+/PD1+ ()</span>
+<span class="sd">                                ├── CD57+/PD1- ()</span>
+<span class="sd">                                ├── CD57-/PD1+ ()</span>
+<span class="sd">                                └── CD57-/PD1- ()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">celltree</span> <span class="o">=</span> <span class="n">tree_complex</span><span class="p">()</span>
+
+    <span class="n">temra_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;naive&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;Tcm&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;Temra&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;Tem&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">]</span>
+    <span class="n">post_temra_1_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD27+/CD28+&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD27+/CD28-&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD27-/CD28+&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD27-/CD28-&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">]</span>
+    <span class="n">post_temra_2_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD57+/PD1+&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD57+/PD1-&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD57-/PD1+&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+        <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;CD57-/PD1-&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">post1_node</span> <span class="ow">in</span> <span class="n">post_temra_1_part</span><span class="p">:</span>
+        <span class="n">post1_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">post_temra_2_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">temra_node</span> <span class="ow">in</span> <span class="n">temra_part</span><span class="p">:</span>
+        <span class="n">temra_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">post_temra_1_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">hutch_node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+        <span class="n">celltree</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span> <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">hutch_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">temra_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">celltree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_simple_cutoff_NOTWORKING">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_simple_cutoff_NOTWORKING">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_simple_cutoff_NOTWORKING</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Not working simple tree with decision cutoffs, only for testing.</span>
+
+<span class="sd">    Blank</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            a (counter:0, decision_name:None, decision_value:None)</span>
+<span class="sd">            ├── a0 (counter:0, decision_name:m1, decision_value:-1)</span>
+<span class="sd">            ├── a1 (counter:0, decision_name:m1, decision_value:1)</span>
+<span class="sd">            │   └── a1a (counter:0, decision_name:m2, decision_value:test)</span>
+<span class="sd">            ├── a2 (counter:0, decision_name:m3, decision_value:another)</span>
+<span class="sd">            └── a3 (counter:0, decision_name:[&#39;m1&#39;, &#39;m4&#39;], decision_value:[0, 1])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mytree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># a0 =</span>
+    <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span>
+    <span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># a2 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;another&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m3&quot;</span><span class="p">)</span>
+    <span class="c1"># a1a =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1a&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+    <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;a3&quot;</span><span class="p">,</span>
+        <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span>
+        <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">,</span> <span class="s2">&quot;m4&quot;</span><span class="p">],</span>
+        <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">mytree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_simple_cutoff">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_simple_cutoff">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_simple_cutoff</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;_summary_.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            a (counter:0, decision_name:None, decision_value:None)</span>
+<span class="sd">            ├── a0 (counter:0, decision_name:m1, decision_value:-1)</span>
+<span class="sd">            ├── a1 (counter:0, decision_name:m1, decision_value:1)</span>
+<span class="sd">            │   └── a1a (counter:0, decision_name:m2, decision_value:test)</span>
+<span class="sd">            └── a2 (counter:0, decision_name:m3, decision_value:another)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mytree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># a0 =</span>
+    <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span>
+    <span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># a2 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;another&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m3&quot;</span><span class="p">)</span>
+    <span class="c1"># a1a =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1a&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mytree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_simple_cutoff_mixed">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_simple_cutoff_mixed">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_simple_cutoff_mixed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Functioning tree with decision cutoffs, testing.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            a (counter:0, decision_name:None, decision_value:None)</span>
+<span class="sd">            ├── a0 (counter:0, decision_name:m1, decision_value:-1)</span>
+<span class="sd">            ├── a1 (counter:0, decision_name:m1, decision_value:1)</span>
+<span class="sd">            │   └── a1a (counter:0, decision_name:m2, decision_value:test)</span>
+<span class="sd">            ├── a2 (counter:0, decision_name:m3, decision_value:another)</span>
+<span class="sd">            └── a3 (counter:0, decision_name:[&#39;m2&#39;, &#39;m4&#39;], decision_value:[&#39;test&#39;, 1])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mytree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1"># a0 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+    <span class="c1"># a2 =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;another&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m3&quot;</span><span class="p">)</span>
+    <span class="c1"># a1a =</span>
+    <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1a&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+    <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;a3&quot;</span><span class="p">,</span>
+        <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span>
+        <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="s2">&quot;m4&quot;</span><span class="p">],</span>
+        <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">mytree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_complete_aligned">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_complete_aligned">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_complete_aligned</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tree for the aligned (now &quot;rescaled&quot;) T-cell panel data.</span>
+
+<span class="sd">    Uses decision cutoffs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode: See ``tree_complete_cell()``, only the decision cutoffs are different</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Betreff:	gates</span>
+    <span class="c1"># Erstellt von:	Jxxx.Hxxx@ukr.de</span>
+    <span class="c1"># Geplantes Datum:</span>
+    <span class="c1"># Erstellungsdatum:	22.09.2022, 16:23</span>
+    <span class="c1"># Von:	JH</span>
+    <span class="c1"># An: G G (Gxx.Gxx@ukr.de)</span>
+    <span class="n">celltree</span> <span class="o">=</span> <span class="n">tree_complex</span><span class="p">()</span>
+
+    <span class="n">celltree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;AllCells&quot;</span><span class="p">,</span>
+        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;DN&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;DP&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="n">temra_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;naive&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Tcm&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Temra&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Tem&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">post_temra_1_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27+/CD28+&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27+/CD28-&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27-/CD28+&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27-/CD28-&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.36</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">post_temra_2_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD57+/PD1+&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD57+/PD1-&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD57-&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.23</span><span class="p">]</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">post1_node</span> <span class="ow">in</span> <span class="n">post_temra_1_part</span><span class="p">:</span>
+        <span class="n">post1_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">post_temra_2_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">temra_node</span> <span class="ow">in</span> <span class="n">temra_part</span><span class="p">:</span>
+        <span class="n">temra_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">post_temra_1_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">hutch_node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+        <span class="n">celltree</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span> <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">hutch_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">temra_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">celltree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_complete_aligned_v2">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_complete_aligned_v2">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_complete_aligned_v2</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tree for the aligned (now &quot;rescaled&quot;) T-cell panel data.</span>
+
+<span class="sd">    Uses decision cutoffs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode: See ``tree_complete_aligned()``, only the decision cutoffs are different</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Given to GG by JH per paper.</span>
+    <span class="c1"># Essentially the exact same gating hierarchy as tree_complete_aligned_v2 with</span>
+    <span class="c1"># really minor changes</span>
+    <span class="c1"># CD4, CD8 cutoffs remain</span>
+    <span class="c1"># CD4:      0.20 --&gt; 0.20   UNCHANGED</span>
+    <span class="c1"># CD8:      0.19 --&gt; 0.19   UNCHANGED</span>
+    <span class="c1"># CD45RA:   0.12 --&gt; 0.20</span>
+    <span class="c1"># CCR7:     0.24 --&gt; 0.15</span>
+    <span class="c1"># CD27:     0.36 --&gt; 0.30</span>
+    <span class="c1"># CD28:     0.30 --&gt; 0.30   UNCHANGED</span>
+    <span class="c1"># CD57:     0.23 --&gt; 0.23   UNCHANGED</span>
+    <span class="c1"># PD1:      0.52 --&gt; 0.52   UNCHANGED</span>
+    <span class="n">celltree</span> <span class="o">=</span> <span class="n">tree_complex</span><span class="p">()</span>
+
+    <span class="n">celltree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;AllCells&quot;</span><span class="p">,</span>
+        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;DN&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;DP&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="n">temra_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;naive&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Tcm&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Temra&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Tem&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">post_temra_1_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27+/CD28+&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27+/CD28-&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27-/CD28+&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD27-/CD28-&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD27&quot;</span><span class="p">,</span> <span class="s2">&quot;CD28&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">post_temra_2_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD57+/PD1+&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD57+/PD1-&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">,</span> <span class="s2">&quot;PD1&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;CD57-&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD57&quot;</span><span class="p">],</span> <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.23</span><span class="p">]</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">post1_node</span> <span class="ow">in</span> <span class="n">post_temra_1_part</span><span class="p">:</span>
+        <span class="n">post1_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">post_temra_2_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">temra_node</span> <span class="ow">in</span> <span class="n">temra_part</span><span class="p">:</span>
+        <span class="n">temra_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">post_temra_1_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">hutch_node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+        <span class="n">celltree</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span> <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">hutch_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">temra_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">celltree</span></div>
+
+
+
+<div class="viewcode-block" id="tree_complete_aligned_trunk">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode_trees.tree_complete_aligned_trunk">[docs]</a>
+<span class="k">def</span> <span class="nf">tree_complete_aligned_trunk</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">NBNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trunk of the tree_complete_aligned_v2 tree.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NBNode::</span>
+
+<span class="sd">            AllCells (counter:0, decision_name:None, decision_value:None)</span>
+<span class="sd">            ├── DN (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], decision_value:[-1, -1])</span>
+<span class="sd">            ├── DP (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], decision_value:[1, 1])</span>
+<span class="sd">            ├── CD4-/CD8+ (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],</span>
+<span class="sd">                            decision_value:[-1, 1])</span>
+<span class="sd">            │   ├── naive (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                            decision_value:[1, 1])</span>
+<span class="sd">            │   ├── Tcm (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                            decision_value:[1, -1])</span>
+<span class="sd">            │   ├── Temra (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                            decision_value:[-1, 1])</span>
+<span class="sd">            │   └── Tem (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                            decision_value:[-1, -1])</span>
+<span class="sd">            └── CD4+/CD8- (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],</span>
+<span class="sd">                            decision_value:[1, -1])</span>
+<span class="sd">                ├── naive (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                        decision_value:[1, 1])</span>
+<span class="sd">                ├── Tcm (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                        decision_value:[1, -1])</span>
+<span class="sd">                ├── Temra (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                        decision_value:[-1, 1])</span>
+<span class="sd">                └── Tem (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],</span>
+<span class="sd">                        decision_value:[-1, -1])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Betreff:	gates</span>
+    <span class="c1"># Erstellt von:	Jxxx.Hxxx@ukr.de</span>
+    <span class="c1"># Geplantes Datum:</span>
+    <span class="c1"># Erstellungsdatum:	22.09.2022, 16:23</span>
+    <span class="c1"># Von:	JH</span>
+    <span class="c1"># An: G G (Gxx.Gxx@ukr.de)</span>
+
+    <span class="n">celltree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span>
+        <span class="s2">&quot;AllCells&quot;</span><span class="p">,</span>
+        <span class="n">children</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;DN&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;DP&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">NBNode</span><span class="p">(</span>
+                <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">,</span>
+                <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CD4&quot;</span><span class="p">,</span> <span class="s2">&quot;CD8&quot;</span><span class="p">],</span>
+                <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="n">temra_part</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;naive&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Tcm&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Temra&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+        <span class="n">NBNode</span><span class="p">(</span>
+            <span class="s2">&quot;Tem&quot;</span><span class="p">,</span>
+            <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CCR7&quot;</span><span class="p">,</span> <span class="s2">&quot;CD45RA&quot;</span><span class="p">],</span>
+            <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">hutch_node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+        <span class="n">celltree</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CD4-/CD8+&quot;</span><span class="p">,</span> <span class="s2">&quot;CD4+/CD8-&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">hutch_node</span><span class="o">.</span><span class="n">insert_nodes</span><span class="p">(</span><span class="n">temra_part</span><span class="p">,</span> <span class="n">copy_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">celltree</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

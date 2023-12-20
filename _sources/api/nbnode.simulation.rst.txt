@@ -1,0 +1,53 @@
+nbnode.simulation package
+=========================
+
+Submodules
+----------
+
+nbnode.simulation.FlowSimulationTree module
+-------------------------------------------
+
+.. automodule:: nbnode.simulation.FlowSimulationTree
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.simulation.TreeMeanDistributionSampler module
+----------------------------------------------------
+
+.. automodule:: nbnode.simulation.TreeMeanDistributionSampler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.simulation.TreeMeanRelative module
+-----------------------------------------
+
+.. automodule:: nbnode.simulation.TreeMeanRelative
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.simulation.sim\_proportional module
+------------------------------------------
+
+.. automodule:: nbnode.simulation.sim_proportional
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.simulation.sim\_target module
+------------------------------------
+
+.. automodule:: nbnode.simulation.sim_target
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode.simulation
+   :members:
+   :undoc-members:
+   :show-inheritance:

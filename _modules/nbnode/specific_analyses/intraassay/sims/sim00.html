@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nbnode.specific_analyses.intraassay.sims.sim00 &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/alabaster.css?v=233b9934" />
+    <script src="../../../../../_static/documentation_options.js?v=42336cb0"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nbnode.specific_analyses.intraassay.sims.sim00</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">nbnode.simulation.FlowSimulationTree</span> <span class="kn">import</span> <span class="n">FlowSimulationTreeDirichlet</span>
+<span class="kn">from</span> <span class="nn">nbnode.simulation.TreeMeanRelative</span> <span class="kn">import</span> <span class="n">TreeMeanRelative</span>
+
+
+<div class="viewcode-block" id="sim00_baseline">
+<a class="viewcode-back" href="../../../../../api/nbnode.specific_analyses.intraassay.sims.html#nbnode.specific_analyses.intraassay.sims.sim00.sim00_baseline">[docs]</a>
+<span class="k">def</span> <span class="nf">sim00_baseline</span><span class="p">(</span>
+    <span class="n">flowsim_tree</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FlowSimulationTreeDirichlet</span><span class="p">],</span>
+    <span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">n_cells</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+    <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">seed_sample_0</span><span class="o">=</span><span class="mi">129873</span><span class="p">,</span>
+    <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;sim/sim00_pure_estimate&quot;</span><span class="p">,</span>
+    <span class="n">only_return_sampled_cell_numbers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Baseline simulation</span>
+
+<span class="sd">    Generates a TreeMeanRelative simulation with the same mean as the original</span>
+<span class="sd">    simulation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        flowsim_tree (Union[str, FlowSimulationTreeDirichlet]):</span>
+<span class="sd">            See ``TreeMeanRelative``.</span>
+<span class="sd">        n_samples (int, optional):</span>
+<span class="sd">            See ``TreeMeanRelative``. Defaults to 100.</span>
+<span class="sd">        n_cells (int, optional):</span>
+<span class="sd">            See ``TreeMeanRelative``. Defaults to 10000.</span>
+<span class="sd">        use_only_diagonal_covmat (bool, optional):</span>
+<span class="sd">            See ``TreeMeanRelative``. Defaults to False.</span>
+<span class="sd">        verbose (bool, optional):</span>
+<span class="sd">            See ``TreeMeanRelative``. Defaults to True.</span>
+<span class="sd">        seed_sample_0 (int, optional):</span>
+<span class="sd">            See ``TreeMeanRelative``. Defaults to 129873.</span>
+<span class="sd">        save_dir (str, optional):</span>
+<span class="sd">            See ``TreeMeanRelative``.</span>
+<span class="sd">            Defaults to &quot;sim/sim00_pure_estimate&quot;.</span>
+<span class="sd">        only_return_sampled_cell_numbers (bool, optional):</span>
+<span class="sd">            See ``TreeMeanRelative``.</span>
+<span class="sd">            Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[pd.DataFrame, Dict[str, Any], List[pd.DataFrame]]:</span>
+<span class="sd">            From proportional_generator.sample()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">proportional_generator</span> <span class="o">=</span> <span class="n">TreeMeanRelative</span><span class="p">(</span>
+        <span class="n">change_pop_mean_proportional</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">flowsim_tree</span><span class="o">=</span><span class="n">flowsim_tree</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span>
+        <span class="n">n_cells</span><span class="o">=</span><span class="n">n_cells</span><span class="p">,</span>
+        <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="n">use_only_diagonal_covmat</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">seed_sample_0</span><span class="o">=</span><span class="n">seed_sample_0</span><span class="p">,</span>
+        <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
+        <span class="n">only_return_sampled_cell_numbers</span><span class="o">=</span><span class="n">only_return_sampled_cell_numbers</span><span class="p">,</span>
+        <span class="n">save_changed_parameters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">proportional_generator</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebooks.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

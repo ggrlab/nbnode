@@ -1,0 +1,21 @@
+nbnode.utils package
+====================
+
+Submodules
+----------
+
+nbnode.utils.merge\_leaf\_nodes module
+--------------------------------------
+
+.. automodule:: nbnode.utils.merge_leaf_nodes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,18 @@
+nbnode.specific\_analyses package
+=================================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   nbnode.specific_analyses.intraassay
+
+Module contents
+---------------
+
+.. automodule:: nbnode.specific_analyses
+   :members:
+   :undoc-members:
+   :show-inheritance:

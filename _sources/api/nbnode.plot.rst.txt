@@ -1,0 +1,29 @@
+nbnode.plot package
+===================
+
+Submodules
+----------
+
+nbnode.plot.shifted\_colormap module
+------------------------------------
+
+.. automodule:: nbnode.plot.shifted_colormap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.plot.utils module
+------------------------
+
+.. automodule:: nbnode.plot.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:

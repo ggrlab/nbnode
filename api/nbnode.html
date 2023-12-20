@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>nbnode package &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=233b9934" />
+    <script src="../_static/documentation_options.js?v=42336cb0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="nbnode.apply package" href="nbnode.apply.html" />
+    <link rel="prev" title="nbnode" href="modules.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="nbnode-package">
+<h1>nbnode package<a class="headerlink" href="#nbnode-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="nbnode.apply.html">nbnode.apply package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.apply.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.apply.html#module-nbnode.apply.count_celltree_df">nbnode.apply.count_celltree_df module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.apply.html#nbnode.apply.count_celltree_df.count_celltree_df"><code class="docutils literal notranslate"><span class="pre">count_celltree_df()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.apply.html#module-nbnode.apply.gate_csv">nbnode.apply.gate_csv module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.apply.html#nbnode.apply.gate_csv.gate_csv"><code class="docutils literal notranslate"><span class="pre">gate_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.apply.html#module-nbnode.apply.gate_pointcloud">nbnode.apply.gate_pointcloud module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.apply.html#module-nbnode.apply">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbnode.io.html">nbnode.io package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.io.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.io.html#module-nbnode.io.pickle_open_dump">nbnode.io.pickle_open_dump module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.io.html#nbnode.io.pickle_open_dump.pickle_open_dump"><code class="docutils literal notranslate"><span class="pre">pickle_open_dump()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.io.html#module-nbnode.io">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbnode.plot.html">nbnode.plot package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.plot.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.plot.html#module-nbnode.plot.shifted_colormap">nbnode.plot.shifted_colormap module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.plot.html#nbnode.plot.shifted_colormap.shifted_colormap"><code class="docutils literal notranslate"><span class="pre">shifted_colormap()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.plot.html#module-nbnode.plot.utils">nbnode.plot.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.plot.html#nbnode.plot.utils.LinearShiftedColormap"><code class="docutils literal notranslate"><span class="pre">LinearShiftedColormap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.plot.html#nbnode.plot.utils.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.plot.html#nbnode.plot.utils.plot_save_unified"><code class="docutils literal notranslate"><span class="pre">plot_save_unified()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.plot.html#module-nbnode.plot">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbnode.simulation.html">nbnode.simulation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.simulation.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.simulation.html#module-nbnode.simulation.FlowSimulationTree">nbnode.simulation.FlowSimulationTree module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.estimate_cell_distributions"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.estimate_cell_distributions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.estimate_population_distribution"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.estimate_population_distribution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.generate_populations"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.generate_populations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.ncells_from_percentages"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.ncells_from_percentages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.remove_population"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.remove_population()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.reset_populations"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.reset_populations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.sample"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.sample_populations"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.sample_populations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.set_seed"><code class="docutils literal notranslate"><span class="pre">BaseFlowSimulationTree.set_seed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.alpha_all"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.alpha_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.estimate_population_distribution"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.estimate_population_distribution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.generate_populations"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.generate_populations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.mean_leafs"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.mean_leafs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.new_pop_mean"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.new_pop_mean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_alpha"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.pop_alpha()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_leafnode_names"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.pop_leafnode_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_mean"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.pop_mean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.precision"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.precision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.remove_population"><code class="docutils literal notranslate"><span class="pre">FlowSimulationTreeDirichlet.remove_population()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.simulation.html#module-nbnode.simulation.TreeMeanDistributionSampler">nbnode.simulation.TreeMeanDistributionSampler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.PseudoTorchDistributionNormal"><code class="docutils literal notranslate"><span class="pre">PseudoTorchDistributionNormal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.PseudoTorchDistributionNormal.sample"><code class="docutils literal notranslate"><span class="pre">PseudoTorchDistributionNormal.sample()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.TreeMeanDistributionSampler"><code class="docutils literal notranslate"><span class="pre">TreeMeanDistributionSampler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.TreeMeanDistributionSampler.sample"><code class="docutils literal notranslate"><span class="pre">TreeMeanDistributionSampler.sample()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanDistributionSampler.mean_dist_fun"><code class="docutils literal notranslate"><span class="pre">mean_dist_fun()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.simulation.html#module-nbnode.simulation.TreeMeanRelative">nbnode.simulation.TreeMeanRelative module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanRelative.TreeMeanRelative"><code class="docutils literal notranslate"><span class="pre">TreeMeanRelative</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanRelative.TreeMeanRelative.sample"><code class="docutils literal notranslate"><span class="pre">TreeMeanRelative.sample()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.TreeMeanRelative.TreeMeanRelative.sample_customize"><code class="docutils literal notranslate"><span class="pre">TreeMeanRelative.sample_customize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.simulation.html#module-nbnode.simulation.sim_proportional">nbnode.simulation.sim_proportional module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.sim_proportional.sim_proportional"><code class="docutils literal notranslate"><span class="pre">sim_proportional()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.simulation.html#module-nbnode.simulation.sim_target">nbnode.simulation.sim_target module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.simulation.html#nbnode.simulation.sim_target.sim_target"><code class="docutils literal notranslate"><span class="pre">sim_target()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.simulation.html#module-nbnode.simulation">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbnode.specific_analyses.html">nbnode.specific_analyses package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.specific_analyses.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.specific_analyses.intraassay.html">nbnode.specific_analyses.intraassay package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.specific_analyses.intraassay.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.specific_analyses.intraassay.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.specific_analyses.intraassay.html#module-nbnode.specific_analyses.intraassay.gate_init">nbnode.specific_analyses.intraassay.gate_init module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nbnode.specific_analyses.intraassay.html#module-nbnode.specific_analyses.intraassay">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.specific_analyses.html#module-nbnode.specific_analyses">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbnode.testutil.html">nbnode.testutil package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.testutil.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.testutil.html#module-nbnode.testutil.get_licenses">nbnode.testutil.get_licenses module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.testutil.html#module-nbnode.testutil.helpers">nbnode.testutil.helpers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.testutil.html#nbnode.testutil.helpers.find_dirname_above"><code class="docutils literal notranslate"><span class="pre">find_dirname_above()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.testutil.html#nbnode.testutil.helpers.find_dirname_above_currentfile"><code class="docutils literal notranslate"><span class="pre">find_dirname_above_currentfile()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.testutil.html#module-nbnode.testutil">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nbnode.utils.html">nbnode.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.utils.html#module-nbnode.utils.merge_leaf_nodes">nbnode.utils.merge_leaf_nodes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nbnode.utils.html#nbnode.utils.merge_leaf_nodes.merge_leaf_nodes"><code class="docutils literal notranslate"><span class="pre">merge_leaf_nodes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode.utils.html#module-nbnode.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-nbnode.nbnode">
+<span id="nbnode-nbnode-module"></span><h2>nbnode.nbnode module<a class="headerlink" href="#module-nbnode.nbnode" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nbnode.nbnode.</span></span><span class="sig-name descname"><span class="pre">NBNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+<p>Non-binary node class, inherits from anytree.Node.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_attribute_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_attribute_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterator=&lt;class</span> <span class="pre">'anytree.iterators.preorderiter.PreOrderIter'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*fun_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**fun_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.apply" title="Link to this definition">¶</a></dt>
+<dd><p>Apply the given function to the <cite>.data</cite> property of each node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fun</strong> – Function to apply on the attribute named <cite>input_attribute_name</cite></p></li>
+<li><p><strong>input_attribute_name</strong> – Name of the attribute to apply <cite>fun</cite> on.</p></li>
+<li><p><strong>result_attribute_name</strong> – If result_attribute_name is given, the return value of <cite>fun(node.data)</cite>
+is set to the node’s <cite>result_attribute_name</cite>-attribute</p></li>
+<li><p><strong>iterator</strong> – How to iterate over the nodes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.astype_math_node_attribute">
+<span class="sig-name descname"><span class="pre">astype_math_node_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.astype_math_node_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.astype_math_node_attribute" title="Link to this definition">¶</a></dt>
+<dd><p>Replaces all node.math_node_attribute with the given dtype.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> (<em>_type_</em>) – The target type</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Replace inplace or not?.
+Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns self if inplace=True, else a copy of self</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode">NBNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.both_iterator">
+<span class="sig-name descname"><span class="pre">both_iterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.both_iterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.both_iterator" title="Link to this definition">¶</a></dt>
+<dd><p>Iterates over self and other simultaneously.</p>
+<p>Gives (yields) the same nodes until EITHER tree is at its end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><em>NBNode</em></a>) – Another NBNode object</p></li>
+<li><p><strong>strict</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the trees must have the same nodes.
+Is only added in python 3.10 though.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>Another NBNode object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.copy_structure">
+<span class="sig-name descname"><span class="pre">copy_structure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.copy_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.copy_structure" title="Link to this definition">¶</a></dt>
+<dd><p>Copy only the structure of the tree.</p>
+<p>This does not copy the data, the ids or the counts.
+It copies additionally set attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>_description_</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode">NBNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_counts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.count" title="Link to this definition">¶</a></dt>
+<dd><p>Count ids and save into node.counter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_list</strong> – <dl class="simple">
+<dt>The [usually predicted] nodes. Usual workflow would be:</dt><dd><ol class="arabic simple">
+<li><p>Predict n samples</p></li>
+<li><p>Get a list of n nodes from these predictions</p></li>
+</ol>
+</dd>
+</dl>
+<p>But you can insert here any node (inside the tree) you want.</p>
+</p></li>
+<li><p><strong>reset_counts</strong> – Should all .counter be set to 0?</p></li>
+<li><p><strong>use_ids</strong> – If use_ids==True, do not use node_list to count but just access the
+length of the node.ids</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.4)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#nbnode.nbnode.NBNode.data" title="Link to this definition">¶</a></dt>
+<dd><p>Data of a node for its ids.</p>
+<p>root._data contains all data. However, each node only “holds” a subset of the
+data. To not have to copy the data for each node, we just subset the data
+for each node by the node’s ids.</p>
+<p>Usually you would set the ids by <cite>celltree.id_preds(predicted_nodes)</cite>.
+You can also set them manually, but you have to be certain that they match to
+the order of the data!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A subset of the root._data corresponding to the node’s ids.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.do_cutoff">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">do_cutoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.do_cutoff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.do_cutoff" title="Link to this definition">¶</a></dt>
+<dd><p>If cutoff is not None, cut the value into 1 or -1.</p>
+<p>Otherwise return the value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The value to be cut</p></li>
+<li><p><strong>cutoff</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>None</em><em>]</em>) – The value to cut at. If None, return value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1       if value &gt;= cutoff
+-1      if value &lt; cutoff
+value   if cutoff is None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[Literal[1, -1], Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.edge_label_fun">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">edge_label_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decision_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.edge_label_fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.edge_label_fun" title="Link to this definition">¶</a></dt>
+<dd><p>Function to label the edges of the tree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.eq_structure">
+<span class="sig-name descname"><span class="pre">eq_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.eq_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.eq_structure" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the structure of two trees is equal.</p>
+<p>It only checks node.name, node.decision_name and node.decision_value.
+It disregards the data, ids, counts or any other attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><em>NBNode</em></a>) – The other node to compare to</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if equal</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.export_counts">
+<span class="sig-name descname"><span class="pre">export_counts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">only_leafnodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_counts_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'int64'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.4)"><span class="pre">DataFrame</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.export_counts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.export_counts" title="Link to this definition">¶</a></dt>
+<dd><p>Export the counts of the predicted celltree to a pd.Dataframe.</p>
+<p>Rows are the samples, columns the node names <cite>get_name_full()</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicted_celltree</strong> (<a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><em>NBNode</em></a>) – The tree whose counts should be exported</p></li>
+<li><p><strong>only_leafnodes</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Should only leaf nodes (or all nodes) be counted/exported?
+Defaults to False.</p></li>
+<li><p><strong>node_counts_dtype</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – The dtype of the resulting counts. Defaults to “int64”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rows are the samples, columns the node names <cite>get_name_full()</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.export_dot">
+<span class="sig-name descname"><span class="pre">export_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unique_dot_exporter_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.export_dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.export_dot" title="Link to this definition">¶</a></dt>
+<dd><p>Convenience wrapper around anytree.DotExporter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>unique_dot_exporter_kwargs</strong> (<em>Dict</em><em>, </em><em>optional</em>) – <p>Arguments to anytree.DotExporter.
+Defaults to “default”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">unique_dot_exporter_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;node [shape=box, style=&quot;filled&quot;, color=&quot;black&quot;];&#39;</span><span class="p">],</span>
+    <span class="s2">&quot;nodeattrfunc&quot;</span><span class="p">:</span>
+        <span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="s1">&#39;label=&quot;</span><span class="si">{}</span><span class="s1">&quot;, fillcolor=&quot;white&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">name</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string with the exported dot graph in dot format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.get_name_full">
+<span class="sig-name descname"><span class="pre">get_name_full</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.get_name_full"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.get_name_full" title="Link to this definition">¶</a></dt>
+<dd><p>Get the full name of the node (including the root node “/”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Full name of the node.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.graph_from_dot">
+<span class="sig-name descname"><span class="pre">graph_from_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree:</span> <span class="pre">~nbnode.nbnode.NBNode</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_dot_graph:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillcolor_node_attribute:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'counter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_min_max_dict:</span> <span class="pre">~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minmax:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillcolor_missing_val:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'#91FF9D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_text_attributes:</span> <span class="pre">~typing.List[str]</span> <span class="pre">|</span> <span class="pre">~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str]</span> <span class="pre">=</span> <span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.graph_from_dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.graph_from_dot" title="Link to this definition">¶</a></dt>
+<dd><p>See <cite>NBNode._graph_from_dot</cite>.</p>
+<p>If no <code class="docutils literal notranslate"><span class="pre">tree</span></code> is given, self is used.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.id_preds">
+<span class="sig-name descname"><span class="pre">id_preds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.id_preds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.id_preds" title="Link to this definition">¶</a></dt>
+<dd><p>Predict node ids.</p>
+<p>Given a list of nodes, enumerate through them and assign this
+(<cite>enumerate(node_list)</cite>) number to self.ids.</p>
+<p>This is then used to subset self.data for each node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_list</strong> (<em>List</em><em>[</em><em>'NBNode'</em><em>]</em>) – _description_</p></li>
+<li><p><strong>reset_ids</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – _description_. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.insert_nodes">
+<span class="sig-name descname"><span class="pre">insert_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><span class="pre">NodeMixin</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.insert_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.insert_nodes" title="Link to this definition">¶</a></dt>
+<dd><p>Insert nodes with the current node as parent.</p>
+<p>For every node in node_list, create a child node of self.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_list</strong> – A list of nodes. All of these nodes get the parent set to the current
+node</p></li>
+<li><p><strong>copy_list</strong> – If you reuse a list of nodes, e.g. twice, the nodes will not be assigned
+to both insertion nodes but RE-assigned to ONE of them.
+To omit this, copy the nodes first.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.join">
+<span class="sig-name descname"><span class="pre">join</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_source_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_source_self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'self'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_source_other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'other'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.join"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.join" title="Link to this definition">¶</a></dt>
+<dd><p>Join two NBNodes.</p>
+<p>The NBNodes must match in structure.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The nodes are added –&gt; math_node_attribute of both NBNodes</p></li>
+<li><p>The data of other is added to the data of self</p></li>
+<li><p>The ids of other are added to the ids of self according to the new _data</p></li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><em>NBNode</em></a>) – The other NBNode to join</p></li>
+<li><p><strong>add_source_name</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – <p>If True, when joining the data an additional column is created
+with the name <cite>add_source_name</cite> which then contains either
+<code class="docutils literal notranslate"><span class="pre">add_source_self</span></code> or <code class="docutils literal notranslate"><span class="pre">add_source_other</span></code> depending on the source
+of the data.</p>
+<p>Defaults to None, so the column is not created.</p>
+</p></li>
+<li><p><strong>add_source_self</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – <p>The value to use for the column <code class="docutils literal notranslate"><span class="pre">add_source_name</span></code> when the data
+is joined.</p>
+<p>Defaults to “self”.</p>
+</p></li>
+<li><p><strong>add_source_other</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – <p>The value to use for the column <code class="docutils literal notranslate"><span class="pre">add_source_name</span></code> when the data
+is joined</p>
+<p>Defaults to “other”.</p>
+</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the NBNode is modified inplace.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A single NBNode with the data of both NBNodes</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode">NBNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.4)"><span class="pre">DataFrame</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_unfitting_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_part_predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.1.4)"><span class="pre">Series</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.predict" title="Link to this definition">¶</a></dt>
+<dd><p>See <code class="docutils literal notranslate"><span class="pre">single_prediction</span></code>.</p>
+<p>But you can put in dataframes or ndarrays instead of only
+dict + value/key paired lists.</p>
+<p>If values is not given or None, the self._data is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns for each value its NBNode</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[NBNodes]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.prediction_str">
+<span class="sig-name descname"><span class="pre">prediction_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.prediction_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.prediction_str" title="Link to this definition">¶</a></dt>
+<dd><p>Return the node that is the prediction for the given nodename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodename</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the node to predict. Should be something matching to any
+<code class="docutils literal notranslate"><span class="pre">node.get_name_full()</span></code>. You have to start with “/” as the root node.</p></li>
+<li><p><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – <p>The string to split the single node names.
+Defaults to “/”. E.g. “/child1/child2” corresponds to the node in the
+hierarchy:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span>
+<span class="o">|---</span><span class="n">child1</span>
+<span class="o">|</span>   <span class="o">|---</span><span class="n">child2</span>
+</pre></div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The node for the given nodename.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode">NBNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.pretty_print">
+<span class="sig-name descname"><span class="pre">pretty_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'__default__'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_ndigits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.pretty_print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.pretty_print" title="Link to this definition">¶</a></dt>
+<dd><p>Print the tree in a pretty way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>print_attributes</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – The attributes of each NBnode which should be printed.
+Defaults to “__default__”, then only the <cite>counter</cite> attribute is shown.</p></li>
+<li><p><strong>round_ndigits</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – <p>If not None, the values of the attributes are rounded to the given
+number of digits.</p>
+<p>Defaults to None.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.reset_counts">
+<span class="sig-name descname"><span class="pre">reset_counts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.reset_counts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.reset_counts" title="Link to this definition">¶</a></dt>
+<dd><p>Set all node.counters to 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.reset_ids">
+<span class="sig-name descname"><span class="pre">reset_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.reset_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.reset_ids" title="Link to this definition">¶</a></dt>
+<dd><p>Set all node.ids to [].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.set_DotExporter_ids">
+<span class="sig-name descname"><span class="pre">set_DotExporter_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.set_DotExporter_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.set_DotExporter_ids" title="Link to this definition">¶</a></dt>
+<dd><p>Create unique ids for each node.</p>
+<p>DotExporter needs unique ids for each node. I set them to the
+hex(id(node)) to make sure they are unique.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nbnode.nbnode.NBNode.single_prediction">
+<span class="sig-name descname"><span class="pre">single_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_unfitting_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_part_predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/nbnode/nbnode.html#NBNode.single_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode.NBNode.single_prediction" title="Link to this definition">¶</a></dt>
+<dd><p>Predicts the endnode (leaf) of the tree given the values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – Either a list or a dict of values. If a dict is given, the keys of
+the dict are used as names. This is used to identify the correct _exact_
+value for the decision node defined by <code class="docutils literal notranslate"><span class="pre">self.decision_value</span></code>.</p></li>
+<li><p><strong>names</strong> – If values is a list, names is a list of the names of the values.
+This is used to identify the correct value for the decision node defined
+by <code class="docutils literal notranslate"><span class="pre">self.decision_name</span></code>.</p></li>
+<li><p><strong>allow_unfitting_data</strong> – If True, returns None if the data you gave was not possible to fit in
+the tree. If False, raises a ValueError.
+Useful if decision values only fit partly to the tree but perfectly
+(completely) to another branch of the tree.</p></li>
+<li><p><strong>allow_part_predictions</strong> – If True, returns all (potentially multiple!) nodes that fit the given
+values. They do not have to be leaf nodes.
+If False, returns only the first node that fits the given values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either a single NBNode instance (the leaf node) or if multiple leaf nodes
+fit, all of them as a list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-nbnode.nbnode_trees">
+<span id="nbnode-nbnode-trees-module"></span><h2>nbnode.nbnode_trees module<a class="headerlink" href="#module-nbnode.nbnode_trees" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_complete_aligned">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_complete_aligned</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_complete_aligned"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_complete_aligned" title="Link to this definition">¶</a></dt>
+<dd><p>Tree for the aligned (now “rescaled”) T-cell panel data.</p>
+<p>Uses decision cutoffs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <code class="docutils literal notranslate"><span class="pre">tree_complete_cell()</span></code>, only the decision cutoffs are different</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode">NBNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_complete_aligned_trunk">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_complete_aligned_trunk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_complete_aligned_trunk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_complete_aligned_trunk" title="Link to this definition">¶</a></dt>
+<dd><p>Trunk of the tree_complete_aligned_v2 tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>AllCells (counter:0, decision_name:None, decision_value:None)
+├── DN (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], decision_value:[-1, -1])
+├── DP (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], decision_value:[1, 1])
+├── CD4-/CD8+ (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],
+                decision_value:[-1, 1])
+│   ├── naive (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+                decision_value:[1, 1])
+│   ├── Tcm (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+                decision_value:[1, -1])
+│   ├── Temra (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+                decision_value:[-1, 1])
+│   └── Tem (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+                decision_value:[-1, -1])
+└── CD4+/CD8- (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],
+                decision_value:[1, -1])
+    ├── naive (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+            decision_value:[1, 1])
+    ├── Tcm (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+            decision_value:[1, -1])
+    ├── Temra (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+            decision_value:[-1, 1])
+    └── Tem (counter:0, decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;],
+            decision_value:[-1, -1])
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_complete_aligned_v2">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_complete_aligned_v2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_complete_aligned_v2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_complete_aligned_v2" title="Link to this definition">¶</a></dt>
+<dd><p>Tree for the aligned (now “rescaled”) T-cell panel data.</p>
+<p>Uses decision cutoffs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <code class="docutils literal notranslate"><span class="pre">tree_complete_aligned()</span></code>, only the decision cutoffs are different</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode">NBNode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_complete_cell">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_complete_cell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_complete_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_complete_cell" title="Link to this definition">¶</a></dt>
+<dd><p>Complete tree for T-cell panel of Beckman Coulter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>AllCells ()
+├── not CD45 ()
+└── CD45+ ()
+    ├── not CD3 ()
+    │   ├── not MNC ()
+    │   └── MNCs ()
+    │       ├── other ()
+    │       └── Monocytes ()
+    └── CD3+ ()
+        ├── DN ()
+        ├── DP ()
+        ├── CD4-/CD8+ ()
+        │   ├── naive ()
+        │   │   ├── CD27+/CD28+ ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   ├── CD27+/CD28- ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   ├── CD27-/CD28+ ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   └── CD27-/CD28- ()
+        │   │       ├── CD57+/PD1+ ()
+        │   │       ├── CD57+/PD1- ()
+        │   │       ├── CD57-/PD1+ ()
+        │   │       └── CD57-/PD1- ()
+        │   ├── Tcm ()
+        │   │   ├── CD27+/CD28+ ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   ├── CD27+/CD28- ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   ├── CD27-/CD28+ ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   └── CD27-/CD28- ()
+        │   │       ├── CD57+/PD1+ ()
+        │   │       ├── CD57+/PD1- ()
+        │   │       ├── CD57-/PD1+ ()
+        │   │       └── CD57-/PD1- ()
+        │   ├── Temra ()
+        │   │   ├── CD27+/CD28+ ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   ├── CD27+/CD28- ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   ├── CD27-/CD28+ ()
+        │   │   │   ├── CD57+/PD1+ ()
+        │   │   │   ├── CD57+/PD1- ()
+        │   │   │   ├── CD57-/PD1+ ()
+        │   │   │   └── CD57-/PD1- ()
+        │   │   └── CD27-/CD28- ()
+        │   │       ├── CD57+/PD1+ ()
+        │   │       ├── CD57+/PD1- ()
+        │   │       ├── CD57-/PD1+ ()
+        │   │       └── CD57-/PD1- ()
+        │   └── Tem ()
+        │       ├── CD27+/CD28+ ()
+        │       │   ├── CD57+/PD1+ ()
+        │       │   ├── CD57+/PD1- ()
+        │       │   ├── CD57-/PD1+ ()
+        │       │   └── CD57-/PD1- ()
+        │       ├── CD27+/CD28- ()
+        │       │   ├── CD57+/PD1+ ()
+        │       │   ├── CD57+/PD1- ()
+        │       │   ├── CD57-/PD1+ ()
+        │       │   └── CD57-/PD1- ()
+        │       ├── CD27-/CD28+ ()
+        │       │   ├── CD57+/PD1+ ()
+        │       │   ├── CD57+/PD1- ()
+        │       │   ├── CD57-/PD1+ ()
+        │       │   └── CD57-/PD1- ()
+        │       └── CD27-/CD28- ()
+        │           ├── CD57+/PD1+ ()
+        │           ├── CD57+/PD1- ()
+        │           ├── CD57-/PD1+ ()
+        │           └── CD57-/PD1- ()
+        └── CD4+/CD8- ()
+            ├── naive ()
+            │   ├── CD27+/CD28+ ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   ├── CD27+/CD28- ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   ├── CD27-/CD28+ ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   └── CD27-/CD28- ()
+            │       ├── CD57+/PD1+ ()
+            │       ├── CD57+/PD1- ()
+            │       ├── CD57-/PD1+ ()
+            │       └── CD57-/PD1- ()
+            ├── Tcm ()
+            │   ├── CD27+/CD28+ ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   ├── CD27+/CD28- ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   ├── CD27-/CD28+ ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   └── CD27-/CD28- ()
+            │       ├── CD57+/PD1+ ()
+            │       ├── CD57+/PD1- ()
+            │       ├── CD57-/PD1+ ()
+            │       └── CD57-/PD1- ()
+            ├── Temra ()
+            │   ├── CD27+/CD28+ ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   ├── CD27+/CD28- ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   ├── CD27-/CD28+ ()
+            │   │   ├── CD57+/PD1+ ()
+            │   │   ├── CD57+/PD1- ()
+            │   │   ├── CD57-/PD1+ ()
+            │   │   └── CD57-/PD1- ()
+            │   └── CD27-/CD28- ()
+            │       ├── CD57+/PD1+ ()
+            │       ├── CD57+/PD1- ()
+            │       ├── CD57-/PD1+ ()
+            │       └── CD57-/PD1- ()
+            └── Tem ()
+                ├── CD27+/CD28+ ()
+                │   ├── CD57+/PD1+ ()
+                │   ├── CD57+/PD1- ()
+                │   ├── CD57-/PD1+ ()
+                │   └── CD57-/PD1- ()
+                ├── CD27+/CD28- ()
+                │   ├── CD57+/PD1+ ()
+                │   ├── CD57+/PD1- ()
+                │   ├── CD57-/PD1+ ()
+                │   └── CD57-/PD1- ()
+                ├── CD27-/CD28+ ()
+                │   ├── CD57+/PD1+ ()
+                │   ├── CD57+/PD1- ()
+                │   ├── CD57-/PD1+ ()
+                │   └── CD57-/PD1- ()
+                └── CD27-/CD28- ()
+                    ├── CD57+/PD1+ ()
+                    ├── CD57+/PD1- ()
+                    ├── CD57-/PD1+ ()
+                    └── CD57-/PD1- ()
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_complex">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_complex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_complex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_complex" title="Link to this definition">¶</a></dt>
+<dd><p>Complex tree to use with yternary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>AllCells (counter:0, decision_name:None, decision_value:None)
+├── not CD45 (counter:0, decision_name:CD45, decision_value:-1)
+└── CD45+ (counter:0, decision_name:CD45, decision_value:1)
+    ├── not CD3 (counter:0, decision_name:CD3, decision_value:-1)
+    │   ├── not MNC (counter:0, decision_name:MNC, decision_value:-1)
+    │   └── MNCs (counter:0, decision_name:MNC, decision_value:1)
+    │       ├── other (counter:0, decision_name:CD4, decision_value:-1)
+    │       └── Monocytes (counter:0, decision_name:CD4, decision_value:1)
+    └── CD3+ (counter:0, decision_name:CD3, decision_value:1)
+        ├── DN (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],
+                decision_value:[-1, -1])
+        ├── DP (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],
+                decision_value:[1, 1])
+        ├── CD4-/CD8+ (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],
+                        decision_value:[-1, 1])
+        └── CD4+/CD8- (counter:0, decision_name:[&#39;CD4&#39;, &#39;CD8&#39;],
+                        decision_value:[1, -1])
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_simple">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_simple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_simple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_simple" title="Link to this definition">¶</a></dt>
+<dd><p>Simple tree for testing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+└── a2 (counter:0, decision_name:m3, decision_value:another)
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_simpleB">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_simpleB</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_simpleB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_simpleB" title="Link to this definition">¶</a></dt>
+<dd><p>Another simple tree for testing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   ├── a1a (counter:0, decision_name:m2, decision_value:test)
+│   └── a1b (counter:0, decision_name:m2, decision_value:tmp)
+└── a2 (counter:0, decision_name:m3, decision_value:another)
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_simple_cutoff">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_simple_cutoff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_simple_cutoff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_simple_cutoff" title="Link to this definition">¶</a></dt>
+<dd><p>_summary_.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+└── a2 (counter:0, decision_name:m3, decision_value:another)
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_simple_cutoff_NOTWORKING">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_simple_cutoff_NOTWORKING</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_simple_cutoff_NOTWORKING"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_simple_cutoff_NOTWORKING" title="Link to this definition">¶</a></dt>
+<dd><p>Not working simple tree with decision cutoffs, only for testing.</p>
+<p>Blank</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+├── a2 (counter:0, decision_name:m3, decision_value:another)
+└── a3 (counter:0, decision_name:[&#39;m1&#39;, &#39;m4&#39;], decision_value:[0, 1])
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_trees.tree_simple_cutoff_mixed">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_trees.</span></span><span class="sig-name descname"><span class="pre">tree_simple_cutoff_mixed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbnode.nbnode.NBNode" title="nbnode.nbnode.NBNode"><span class="pre">NBNode</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_trees.html#tree_simple_cutoff_mixed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_trees.tree_simple_cutoff_mixed" title="Link to this definition">¶</a></dt>
+<dd><p>Functioning tree with decision cutoffs, testing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>NBNode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+├── a2 (counter:0, decision_name:m3, decision_value:another)
+└── a3 (counter:0, decision_name:[&#39;m2&#39;, &#39;m4&#39;], decision_value:[&#39;test&#39;, 1])
+</pre></div>
+</div>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-nbnode.nbnode_util">
+<span id="nbnode-nbnode-util-module"></span><h2>nbnode.nbnode_util module<a class="headerlink" href="#module-nbnode.nbnode_util" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_util.frame_cov">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_util.</span></span><span class="sig-name descname"><span class="pre">frame_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Frame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.4)"><span class="pre">DataFrame</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_util.html#frame_cov"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_util.frame_cov" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the covariance matrix of a datatable frame from all columns.</p>
+<p>Similar to pd.DataFrame.cov().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dt_frame</strong> (<em>datatable.Frame</em>) – The datatable frame to compute the covariance matrix from</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame of the covariance matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nbnode.nbnode_util.per_node_data_fun">
+<span class="sig-prename descclassname"><span class="pre">nbnode.nbnode_util.</span></span><span class="sig-name descname"><span class="pre">per_node_data_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.4)"><span class="pre">DataFrame</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fun_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#slice" title="(in Python v3.11)"><span class="pre">slice</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fun_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fun_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.4)"><span class="pre">DataFrame</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.11/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></span><a class="reference internal" href="../_modules/nbnode/nbnode_util.html#per_node_data_fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbnode.nbnode_util.per_node_data_fun" title="Link to this definition">¶</a></dt>
+<dd><p>per_node_data_fun.</p>
+<p>To be used in NBnode.node.apply() to apply a function to the data of
+each node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>pd.DataFrame</em>) – A dataframe, usually the NBnode.data attribute</p></li>
+<li><p><strong>include_features</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3.11/library/functions.html#slice" title="(in Python v3.11)"><em>slice</em></a><em>]</em>) – the given function <code class="docutils literal notranslate"><span class="pre">fun_name</span></code> will be applied to only these features</p></li>
+<li><p><strong>fun_name</strong> (<a class="reference external" href="https://docs.python.org/3.11/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – <p>Name of the function, is usually retrieved by getattr(x, fun_name).
+Therefore, if x is e.g. an instance of datatable.Frame, fun_name can be any
+function applicable to a datatable.Frame, e.g. “mean”, “sum”.
+If x is e.g. an instance of pd.DataFrame, fun_name can be any function
+applicable to a pd.DataFrame, e.g. “mean”, “sum”, “cov”.</p>
+<p>Special cases:</p>
+<blockquote>
+<div><p>”cov”: compute the covariance matrix of the given features</p>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Usually, but not necessarily a pd.DataFrame. Depends on the function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">node</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">per_node_data_fun</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">include_features</span><span class="o">=</span><span class="n">include_features</span><span class="p">,</span> <span class="n">fun_name</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span>
+    <span class="p">),</span>
+    <span class="n">result_attribute_name</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-nbnode">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-nbnode" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Module Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">nbnode package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">nbnode</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">nbnode</a></li>
+      <li>Next: <a href="nbnode.apply.html" title="next chapter">nbnode.apply package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/api/nbnode.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

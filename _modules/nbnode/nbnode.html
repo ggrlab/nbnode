@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nbnode.nbnode &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=233b9934" />
+    <script src="../../_static/documentation_options.js?v=42336cb0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for nbnode.nbnode</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="kn">import</span> <span class="nn">anytree</span>
+<span class="kn">import</span> <span class="nn">datatable</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pydotplus</span>
+<span class="kn">from</span> <span class="nn">anytree.exporter</span> <span class="kn">import</span> <span class="n">DotExporter</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">to_hex</span>
+
+<span class="kn">from</span> <span class="nn">nbnode.plot.shifted_colormap</span> <span class="kn">import</span> <span class="n">shifted_colormap</span>
+
+<span class="c1"># Set matplotlib backend to &quot;AGG&quot;</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;AGG&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="NBNode">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode">[docs]</a>
+<span class="k">class</span> <span class="nc">NBNode</span><span class="p">(</span><span class="n">anytree</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Non-binary node class, inherits from anytree.Node.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">decision_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">decision_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">decision_cutoff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Non-binary node class, inherits from anytree.Node.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str):</span>
+<span class="sd">                The name of the node. Should be unique within the children of a</span>
+<span class="sd">                parent node.</span>
+<span class="sd">            parent (NBNode, optional):</span>
+<span class="sd">                The parent node. Defaults to None.</span>
+<span class="sd">            decision_value (Any, optional):</span>
+<span class="sd">            The value leading to this node.</span>
+<span class="sd">                Can be anything, including single values, strings, numbers, lists,</span>
+<span class="sd">                dicts, etc. NBNode uses exact equality to determine which child node to</span>
+<span class="sd">                take.</span>
+
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            decision_name (str, optional):</span>
+<span class="sd">                The name of the value leading to this node. Defaults to None.</span>
+<span class="sd">            decision_cutoff (float, optional):</span>
+<span class="sd">                The cutoff value for the ``decision_value``. If the ``decision_value``</span>
+<span class="sd">                is numeric, then the ``decision_value`` is compared to the</span>
+<span class="sd">                decision_cutoff and returns::</span>
+
+<span class="sd">                    1       if value &gt;= cutoff</span>
+<span class="sd">                    -1      if value &lt; cutoff</span>
+<span class="sd">                    value   if cutoff is None</span>
+
+<span class="sd">                Then ``decision_value`` should then be either 1 or -1 such that</span>
+<span class="sd">                after the comparison, the ``decision_value`` is either 1 or -1.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">NBNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decision_name</span> <span class="o">=</span> <span class="n">decision_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decision_value</span> <span class="o">=</span> <span class="n">decision_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decision_cutoff</span> <span class="o">=</span> <span class="n">decision_cutoff</span>  <span class="c1"># Not necessary in ternary prediction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_unique_dot_exporter</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Set math_node_attribute to whatever you want to add when using</span>
+        <span class="c1"># (usual) mathematics.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">math_node_attribute</span> <span class="o">=</span> <span class="s2">&quot;counter&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">math_inplace</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_long_print_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span> <span class="s2">&quot;decision_name&quot;</span><span class="p">,</span> <span class="s2">&quot;decision_value&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="NBNode.prediction_str">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.prediction_str">[docs]</a>
+    <span class="k">def</span> <span class="nf">prediction_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the node that is the prediction for the given nodename.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nodename (str):</span>
+<span class="sd">                The name of the node to predict. Should be something matching to any</span>
+<span class="sd">                ``node.get_name_full()``. You have to start with &quot;/&quot; as the root node.</span>
+<span class="sd">            split (str, optional):</span>
+<span class="sd">                The string to split the single node names.</span>
+<span class="sd">                Defaults to &quot;/&quot;. E.g. &quot;/child1/child2&quot; corresponds to the node in the</span>
+<span class="sd">                hierarchy::</span>
+
+<span class="sd">                    root</span>
+<span class="sd">                    |---child1</span>
+<span class="sd">                    |   |---child2</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NBNode: The node for the given nodename.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nodename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">split_names</span> <span class="o">=</span> <span class="n">nodename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">split</span><span class="p">)</span>
+            <span class="c1"># if first element is &quot;&quot;, then because that was the root.</span>
+            <span class="k">if</span> <span class="n">split_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">split_names</span> <span class="o">=</span> <span class="n">split_names</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">split_names</span> <span class="o">=</span> <span class="n">nodename</span>
+
+        <span class="k">if</span> <span class="n">split_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;self.name != split_names[0]. Did you &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;start at (=supply) the right node?&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">split_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="c1"># &quot;Remove&quot; [1:] the first element (the current node&#39;s name)</span>
+                    <span class="k">return</span> <span class="n">child</span><span class="o">.</span><span class="n">prediction_str</span><span class="p">(</span><span class="n">split_names</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="NBNode.do_cutoff">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.do_cutoff">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">do_cutoff</span><span class="p">(</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">cutoff</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;If cutoff is not None, cut the value into 1 or -1.</span>
+
+<span class="sd">        Otherwise return the value.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (float): The value to be cut</span>
+<span class="sd">            cutoff (Union[float, None]): The value to cut at. If None, return value</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Union[Literal[1, -1], Any]:</span>
+<span class="sd">                1       if value &gt;= cutoff</span>
+<span class="sd">                -1      if value &lt; cutoff</span>
+<span class="sd">                value   if cutoff is None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># &quot;&gt;= --&gt; 1&quot; from https://en.wikipedia.org/wiki/Decision_tree_learning</span>
+        <span class="k">if</span> <span class="n">cutoff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="n">cutoff</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="NBNode.single_prediction">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.single_prediction">[docs]</a>
+    <span class="k">def</span> <span class="nf">single_prediction</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">],</span>
+        <span class="n">names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">allow_unfitting_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">allow_part_predictions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predicts the endnode (leaf) of the tree given the values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            values:</span>
+<span class="sd">                Either a list or a dict of values. If a dict is given, the keys of</span>
+<span class="sd">                the dict are used as names. This is used to identify the correct _exact_</span>
+<span class="sd">                value for the decision node defined by ``self.decision_value``.</span>
+<span class="sd">            names:</span>
+<span class="sd">                If values is a list, names is a list of the names of the values.</span>
+<span class="sd">                This is used to identify the correct value for the decision node defined</span>
+<span class="sd">                by ``self.decision_name``.</span>
+<span class="sd">            allow_unfitting_data:</span>
+<span class="sd">                If True, returns None if the data you gave was not possible to fit in</span>
+<span class="sd">                the tree. If False, raises a ValueError.</span>
+<span class="sd">                Useful if decision values only fit partly to the tree but perfectly</span>
+<span class="sd">                (completely) to another branch of the tree.</span>
+<span class="sd">            allow_part_predictions:</span>
+<span class="sd">                If True, returns all (potentially multiple!) nodes that fit the given</span>
+<span class="sd">                values. They do not have to be leaf nodes.</span>
+<span class="sd">                If False, returns only the first node that fits the given values.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Either a single NBNode instance (the leaf node) or if multiple leaf nodes</span>
+<span class="sd">            fit, all of them as a list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="n">leaf_nodes_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">leaf_node</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="n">child</span><span class="p">:</span> <span class="n">NBNode</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">decision_name</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">name_index</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">decision_name</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">decision_cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">values</span><span class="p">[</span><span class="n">name_index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_cutoff</span><span class="p">(</span>
+                            <span class="n">value</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="n">name_index</span><span class="p">],</span> <span class="n">cutoff</span><span class="o">=</span><span class="n">child</span><span class="o">.</span><span class="n">decision_cutoff</span>
+                        <span class="p">)</span>
+                    <span class="n">do_all_values_match</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">name_index</span><span class="p">]</span> <span class="o">==</span> <span class="n">child</span><span class="o">.</span><span class="n">decision_value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">name_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">decision_name</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">decision_cutoff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">decision_i</span><span class="p">,</span> <span class="n">decision_name_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">name_index</span><span class="p">):</span>
+                            <span class="n">values</span><span class="p">[</span><span class="n">decision_name_i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_cutoff</span><span class="p">(</span>
+                                <span class="n">value</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="n">decision_name_i</span><span class="p">],</span>
+                                <span class="n">cutoff</span><span class="o">=</span><span class="n">child</span><span class="o">.</span><span class="n">decision_cutoff</span><span class="p">[</span><span class="n">decision_i</span><span class="p">],</span>
+                            <span class="p">)</span>
+                    <span class="n">do_all_values_match</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">values</span><span class="p">[</span><span class="n">decision_name</span><span class="p">]</span>
+                            <span class="o">==</span> <span class="n">child</span><span class="o">.</span><span class="n">decision_value</span><span class="p">[</span><span class="n">decision_value_index</span><span class="p">]</span>
+                            <span class="k">for</span> <span class="n">decision_value_index</span><span class="p">,</span> <span class="n">decision_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                                <span class="n">name_index</span>
+                            <span class="p">)</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">do_all_values_match</span><span class="p">:</span>
+                    <span class="n">leaf_node</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">single_prediction</span><span class="p">(</span>
+                        <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
+                        <span class="n">names</span><span class="o">=</span><span class="n">names</span><span class="p">,</span>
+                        <span class="n">allow_unfitting_data</span><span class="o">=</span><span class="n">allow_unfitting_data</span><span class="p">,</span>
+                        <span class="n">allow_part_predictions</span><span class="o">=</span><span class="n">allow_part_predictions</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">leaf_node</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                        <span class="n">leaf_nodes_list</span> <span class="o">+=</span> <span class="n">leaf_node</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">leaf_nodes_list</span> <span class="o">+=</span> <span class="p">[</span><span class="n">leaf_node</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">if</span> <span class="n">leaf_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">allow_unfitting_data</span> <span class="ow">or</span> <span class="n">allow_part_predictions</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Could not find a fitting endnode for the data you gave. &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;You also did not allow for part predictions. &quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">allow_part_predictions</span><span class="p">:</span>
+                <span class="n">leaf_nodes_list</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">leaf_nodes_list</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># Then only allow_unfitting_data was True</span>
+                <span class="k">return</span> <span class="n">leaf_nodes_list</span>
+        <span class="c1"># if leaf_node is None and not allow_unfitting_data:</span>
+        <span class="c1">#     raise ValueError(</span>
+        <span class="c1">#         &quot;Could not find a fitting endnode for the data you gave.&quot;</span>
+        <span class="c1">#         )</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">leaf_nodes_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">leaf_nodes_list</span> <span class="o">=</span> <span class="n">leaf_nodes_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">leaf_nodes_list</span></div>
+
+
+<div class="viewcode-block" id="NBNode.predict">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.predict">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">allow_unfitting_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">allow_part_predictions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See ``single_prediction``.</span>
+
+<span class="sd">        But you can put in dataframes or ndarrays instead of only</span>
+<span class="sd">        dict + value/key paired lists.</span>
+
+<span class="sd">        If values is not given or None, the self._data is used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[NBNodes]: Returns for each value its NBNode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;predict() without argument (the data to predict) is only &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;possible if self._data is not None&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">datatable</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;You supplied a numpy array but no names. &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;Names are necessary with np.ndarray&quot;</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_prediction</span><span class="p">(</span>
+                <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
+                <span class="n">names</span><span class="o">=</span><span class="n">names</span><span class="p">,</span>
+                <span class="n">allow_unfitting_data</span><span class="o">=</span><span class="n">allow_unfitting_data</span><span class="p">,</span>
+                <span class="n">allow_part_predictions</span><span class="o">=</span><span class="n">allow_part_predictions</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">values</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="n">func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">single_prediction</span><span class="p">,</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">allow_unfitting_data</span><span class="o">=</span><span class="n">allow_unfitting_data</span><span class="p">,</span>
+                <span class="n">allow_part_predictions</span><span class="o">=</span><span class="n">allow_part_predictions</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># THen I assume I got multiple instances to predict.</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;I do not know how to fit the given inputdata.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NBNode.reset_counts">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.reset_counts">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set all node.counters to 0.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">child</span><span class="o">.</span><span class="n">reset_counts</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NBNode.count">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.count">[docs]</a>
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">node_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">reset_counts</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">use_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Count ids and save into node.counter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node_list:</span>
+<span class="sd">                The [usually predicted] nodes. Usual workflow would be:</span>
+<span class="sd">                    1. Predict n samples</span>
+<span class="sd">                    2. Get a list of n nodes from these predictions</span>
+
+<span class="sd">                But you can insert here any node (inside the tree) you want.</span>
+<span class="sd">            reset_counts:</span>
+<span class="sd">                Should all .counter be set to 0?</span>
+<span class="sd">            use_ids:</span>
+<span class="sd">                If use_ids==True, do not use node_list to count but just access the</span>
+<span class="sd">                length of the node.ids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">reset_counts</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_counts</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">use_ids</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">ids</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">counted_nodes</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">node_list</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key_node</span><span class="p">,</span> <span class="n">node_count</span> <span class="ow">in</span> <span class="n">counted_nodes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">ancestor_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">key_node</span><span class="o">.</span><span class="n">ancestors</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">node_x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">key_node</span><span class="p">]</span> <span class="o">+</span> <span class="n">ancestor_nodes</span><span class="p">:</span>
+                    <span class="n">node_x</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="n">node_count</span></div>
+
+
+<div class="viewcode-block" id="NBNode.reset_ids">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.reset_ids">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set all node.ids to [].&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">child</span><span class="o">.</span><span class="n">reset_ids</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NBNode.id_preds">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.id_preds">[docs]</a>
+    <span class="k">def</span> <span class="nf">id_preds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">],</span> <span class="n">reset_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predict node ids.</span>
+
+<span class="sd">        Given a list of nodes, enumerate through them and assign this</span>
+<span class="sd">        (`enumerate(node_list)`) number to self.ids.</span>
+
+<span class="sd">        This is then used to subset self.data for each node.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node_list (List[&#39;NBNode&#39;]): _description_</span>
+<span class="sd">            reset_ids (bool, optional): _description_. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">reset_ids</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_ids</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_list</span><span class="p">):</span>
+            <span class="n">ancestor_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">ancestors</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">node_x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="n">ancestor_nodes</span><span class="p">:</span>
+                <span class="n">node_x</span><span class="o">.</span><span class="n">ids</span> <span class="o">+=</span> <span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Data of a node for its ids.</span>
+
+<span class="sd">        root._data contains all data. However, each node only &quot;holds&quot; a subset of the</span>
+<span class="sd">        data. To not have to copy the data for each node, we just subset the data</span>
+<span class="sd">        for each node by the node&#39;s ids.</span>
+
+<span class="sd">        Usually you would set the ids by `celltree.id_preds(predicted_nodes)`.</span>
+<span class="sd">        You can also set them manually, but you have to be certain that they match to</span>
+<span class="sd">        the order of the data!</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame:</span>
+<span class="sd">                A subset of the root._data corresponding to the node&#39;s ids.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ids</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;self.ids was an empty list, subset an empty dataframe. Did you call &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;celltree.id_preds(predicted_nodes)?&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; Can also be a node with no cells.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ids</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="nd">@data</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;data is no pandas.DataFrame, converting it via pd.DataFrame(data).&quot;</span>
+            <span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+
+<div class="viewcode-block" id="NBNode.apply">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">fun</span><span class="p">,</span>
+        <span class="n">input_attribute_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+        <span class="n">result_attribute_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">iterator</span><span class="o">=</span><span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">fun_args</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">fun_kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the given function to the `.data` property of each node.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            fun: Function to apply on the attribute named `input_attribute_name`</span>
+<span class="sd">            input_attribute_name: Name of the attribute to apply `fun` on.</span>
+<span class="sd">            result_attribute_name:</span>
+<span class="sd">                If result_attribute_name is given, the return value of `fun(node.data)`</span>
+<span class="sd">                is set to the node&#39;s `result_attribute_name`-attribute</span>
+<span class="sd">            iterator:</span>
+<span class="sd">                How to iterate over the nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">applied_fun_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">applied_fun</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">input_attribute_name</span><span class="p">),</span> <span class="o">*</span><span class="n">fun_args</span><span class="p">,</span> <span class="o">**</span><span class="n">fun_kwargs</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">result_attribute_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">result_attribute_name</span><span class="p">,</span> <span class="n">applied_fun</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">applied_fun_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">node</span><span class="p">:</span> <span class="n">applied_fun</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">applied_fun_dict</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">applied_fun_dict</span></div>
+
+
+<div class="viewcode-block" id="NBNode.export_dot">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.export_dot">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_dot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unique_dot_exporter_kwargs</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience wrapper around anytree.DotExporter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            unique_dot_exporter_kwargs (Dict, optional):</span>
+<span class="sd">                Arguments to anytree.DotExporter.</span>
+<span class="sd">                Defaults to &quot;default&quot;::</span>
+
+<span class="sd">                    unique_dot_exporter_kwargs = {</span>
+<span class="sd">                        &quot;options&quot;: [&#39;node [shape=box, style=&quot;filled&quot;, color=&quot;black&quot;];&#39;],</span>
+<span class="sd">                        &quot;nodeattrfunc&quot;:</span>
+<span class="sd">                            lambda node: &#39;label=&quot;{}&quot;, fillcolor=&quot;white&quot;&#39;.format(</span>
+<span class="sd">                            node.name</span>
+<span class="sd">                        ),</span>
+<span class="sd">                    }</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: A string with the exported dot graph in dot format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_unique_dot_exporter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_DotExporter_ids</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">unique_dot_exporter_kwargs</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">unique_dot_exporter_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;node [shape=box, style=&quot;filled&quot;, color=&quot;black&quot;];&#39;</span><span class="p">],</span>
+                <span class="s2">&quot;nodeattrfunc&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="s1">&#39;label=&quot;</span><span class="si">{}</span><span class="s1">&quot;, fillcolor=&quot;white&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">name</span>
+                <span class="p">),</span>
+            <span class="p">}</span>
+        <span class="c1"># dot_data = DotExporter(self, **unique_dot_exporter_kwargs)</span>
+        <span class="n">dot_data</span> <span class="o">=</span> <span class="n">DotExporter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">nodenamefunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">id_unique_dot_exporter</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">unique_dot_exporter_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">dotdata_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dot_data</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dotdata_str</span></div>
+
+
+<div class="viewcode-block" id="NBNode.set_DotExporter_ids">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.set_DotExporter_ids">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_DotExporter_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create unique ids for each node.</span>
+
+<span class="sd">        DotExporter needs unique ids for each node. I set them to the</span>
+<span class="sd">        hex(id(node)) to make sure they are unique.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">id_unique_dot_exporter</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span>
+                <span class="nb">id</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="p">)</span>  <span class="c1"># That is how DotExporter gets his values</span></div>
+
+
+<div class="viewcode-block" id="NBNode.graph_from_dot">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.graph_from_dot">[docs]</a>
+    <span class="k">def</span> <span class="nf">graph_from_dot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">,</span>
+        <span class="n">tree</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">exported_dot_graph</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fillcolor_node_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;counter&quot;</span><span class="p">,</span>
+        <span class="n">custom_min_max_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">minmax</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+        <span class="n">fillcolor_missing_val</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#91FF9D&quot;</span><span class="p">,</span>
+        <span class="n">node_text_attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdBu_r</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See `NBNode._graph_from_dot`.</span>
+
+<span class="sd">        If no ``tree`` is given, self is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph_from_dot</span><span class="p">(</span>
+            <span class="n">tree</span><span class="o">=</span><span class="n">tree</span> <span class="k">if</span> <span class="n">tree</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">exported_dot_graph</span><span class="o">=</span><span class="n">exported_dot_graph</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">fillcolor_node_attribute</span><span class="o">=</span><span class="n">fillcolor_node_attribute</span><span class="p">,</span>
+            <span class="n">custom_min_max_dict</span><span class="o">=</span><span class="n">custom_min_max_dict</span><span class="p">,</span>
+            <span class="n">minmax</span><span class="o">=</span><span class="n">minmax</span><span class="p">,</span>
+            <span class="n">fillcolor_missing_val</span><span class="o">=</span><span class="n">fillcolor_missing_val</span><span class="p">,</span>
+            <span class="n">node_text_attributes</span><span class="o">=</span><span class="n">node_text_attributes</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_graph_from_dot</span><span class="p">(</span>
+        <span class="c1"># def graph_from_dot(</span>
+        <span class="n">tree</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">,</span>
+        <span class="n">exported_dot_graph</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fillcolor_node_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;counter&quot;</span><span class="p">,</span>
+        <span class="n">custom_min_max_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">minmax</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+        <span class="n">fillcolor_missing_val</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#91FF9D&quot;</span><span class="p">,</span>
+        <span class="n">node_text_attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdBu_r</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pydotplus</span><span class="o">.</span><span class="n">Dot</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make a pydotplus.Dot from a NBNode tree.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tree (NBNode):</span>
+<span class="sd">                The tree which should be plotted</span>
+<span class="sd">            exported_dot_graph (str, optional):</span>
+<span class="sd">                You can give your custom dot graph.</span>
+<span class="sd">                Defaults to None, then it is exported internally by</span>
+<span class="sd">                ``tree.export_dot()``.</span>
+<span class="sd">            title (str, optional):</span>
+<span class="sd">                Title for the plot. Creates an additional node holding the title.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            fillcolor_node_attribute (str, optional):</span>
+<span class="sd">                The (str) name of each node containing the numeric value how the node</span>
+<span class="sd">                should be colored.</span>
+<span class="sd">                Defaults to &quot;counter&quot;.</span>
+<span class="sd">            custom_min_max_dict (Dict[str, float], optional):</span>
+<span class="sd">                You can give a custom dict with the min and max values for the</span>
+<span class="sd">                fillcolor_node_attribute in the colorbar range.</span>
+<span class="sd">                Takes precedence over minmax.</span>
+
+<span class="sd">                Defaults to None, therefore is created by the minimum and maximum values</span>
+<span class="sd">                from the fillcolor_node_attribute.</span>
+<span class="sd">            minmax (str, optional):</span>
+<span class="sd">                If custom_min_max_dict is None, the node filling colors reach their</span>
+<span class="sd">                maximum/minimum color at the extremes of fillcolor_node_attribute::</span>
+
+<span class="sd">                    &quot;equal&quot;:</span>
+<span class="sd">                        The colorbar is centered around 0, so the colorbar reaches from</span>
+<span class="sd">                        -max(abs(minimum), abs(maximum))</span>
+<span class="sd">                        to</span>
+<span class="sd">                        +max(abs(minimum), abs(maximum)).</span>
+<span class="sd">                    else:</span>
+<span class="sd">                        The colorbar reaches from minimum to maximum.</span>
+<span class="sd">                        Not necessarily symmetric.</span>
+
+<span class="sd">                Defaults to &quot;equal&quot;.</span>
+<span class="sd">            fillcolor_missing_val (str, optional):</span>
+<span class="sd">                Color for missing values.</span>
+
+<span class="sd">                Defaults to &quot;#91FF9D&quot;.</span>
+<span class="sd">            node_text_attributes (Union[List[str], Dict[str, str]], optional):</span>
+<span class="sd">                List or dict of attributes which should be displayed in the node:</span>
+
+<span class="sd">                    - If &quot;default&quot;, the node name is displayed.</span>
+<span class="sd">                    - If a list, the list elements are used as keys for the node</span>
+<span class="sd">                    attributes.</span>
+<span class="sd">                    - If a dict, the dict values are used as keys for the node</span>
+<span class="sd">                    attributes</span>
+<span class="sd">                    and the dict values are used as format strings for the node</span>
+<span class="sd">                    attributes.</span>
+
+<span class="sd">                Defaults to &quot;default&quot;.</span>
+<span class="sd">            cmap (str, optional):</span>
+<span class="sd">                The colormap which should be used for the fillcolor.</span>
+
+<span class="sd">                Defaults to matplotlib.cm.RdBu_r.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pydotplus.Dot: A graphviz Dot element, therefore a plot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">node_text_attributes</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">node_text_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">exported_dot_graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exported_dot_graph</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">export_dot</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tree</span><span class="o">.</span><span class="n">id_unique_dot_exporter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tree</span><span class="o">.</span><span class="n">set_DotExporter_ids</span><span class="p">()</span>
+
+        <span class="n">graph</span><span class="p">:</span> <span class="n">pydotplus</span><span class="o">.</span><span class="n">Dot</span> <span class="o">=</span> <span class="n">pydotplus</span><span class="o">.</span><span class="n">graph_from_dot_data</span><span class="p">(</span><span class="n">exported_dot_graph</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node_list</span><span class="p">()</span>
+
+        <span class="c1"># pydotplus seems to add an additional &quot;node-like&quot; element which is no node</span>
+        <span class="c1"># but a new line which has just &quot;\\n&quot; inside. I dont know why.</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># create a new node for text</span>
+            <span class="n">titlenode</span> <span class="o">=</span> <span class="n">pydotplus</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="s2">&quot;plottitle&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+            <span class="n">titlenode</span><span class="o">.</span><span class="n">set_fillcolor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+            <span class="c1"># add that node to the graph (No connections until now!)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">titlenode</span><span class="p">)</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node_list</span><span class="p">()</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span>
+            <span class="p">]</span>
+            <span class="c1"># identify the first node</span>
+            <span class="n">node_zero</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_zero</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Then the node_zero could be found and the edge is created</span>
+                <span class="c1"># Otherwise the edge is not created</span>
+
+                <span class="c1"># add an edge between the plottitle and the first node</span>
+                <span class="c1"># make it white</span>
+                <span class="c1"># https://stackoverflow.com/questions/44274518/how-can-i-control-within-level-node-order-in-graphvizs-dot</span>
+                <span class="n">myedge</span> <span class="o">=</span> <span class="n">pydotplus</span><span class="o">.</span><span class="n">Edge</span><span class="p">(</span><span class="n">titlenode</span><span class="p">,</span> <span class="n">node_zero</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="c1"># add the edge to the graph</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">myedge</span><span class="p">)</span>
+
+        <span class="c1"># get the predicted (regression!) values from each node in the tree</span>
+        <span class="n">node_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="n">current_node_name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
+            <span class="n">current_node_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&quot;$&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">current_node_name</span><span class="p">)</span>
+            <span class="n">current_node_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^&quot;&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">current_node_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">current_node_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="s2">&quot;edge&quot;</span><span class="p">,</span> <span class="s2">&quot;plottitle&quot;</span><span class="p">):</span>
+                <span class="n">current_matching_tree_node</span> <span class="o">=</span> <span class="n">anytree</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">find_by_attr</span><span class="p">(</span>
+                    <span class="n">node</span><span class="o">=</span><span class="n">tree</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">current_node_name</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;id_unique_dot_exporter&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">current_matching_tree_node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Node not found in tree!&quot;</span><span class="p">)</span>
+                <span class="n">node_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">current_matching_tree_node</span><span class="p">,</span> <span class="n">fillcolor_node_attribute</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">custom_min_max_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vminmax</span> <span class="o">=</span> <span class="n">custom_min_max_dict</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">all_values_concat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_values</span><span class="p">)</span>
+            <span class="n">all_values_concat</span> <span class="o">=</span> <span class="n">all_values_concat</span><span class="p">[</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">all_values_concat</span><span class="p">))</span>
+            <span class="p">]</span>
+            <span class="c1"># the following command is the same, just shorthand</span>
+            <span class="c1"># all_values_concat = all_values_concat[~np.isnan(all_values_concat)]</span>
+            <span class="k">if</span> <span class="n">minmax</span> <span class="o">==</span> <span class="s2">&quot;equal&quot;</span><span class="p">:</span>
+                <span class="c1"># then take the maximum of the absolute values and use it as positive</span>
+                <span class="c1"># and negative colorbar</span>
+                <span class="n">all_values_concat_abs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">all_values_concat</span><span class="p">)</span>
+                <span class="n">vminmax</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_values_concat_abs</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_values_concat_abs</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vminmax</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">all_values_concat</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">all_values_concat</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="p">}</span>
+        <span class="n">new_cmap</span> <span class="o">=</span> <span class="n">shifted_colormap</span><span class="p">(</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">min_val</span><span class="o">=</span><span class="n">vminmax</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">],</span>
+            <span class="n">max_val</span><span class="o">=</span><span class="n">vminmax</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">],</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NoName&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">vminmax</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vminmax</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="n">current_node_name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
+            <span class="n">current_node_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&quot;$&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">current_node_name</span><span class="p">)</span>
+            <span class="n">current_node_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^&quot;&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">current_node_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">current_node_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="s2">&quot;edge&quot;</span><span class="p">,</span> <span class="s2">&quot;plottitle&quot;</span><span class="p">):</span>
+                <span class="n">current_matching_tree_node</span> <span class="o">=</span> <span class="n">anytree</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">find_by_attr</span><span class="p">(</span>
+                    <span class="n">node</span><span class="o">=</span><span class="n">tree</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">current_node_name</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;id_unique_dot_exporter&quot;</span>
+                <span class="p">)</span>
+                <span class="n">current_node_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="n">current_matching_tree_node</span><span class="p">,</span> <span class="n">fillcolor_node_attribute</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">current_node_value</span><span class="p">):</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">set_fillcolor</span><span class="p">(</span><span class="n">fillcolor_missing_val</span><span class="p">)</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">set_shape</span><span class="p">(</span><span class="s2">&quot;house&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">set_fillcolor</span><span class="p">(</span>
+                        <span class="n">to_hex</span><span class="p">(</span><span class="n">new_cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">current_node_value</span><span class="p">)),</span> <span class="n">keep_alpha</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_text_attributes</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">node_value_attributes</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">value_name</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;: &quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">current_matching_tree_node</span><span class="p">,</span> <span class="n">value_name</span><span class="p">))</span>
+                        <span class="k">for</span> <span class="n">value_name</span> <span class="ow">in</span> <span class="n">node_text_attributes</span>
+                    <span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_text_attributes</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">node_value_attributes</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">value_name</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;: &quot;</span>
+                        <span class="o">+</span> <span class="n">value_fmtstr</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="nb">getattr</span><span class="p">(</span><span class="n">current_matching_tree_node</span><span class="p">,</span> <span class="n">value_name</span><span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">for</span> <span class="n">value_name</span><span class="p">,</span> <span class="n">value_fmtstr</span> <span class="ow">in</span> <span class="n">node_text_attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node_value_attributes</span> <span class="o">=</span> <span class="n">node_text_attributes</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">get_attributes</span><span class="p">()[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node_value_attributes</span><span class="p">)</span>
+                <span class="c1"># node.(&#39;\n&#39;.join(node_value_attributes))</span>
+
+        <span class="k">return</span> <span class="n">graph</span>
+
+<div class="viewcode-block" id="NBNode.insert_nodes">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.insert_nodes">[docs]</a>
+    <span class="k">def</span> <span class="nf">insert_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">anytree</span><span class="o">.</span><span class="n">NodeMixin</span><span class="p">],</span> <span class="n">copy_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert nodes with the current node as parent.</span>
+
+<span class="sd">        For every node in node_list, create a child node of self.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            node_list:</span>
+<span class="sd">                A list of nodes. All of these nodes get the parent set to the current</span>
+<span class="sd">                node</span>
+<span class="sd">            copy_list:</span>
+<span class="sd">                If you reuse a list of nodes, e.g. twice, the nodes will not be assigned</span>
+<span class="sd">                to both insertion nodes but RE-assigned to ONE of them.</span>
+<span class="sd">                To omit this, copy the nodes first.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">copy_list</span><span class="p">:</span>
+            <span class="n">node_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">node_list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node_i</span><span class="p">,</span> <span class="n">node_x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">node_list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">node_x</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;The parent of the &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">node_i</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;. node is not None, did you reuse the list &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;without copy_list=True? The nodes would get RE-assigned, &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;not additionally!&quot;</span>
+                <span class="p">)</span>
+            <span class="n">node_x</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="NBNode.export_counts">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.export_counts">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_counts</span><span class="p">(</span>
+        <span class="n">predicted_celltree</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">,</span>
+        <span class="n">only_leafnodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">node_counts_dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export the counts of the predicted celltree to a pd.Dataframe.</span>
+
+<span class="sd">        Rows are the samples, columns the node names `get_name_full()`</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            predicted_celltree (NBNode):</span>
+<span class="sd">                The tree whose counts should be exported</span>
+<span class="sd">            only_leafnodes (bool, optional):</span>
+<span class="sd">                Should only leaf nodes (or all nodes) be counted/exported?</span>
+<span class="sd">                Defaults to False.</span>
+<span class="sd">            node_counts_dtype (str, optional):</span>
+<span class="sd">                The dtype of the resulting counts. Defaults to &quot;int64&quot;.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame:</span>
+<span class="sd">                Rows are the samples, columns the node names `get_name_full()`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">predicted_celltree</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">use_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">leaf_nodes_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_nodes_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">predicted_celltree</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;predicted_celltree.data is empty. Did you set it and make id_preds()?&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">a = celltree_trunk.predict(cellmat)&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">predicted_celltree.data = pd.DataFrame()&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">celltree_trunk.id_preds(a)&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">PostOrderIter</span><span class="p">(</span><span class="n">predicted_celltree</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">:</span> <span class="n">NBNode</span>
+            <span class="k">if</span> <span class="s2">&quot;sample_name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">predicted_celltree</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="c1"># Then I assume all cells in the node are from the same sample</span>
+                <span class="n">node_counts</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">node_counts</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">node_counts</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">node_counts_dtype</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node_counts</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sample_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+                <span class="n">node_counts</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">only_leafnodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">:</span>
+                    <span class="n">leaf_nodes_dict</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get_name_full</span><span class="p">()]</span> <span class="o">=</span> <span class="n">node_counts</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_nodes_dict</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get_name_full</span><span class="p">()]</span> <span class="o">=</span> <span class="n">node_counts</span>
+
+        <span class="k">if</span> <span class="n">only_leafnodes</span><span class="p">:</span>
+            <span class="n">counted_pops</span> <span class="o">=</span> <span class="n">leaf_nodes_dict</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">counted_pops</span> <span class="o">=</span> <span class="n">all_nodes_dict</span>
+        <span class="n">counts_allsamples</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">counted_pops</span><span class="p">)</span>
+        <span class="n">counts_allsamples</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">counts_allsamples</span><span class="p">[</span><span class="s2">&quot;Sample&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts_allsamples</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">counts_allsamples</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Sample&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">counts_allsamples</span> <span class="o">=</span> <span class="n">counts_allsamples</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">node_counts_dtype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">counts_allsamples</span></div>
+
+
+<div class="viewcode-block" id="NBNode.edge_label_fun">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.edge_label_fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">edge_label_fun</span><span class="p">(</span><span class="n">decision_names</span><span class="p">,</span> <span class="n">decision_values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to label the edges of the tree.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decision_names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">decision_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">decision_names</span><span class="p">]</span>
+            <span class="n">decision_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">decision_values</span><span class="p">]</span>
+        <span class="n">generated_labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">decision_names</span><span class="p">,</span> <span class="n">decision_values</span><span class="p">):</span>
+            <span class="n">generated_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+        <span class="n">gathered_label</span> <span class="o">=</span> <span class="s2">&quot; &amp; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">generated_labels</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;label=&quot;</span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gathered_label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NBNode.both_iterator">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.both_iterator">[docs]</a>
+    <span class="k">def</span> <span class="nf">both_iterator</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="s2">&quot;NBNode&quot;</span><span class="p">,</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterates over self and other simultaneously.</span>
+
+<span class="sd">        Gives (yields) the same nodes until EITHER tree is at its end.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            other (NBNode):</span>
+<span class="sd">                Another NBNode object</span>
+<span class="sd">            strict (bool, optional):</span>
+<span class="sd">                If True, the trees must have the same nodes.</span>
+<span class="sd">                Is only added in python 3.10 though.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Another NBNode object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">node_self</span><span class="p">,</span> <span class="n">node_other</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">(</span><span class="n">other</span><span class="p">),</span>
+            <span class="c1"># https://stackoverflow.com/questions/32954486/zip-iterators-asserting-for-equal-length-in-python</span>
+            <span class="c1"># strict=strict,  # is only added in python 3.10</span>
+        <span class="p">):</span>
+            <span class="k">yield</span> <span class="p">((</span><span class="n">node_self</span><span class="p">,</span> <span class="n">node_other</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="NBNode.copy_structure">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.copy_structure">[docs]</a>
+    <span class="k">def</span> <span class="nf">copy_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy only the structure of the tree.</span>
+
+<span class="sd">        This does not copy the data, the ids or the counts.</span>
+<span class="sd">        It copies additionally set attributes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NBNode: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_node</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">new_node</span><span class="o">.</span><span class="n">reset_counts</span><span class="p">()</span>
+        <span class="n">new_node</span><span class="o">.</span><span class="n">reset_ids</span><span class="p">()</span>
+        <span class="n">new_node</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">new_node</span></div>
+
+
+<div class="viewcode-block" id="NBNode.eq_structure">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.eq_structure">[docs]</a>
+    <span class="k">def</span> <span class="nf">eq_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the structure of two trees is equal.</span>
+
+<span class="sd">        It only checks node.name, node.decision_name and node.decision_value.</span>
+<span class="sd">        It disregards the data, ids, counts or any other attribute.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (NBNode): The other node to compare to</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if equal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">both_iterator</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">decision_name</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">decision_name</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">decision_value</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">decision_value</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="NBNode.astype_math_node_attribute">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.astype_math_node_attribute">[docs]</a>
+    <span class="k">def</span> <span class="nf">astype_math_node_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Replaces all node.math_node_attribute with the given dtype.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dtype (_type_): The target type</span>
+<span class="sd">            inplace (bool, optional):</span>
+<span class="sd">                Replace inplace or not?.</span>
+<span class="sd">                Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NBNode: Returns self if inplace=True, else a copy of self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="n">node</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">dtype</span><span class="p">)(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">)),</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">root</span></div>
+
+
+<div class="viewcode-block" id="NBNode.join">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.join">[docs]</a>
+    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">,</span>
+        <span class="n">add_source_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">add_source_self</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+        <span class="n">add_source_other</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;other&quot;</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Join two NBNodes.</span>
+
+<span class="sd">        The NBNodes must match in structure.</span>
+
+<span class="sd">            1. The nodes are added --&gt; math_node_attribute of both NBNodes</span>
+<span class="sd">            2. The data of other is added to the data of self</span>
+<span class="sd">            3. The ids of other are added to the ids of self according to the new _data</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (NBNode): The other NBNode to join</span>
+<span class="sd">            add_source_name (str, optional):</span>
+<span class="sd">                If True, when joining the data an additional column is created</span>
+<span class="sd">                with the name `add_source_name` which then contains either</span>
+<span class="sd">                ``add_source_self`` or ``add_source_other`` depending on the source</span>
+<span class="sd">                of the data.</span>
+
+<span class="sd">                Defaults to None, so the column is not created.</span>
+<span class="sd">            add_source_self (str, optional):</span>
+<span class="sd">                The value to use for the column ``add_source_name`` when the data</span>
+<span class="sd">                is joined.</span>
+
+<span class="sd">                Defaults to &quot;self&quot;.</span>
+<span class="sd">            add_source_other (str, optional):</span>
+<span class="sd">                The value to use for the column ``add_source_name`` when the data</span>
+<span class="sd">                is joined</span>
+
+<span class="sd">                Defaults to &quot;other&quot;.</span>
+<span class="sd">            inplace (bool, optional):</span>
+<span class="sd">                If True, the NBNode is modified inplace.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            NBNode: A single NBNode with the data of both NBNodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Add math_node_attribute of both NBNodes</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">other</span>
+
+        <span class="n">self_total_predicted_nodes_n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="p">)</span>
+        <span class="n">other_data</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_data</span>
+        <span class="n">self_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_data</span>
+
+        <span class="k">if</span> <span class="n">add_source_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">other_data</span> <span class="o">=</span> <span class="n">other_data</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">add_source_name</span><span class="p">:</span> <span class="n">add_source_other</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">add_source_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">self_data</span> <span class="o">=</span> <span class="n">self_data</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">add_source_name</span><span class="p">:</span> <span class="n">add_source_self</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">self_data</span><span class="p">,</span> <span class="n">other_data</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">node_self</span><span class="p">,</span> <span class="n">node_other</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">both_iterator</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="n">node_self</span><span class="p">:</span> <span class="n">NBNode</span>
+            <span class="n">node_other</span><span class="p">:</span> <span class="n">NBNode</span>
+            <span class="n">other_new_ids</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">old_id</span> <span class="o">+</span> <span class="n">self_total_predicted_nodes_n</span> <span class="k">for</span> <span class="n">old_id</span> <span class="ow">in</span> <span class="n">node_other</span><span class="o">.</span><span class="n">ids</span>
+            <span class="p">]</span>
+            <span class="n">node_self</span><span class="o">.</span><span class="n">ids</span> <span class="o">+=</span> <span class="n">other_new_ids</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the number of nodes in the tree.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: The number of nodes in the tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">length</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">length</span>
+
+<div class="viewcode-block" id="NBNode.pretty_print">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.pretty_print">[docs]</a>
+    <span class="k">def</span> <span class="nf">pretty_print</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">print_attributes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;__default__&quot;</span><span class="p">,</span> <span class="n">round_ndigits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Print the tree in a pretty way.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            print_attributes (List[str], optional):</span>
+<span class="sd">                The attributes of each NBnode which should be printed.</span>
+<span class="sd">                Defaults to &quot;__default__&quot;, then only the `counter` attribute is shown.</span>
+
+<span class="sd">            round_ndigits (int, optional):</span>
+<span class="sd">                If not None, the values of the attributes are rounded to the given</span>
+<span class="sd">                number of digits.</span>
+
+<span class="sd">                Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">print_attributes</span> <span class="o">==</span> <span class="s2">&quot;__default__&quot;</span><span class="p">:</span>
+            <span class="n">print_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;counter&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">print_attributes</span> <span class="o">==</span> <span class="s2">&quot;__long__&quot;</span><span class="p">:</span>
+            <span class="n">print_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_long_print_attributes</span>
+
+        <span class="k">for</span> <span class="n">pre</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">RenderTree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">node_attrs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">print_attributes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">attr_values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">print_attributes</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">round_ndigits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">attr_values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="n">round_ndigits</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">attr_values</span><span class="p">]</span>
+                <span class="n">attr_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">print_attributes</span><span class="p">]</span>
+                <span class="n">node_attrs</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">attr_names</span><span class="p">,</span> <span class="n">attr_values</span><span class="p">)</span>
+                <span class="p">]</span>
+
+            <span class="n">joined_attr</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">node_attrs</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pre</span><span class="si">}{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">joined_attr</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__both_nodeattr_fun</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">,</span>
+        <span class="n">fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">type_force_fun_names</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;__truediv__&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;__divmod__&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply a function to the &quot;same&quot; node of two NBNodes.</span>
+
+<span class="sd">        Traverses both trees simultaneously and applies</span>
+<span class="sd">        ``fun(node_1.math_node_attribute, node_2.math_node_attribute)``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (NBNode): The other NBNode</span>
+<span class="sd">            fun (_type_, optional):</span>
+<span class="sd">                The function to apply to the math_node_attribute of all nodes from</span>
+<span class="sd">                both NBNodes.</span>
+
+<span class="sd">                Defaults to ``lambda x, y: x + y``.</span>
+<span class="sd">            strict (bool, optional):</span>
+<span class="sd">                See `NBNode.both_iterator()`.</span>
+<span class="sd">                Defaults to True.</span>
+<span class="sd">            inplace (bool, optional):</span>
+<span class="sd">                If True, the NBNode is modified inplace.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            type_force_fun_names (tuple, optional):</span>
+<span class="sd">                Some functions need to be forced to be applied to the same type of the</span>
+<span class="sd">                math_node_attribute. Use with care!</span>
+<span class="sd">                Better, use ``NBNode.astype_math_node_attribute()`` before.</span>
+
+<span class="sd">                Defaults to ( &quot;__truediv__&quot;, &quot;__divmod__&quot;, ).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NBNode:</span>
+<span class="sd">                A new NBNode with the result of the function applied to the</span>
+<span class="sd">                math_node_attribute of both NBNodes.</span>
+<span class="sd">                The result is directly saved in the math_node_attribute of the new</span>
+<span class="sd">                NBNode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">self_tmp</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">inplace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">math_inplace</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="n">self_tmp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># Then fun should be `inspect.stack()[0][3]` and be something like &quot;__add__&quot;</span>
+            <span class="c1"># Then the type of the current node_attr is determined (e.g. float)</span>
+            <span class="n">attr_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">self_tmp</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">))</span>
+            <span class="c1"># and fun() will become float.__add__()</span>
+            <span class="n">fun</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr_type</span><span class="p">,</span> <span class="n">fun</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">NBNode</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">node_self</span><span class="p">,</span> <span class="n">node_other</span> <span class="ow">in</span> <span class="n">self_tmp</span><span class="o">.</span><span class="n">both_iterator</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">):</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node_self</span><span class="p">,</span> <span class="n">self_tmp</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">)</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node_other</span><span class="p">,</span> <span class="n">self_tmp</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">type_force_fun_names</span><span class="p">:</span>
+                    <span class="n">a</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)(</span><span class="n">a</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="k">else</span> <span class="n">a</span>
+                <span class="nb">setattr</span><span class="p">(</span>
+                    <span class="n">node_self</span><span class="p">,</span>
+                    <span class="n">self_tmp</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">,</span>
+                    <span class="n">fun</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node_self</span> <span class="ow">in</span> <span class="n">anytree</span><span class="o">.</span><span class="n">iterators</span><span class="o">.</span><span class="n">PreOrderIter</span><span class="p">(</span><span class="n">self_tmp</span><span class="p">):</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node_self</span><span class="p">,</span> <span class="n">self_tmp</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">)</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">other</span>
+                <span class="k">if</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">type_force_fun_names</span><span class="p">:</span>
+                    <span class="n">a</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">)(</span><span class="n">a</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="k">else</span> <span class="n">a</span>
+                <span class="nb">setattr</span><span class="p">(</span>
+                    <span class="n">node_self</span><span class="p">,</span>
+                    <span class="n">self_tmp</span><span class="o">.</span><span class="n">math_node_attribute</span><span class="p">,</span>
+                    <span class="n">fun</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">self_tmp</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if two NBNodes are equal.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (NBnode): Other NBnode to compare with.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool:</span>
+<span class="sd">                True if the two NBNodes are equal regarding structure and the attributes</span>
+<span class="sd">                name, decision_name, decision_value, counter, ids.</span>
+<span class="sd">                False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">NBNode</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">eq_structure</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">both_iterator</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">decision_name</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">decision_name</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">decision_value</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">decision_value</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">counter</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">ids</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">ids</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__floordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__divmod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rfloordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__rdiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rtruediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rmod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rdivmod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rlshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rrshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__ror__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__rxor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__isub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__imul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__ifloordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__idiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__itruediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__imod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__ilshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__irshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__iand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__ixor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__both_nodeattr_fun</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_attrs</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">include_attrs</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">include_attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_long_print_attributes</span>
+        <span class="n">exclude_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">include_attrs</span><span class="p">]</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;</span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">])</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">anytree</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">nameblacklist</span><span class="o">=</span><span class="n">exclude_attrs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NBNode.get_name_full">
+<a class="viewcode-back" href="../../api/nbnode.html#nbnode.nbnode.NBNode.get_name_full">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name_full</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the full name of the node (including the root node &quot;/&quot;)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Full name of the node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">full_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">current_node</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">current_node</span><span class="o">.</span><span class="n">is_root</span><span class="p">:</span>
+            <span class="n">full_name</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">full_name</span>
+            <span class="n">current_node</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">full_name</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">current_node</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">full_name</span>
+
+        <span class="k">return</span> <span class="n">full_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># remove the last &quot;/&quot;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbnode_full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NBNode&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a node by its full name (including the root node &quot;/&quot;)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nbnode_full_name (str): Full name of the node.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the selector is not a string with a full name from some node</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NBNode: The node with the given full name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">nbnode_full_name</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># This happens if printing predicted nodes (which are a pandas.DataFrame)</span>
+            <span class="c1">#   predicted_nodes = celltree_decision.predict(tmp_data)</span>
+            <span class="c1">#   print(predicted_nodes)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nbnode_full_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The selector must be a string with a full name from some node &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;(created by `node.get_name_full()`)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">anytree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">get_name_full</span><span class="p">()</span> <span class="o">==</span> <span class="n">nbnode_full_name</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

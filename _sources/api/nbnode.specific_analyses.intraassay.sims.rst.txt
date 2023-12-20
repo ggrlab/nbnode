@@ -1,0 +1,45 @@
+nbnode.specific\_analyses.intraassay.sims package
+=================================================
+
+Submodules
+----------
+
+nbnode.specific\_analyses.intraassay.sims.sim00 module
+------------------------------------------------------
+
+.. automodule:: nbnode.specific_analyses.intraassay.sims.sim00
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.specific\_analyses.intraassay.sims.sim01 module
+------------------------------------------------------
+
+.. automodule:: nbnode.specific_analyses.intraassay.sims.sim01
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.specific\_analyses.intraassay.sims.sim02 module
+------------------------------------------------------
+
+.. automodule:: nbnode.specific_analyses.intraassay.sims.sim02
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nbnode.specific\_analyses.intraassay.sims.sim03 module
+------------------------------------------------------
+
+.. automodule:: nbnode.specific_analyses.intraassay.sims.sim03
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode.specific_analyses.intraassay.sims
+   :members:
+   :undoc-members:
+   :show-inheritance:

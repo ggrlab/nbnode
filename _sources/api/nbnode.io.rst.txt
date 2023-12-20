@@ -1,0 +1,21 @@
+nbnode.io package
+=================
+
+Submodules
+----------
+
+nbnode.io.pickle\_open\_dump module
+-----------------------------------
+
+.. automodule:: nbnode.io.pickle_open_dump
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: nbnode.io
+   :members:
+   :undoc-members:
+   :show-inheritance:
