@@ -56,7 +56,7 @@ Installation
 Tutorials
 =========
 
-See the documentation and the (within) presented jupyter notebooks https://ccc_verse.git-pages.uni-regensburg.de/nbnode
+See the documentation and the (within) presented jupyter notebooks https://ggrlab.github.io/nbnode/
 
 
 Package setup
