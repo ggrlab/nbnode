@@ -12,6 +12,10 @@ def test_shifted_colormap():
     print(new_cmap)
 
 
+def test_FAILED_TEST_FOR_TESTING():
+    raise NotImplementedError
+
+
 def test_linear_shifted_colormap():
     import matplotlib
 
