@@ -85,7 +85,7 @@ jobs:
         with: { name: python-distribution-files, path: dist/ }
       - name: Install pandoc and build documentation
         run: >-
-          apt-get install pandoc \\
+          apt-get install pandoc ;
           pipx run --python '${{ steps.setup-python.outputs.python-path }}'
           tox -e docs
       - name: Deploy to GitHub Pages
