@@ -317,10 +317,12 @@ class TestFlowSimulation(TestCase):
         print(flowsim.precision)
         print(flowsim.mean_leafs)
         assert flowsim.pop_alpha("/AllCells") == flowsim.precision
-        assert (
-            flowsim.pop_alpha("/AllCells/CD45+")
-            == flowsim.precision
-            - flowsim.population_parameters["alpha"]["/AllCells/not CD45"]
+        assert np.isclose(
+            flowsim.pop_alpha("/AllCells/CD45+"),
+            (
+                flowsim.precision
+                - flowsim.population_parameters["alpha"]["/AllCells/not CD45"]
+            ),
         )
         assert flowsim.pop_mean("/AllCells") == 1
         assert np.isclose(

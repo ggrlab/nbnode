@@ -4,6 +4,8 @@ dirichlet
 dtreeviz
 importlib-metadata
 matplotlib
+nbconvert <=7.12
+nbsphinx
 numpy>=1.21.1
 pandas>=1.2
 pydotplus
