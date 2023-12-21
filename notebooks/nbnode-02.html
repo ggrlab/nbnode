@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Part predictions and unfitting data &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=233b9934" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=e577996c"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Counting and math" href="nbnode-03.html" />
+    <link rel="prev" title="Base Non-binary node functionality" href="nbnode-01.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="Part-predictions-and-unfitting-data">
+<h1>Part predictions and unfitting data<a class="headerlink" href="#Part-predictions-and-unfitting-data" title="Permalink to this heading">¶</a></h1>
+<p>What if we want only part of the predictions, not the end-nodes?</p>
+<p>See Tutorial 1</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nbnode.nbnode</span> <span class="kn">import</span> <span class="n">NBNode</span>
+<span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtree</span>
+<span class="n">simple_tree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_simple</span><span class="p">()</span>
+<span class="n">simple_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="s2">&quot;__long__&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+└── a2 (counter:0, decision_name:m3, decision_value:another)
+</pre></div></div>
+</div>
+<p>The following dictionary would usually have raised a ValueError after it does not reach an endnode:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">({</span><span class="s2">&quot;m1&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.
+</pre></div></div>
+</div>
+<p>However, allowing for partial predictions enables a more flexible approach to the problem. The previous example actually DOES identify a node (<code class="docutils literal notranslate"><span class="pre">a1</span></code>), however it does not find an endnode. We can enable this by setting <code class="docutils literal notranslate"><span class="pre">allow_part_predictions</span></code> argument to True:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">({</span><span class="s2">&quot;m1&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span> <span class="n">allow_part_predictions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1)
+</pre></div></div>
+</div>
+<p>Note that this enables more complex results than just a single NBnode. In the following example, the data finds a matching part <strong>and</strong> endnode!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">({</span><span class="s2">&quot;m1&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">:</span><span class="s2">&quot;another&quot;</span><span class="p">},</span> <span class="n">allow_part_predictions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1),
+ NBNode(&#39;/a/a2&#39;, counter=0, decision_name=&#39;m3&#39;, decision_value=&#39;another&#39;)]
+</pre></div></div>
+</div>
+<p>The following prediction fails because:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1.1 Check if m1=-1 (no)
+2.1 Check if m1=1 (yes)
+2.2 Check if m2=&#39;test&#39; (no), no endnode!
+  raise exception because in this path no proper endnode was able to be
+  found with the given values
+3.1 Check if m3=&#39;another&#39; (yes) -&gt; return this node
+</pre></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;m1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">:</span> <span class="s2">&quot;another&quot;</span><span class="p">})</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.
+</pre></div></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">allow_unfitting_data=True</span></code>, the previously ValueError is not called and a proper endnode returned!</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1.1 Check if m1=-1 (no)
+2.1 Check if m1=1 (yes)
+2.2 Check if m2=&#39;test&#39; (no), no endnode!
+  raise exception because in this path no proper endnode was able to be
+  found with the given values
+3.1 Check if m3=&#39;another&#39; (yes) -&gt; return this node
+</pre></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+    <span class="n">values</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;m1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">:</span> <span class="s2">&quot;another&quot;</span><span class="p">},</span> <span class="n">allow_unfitting_data</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+NBNode(&#39;/a/a2&#39;, counter=0, decision_name=&#39;m3&#39;, decision_value=&#39;another&#39;)
+</pre></div></div>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../notebooks.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nbnode-01.html">Tutorial 1: NBNode basic,</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial 2: Predictions I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-03.html">Tutorial 3: Counting and math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-04.html">Tutorial 4: Predictions II, data, plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-05_sim.html">Tutorial 5: Cytometry simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../notebooks.html">Tutorials</a><ul>
+      <li>Previous: <a href="nbnode-01.html" title="previous chapter">Base Non-binary node functionality</a></li>
+      <li>Next: <a href="nbnode-03.html" title="next chapter">Counting and math</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/notebooks/nbnode-02.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

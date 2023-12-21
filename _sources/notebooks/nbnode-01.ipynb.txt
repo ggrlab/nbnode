@@ -1,0 +1,521 @@
+{
+ "cells": [
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Base Non-binary node functionality\n",
+    "\n",
+    "\n",
+    "Optional: Create a (conda) environment and activate it, install the package\n",
+    "\n",
+    "```bash\n",
+    "    conda create -y -n conda_nbnode python=3.8\n",
+    "    conda activate conda_nbnode\n",
+    "    git clone https://github.com/ggrlab/nbnode\n",
+    "    cd nbnode\n",
+    "    pip install --upgrade pip\n",
+    "    pip install . \n",
+    "```\n",
+    "\n",
+    "\n",
+    "Base-functionality of the package is to enable non-binary trees. The following creates\n",
+    "a tree with a root node ``a`` and three children ``a0``, ``a1`` and ``a2``. ``a1`` is the only child with another child ``a1a``.\n",
+    "\n",
+    "```\n",
+    "    a\n",
+    "    ├── a0\n",
+    "    ├── a1\n",
+    "    │   └── a1a\n",
+    "    └── a2\n",
+    "```\n",
+    "\n",
+    "\n",
+    "A basic non-binary node (``NBNode``) consists of four important attributes:\n",
+    "\n",
+    "    - ``name`` The name of the node. This is the only mandatory attribute.\n",
+    "    - ``parent`` The parent node of this node.\n",
+    "    - ``decision_name`` The name of the value leading to this node. \n",
+    "    - ``decision_value`` The value leading to this node.\n",
+    "\n",
+    "    \n",
+    "The name of the node must only be unique within all childs of the parent node.\n",
+    "The ``decision_name`` and ``decision_value`` are the named values leading to this node. Note that \n",
+    "``decision_name`` must be a string, but ``decision_value`` can be anything, including strings, integers, floats, etc.\n",
+    "\n",
+    "To build the tree above, we can use the following code:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "NBNode('/a/a1/a1a', counter=0, decision_name='m2', decision_value='test')"
+      ]
+     },
+     "execution_count": 45,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from nbnode.nbnode import NBNode\n",
+    "simple_tree = NBNode(\"a\")\n",
+    "NBNode(\"a0\", parent=simple_tree, decision_value=-1, decision_name=\"m1\")\n",
+    "a1 = NBNode(\"a1\", parent=simple_tree, decision_value=1, decision_name=\"m1\")\n",
+    "NBNode(\"a2\", parent=simple_tree, decision_value=\"another\", decision_name=\"m3\")\n",
+    "NBNode(\"a1a\", parent=a1, decision_value=\"test\", decision_name=\"m2\")"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can check if the previous tree was built correctly: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "a (counter:0)\n",
+      "├── a0 (counter:0)\n",
+      "├── a1 (counter:0)\n",
+      "│   └── a1a (counter:0)\n",
+      "└── a2 (counter:0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "simple_tree.pretty_print()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And we can show additional information about each node of the tree:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "a (counter:0, decision_name:None, decision_value:None)\n",
+      "├── a0 (counter:0, decision_name:m1, decision_value:-1)\n",
+      "├── a1 (counter:0, decision_name:m1, decision_value:1)\n",
+      "│   └── a1a (counter:0, decision_name:m2, decision_value:test)\n",
+      "└── a2 (counter:0, decision_name:m3, decision_value:another)\n"
+     ]
+    }
+   ],
+   "source": [
+    "simple_tree.pretty_print(\"__long__\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Alternatively, we prepared the tree already for you:\n",
+    "import nbnode.nbnode_trees as nbtree\n",
+    "simple_tree = nbtree.tree_simple()\n",
+    "simple_tree.pretty_print(\"__long__\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally, we use the tree to predict the final node of a new data point.\n",
+    "The following values, supplied as two lists ``values`` and ``names`` are used to predict the final node."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "NBNode('/a/a1/a1a', counter=0, decision_name='m2', decision_value='test')\n"
+     ]
+    }
+   ],
+   "source": [
+    "single_prediction = simple_tree.predict(\n",
+    "        values=[1, \"test\", 2], names=[\"m1\", \"m2\", \"m3\"]\n",
+    "    )\n",
+    "print(single_prediction)"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This returns the identified NBnode object defined by the values. \n",
+    "``NBNode`` can additionally handle the following data types: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Dictionary\n",
+      "{'m1': 1, 'm2': 'test', 'm3': 2}\n",
+      "Prediction: \n",
+      "NBNode('/a/a1/a1a', counter=0, decision_name='m2', decision_value='test')\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\nDictionary\")\n",
+    "value_dict = {\"m1\": 1, \"m2\": \"test\", \"m3\": 2}\n",
+    "print(value_dict)\n",
+    "pred_dict = simple_tree.predict(values=value_dict)\n",
+    "print(\"Prediction: \")\n",
+    "print(pred_dict)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Pandas DataFrame\n",
+      "   m1    m2  m3\n",
+      "0   1  test   2\n",
+      "\n",
+      "Prediction: \n",
+      "0    (((NBNode('/a/a1/a1a', counter=0, decision_nam...\n",
+      "dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\nPandas DataFrame\")\n",
+    "import pandas as pd\n",
+    "value_df = pd.DataFrame.from_dict([value_dict])\n",
+    "print(value_df)\n",
+    "print(\"\\nPrediction: \")\n",
+    "pred_df = simple_tree.predict(values=value_df)\n",
+    "print(pred_df)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Numpy array: Only for numerical values\n",
+      "[[-1  0  0]]\n",
+      "0    (((NBNode('/a/a0', counter=0, decision_name='m...\n",
+      "dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"\\nNumpy array: Only for numerical values\")\n",
+    "import numpy as np\n",
+    "values_np = np.array([[-1, 0, 0]])\n",
+    "print(values_np)\n",
+    "pred_np = simple_tree.predict(values=values_np,  names=[\"m1\", \"m2\", \"m3\"])\n",
+    "print(pred_np)\n"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# NBNode basic methods\n",
+    "\n",
+    "``NBNode`` has a large number of implemented basic methods: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 66,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "a (counter:0, decision_name:None, decision_value:None)\n",
+      "├── a0 (counter:0, decision_name:m1, decision_value:-1)\n",
+      "├── a1 (counter:0, decision_name:m1, decision_value:1)\n",
+      "│   └── a1a (counter:0, decision_name:m2, decision_value:test)\n",
+      "└── a2 (counter:0, decision_name:m3, decision_value:another)\n",
+      "a (counter:0)\n",
+      "├── a0 (counter:0)\n",
+      "├── a1 (counter:0)\n",
+      "│   └── a1a (counter:0)\n",
+      "└── a2 (counter:0)\n",
+      "a (decision_name:None, decision_value:None)\n",
+      "├── a0 (decision_name:m1, decision_value:-1)\n",
+      "├── a1 (decision_name:m1, decision_value:1)\n",
+      "│   └── a1a (decision_name:m2, decision_value:test)\n",
+      "└── a2 (decision_name:m3, decision_value:another)\n",
+      "NBNode('/a/a1', counter=0, decision_name='m1', decision_value=1)\n",
+      "/a/a1\n",
+      "NBNode('/a/a1', counter=0, decision_name='m1', decision_value=1)\n"
+     ]
+    }
+   ],
+   "source": [
+    "from nbnode.nbnode import NBNode\n",
+    "import nbnode.nbnode_trees as nbtree\n",
+    "simple_tree = nbtree.tree_simple()\n",
+    "\n",
+    "# Print the tree\n",
+    "simple_tree.pretty_print(\"__long__\")\n",
+    "# Print specific attributes of the tree as list\n",
+    "simple_tree.pretty_print([\"counter\"])\n",
+    "simple_tree.pretty_print([\"decision_name\", \"decision_value\"])\n",
+    "simple_tree.__dict__\n",
+    "\n",
+    "\n",
+    "# Access nodes\n",
+    "# Access a child of any (here root) node\n",
+    "simple_tree.children\n",
+    "a1 = simple_tree.children[1]\n",
+    "print(a1)\n",
+    "\n",
+    "# You can also access nodes by their _full_ name\n",
+    "# full name is the path from root to the node, not the decision name, nor the node name\n",
+    "# You can retrieve the full name of a node by\n",
+    "print(a1.get_name_full())\n",
+    "# Mind the \"/\" (\"root\") at the beginning of the path\n",
+    "a1_by_name = simple_tree[\"/a/a1\"]\n",
+    "print(a1_by_name)\n",
+    "\n",
+    "# We can compare nodes! Here we have the exact same node, so it is identical. \n",
+    "assert a1_by_name == a1\n"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Decision cutoffs  \n",
+    "\n",
+    "``NBNode`` can also be used to split and then decide on continuous features. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "a (counter:0, decision_name:None, decision_value:None)\n",
+      "├── a0 (counter:0, decision_name:m1, decision_value:1)\n",
+      "└── a1 (counter:0, decision_name:m1, decision_value:-1)\n"
+     ]
+    }
+   ],
+   "source": [
+    "continuous_tree = NBNode(\"a\")\n",
+    "NBNode(\"a0\", parent=continuous_tree, decision_value=1, decision_name=\"m1\", decision_cutoff=0.5)\n",
+    "NBNode(\"a1\", parent=continuous_tree, decision_value=-1, decision_name=\"m1\", decision_cutoff=0.5)\n",
+    "continuous_tree.pretty_print(\"__long__\")"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The above ``continuous_tree`` contains two nodes, which both decide on the value of ``m1`` with either 1 or -1. Additionally, they have a decision cutoff. \n",
+    "Until now, ``NBNode`` needed an **exact** match of the decision value. With ``decision_cutoff``, the value in ``decision_name`` is first cut at the cutoff and returns: \n",
+    "\n",
+    "```python\n",
+    "    True if >= 0.5\n",
+    "    False if < 0.5\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "NBNode('/a/a0', counter=0, decision_name='m1', decision_value=1)\n",
+      "NBNode('/a/a1', counter=0, decision_name='m1', decision_value=-1)\n",
+      "NBNode('/a/a0', counter=0, decision_name='m1', decision_value=1)\n",
+      "NBNode('/a/a1', counter=0, decision_name='m1', decision_value=-1)\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(continuous_tree.predict(values=[0.6], names=[\"m1\"]))\n",
+    "print(continuous_tree.predict(values=[0.4], names=[\"m1\"]))\n",
+    "\n",
+    "print(continuous_tree.predict(values=[1], names=[\"m1\"]))\n",
+    "print(continuous_tree.predict(values=[-1], names=[\"m1\"]))\n",
+    "\n",
+    "print(continuous_tree.predict(values=[10], names=[\"m1\"]))\n",
+    "print(continuous_tree.predict(values=[-10], names=[\"m1\"]))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Multiple decision values\n",
+    "\n",
+    "Some nodes need not only a single value to decide on the endnode but multiple. With NBNode, you can decide on any number of features. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 85,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "a (counter:0, decision_name:None, decision_value:None)\n",
+      "├── a0 (counter:0, decision_name:m1, decision_value:-1)\n",
+      "├── a1 (counter:0, decision_name:m1, decision_value:1)\n",
+      "│   └── a1a (counter:0, decision_name:m2, decision_value:test)\n",
+      "├── a2 (counter:0, decision_name:m3, decision_value:another)\n",
+      "└── a3 (counter:0, decision_name:['m2', 'm4'], decision_value:['test', 1])\n",
+      "Predictions\n",
+      "\n",
+      "\n",
+      "NBNode('/a/a3', counter=0, decision_name=['m2', 'm4'], decision_value=['test', 1])\n",
+      "ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.\n"
+     ]
+    }
+   ],
+   "source": [
+    "from nbnode.nbnode import NBNode\n",
+    "\n",
+    "mytree = NBNode(\"a\")\n",
+    "# a0 =\n",
+    "NBNode(\"a0\", parent=mytree, decision_value=-1, decision_name=\"m1\")\n",
+    "a1 = NBNode(\"a1\", parent=mytree, decision_value=1, decision_name=\"m1\")\n",
+    "# a2 =\n",
+    "NBNode(\"a2\", parent=mytree, decision_value=\"another\", decision_name=\"m3\")\n",
+    "# a1a =\n",
+    "NBNode(\"a1a\", parent=a1, decision_value=\"test\", decision_name=\"m2\")\n",
+    "NBNode(\n",
+    "    \"a3\",\n",
+    "    parent=mytree,\n",
+    "    decision_value=[\"test\", 1],\n",
+    "    decision_name=[\"m2\", \"m4\"],\n",
+    "    decision_cutoff=[None, 0],\n",
+    ")\n",
+    "\n",
+    "mytree.pretty_print(\"__long__\")\n",
+    "\n",
+    "print(\"\\n\\nPredictions\")\n",
+    "print(mytree.predict(values=[None, \"test\", None, 3], names=[\"m1\", \"m2\", \"m3\", \"m4\"]))\n",
+    "try: \n",
+    "    print(mytree.predict(\n",
+    "        values=[None, \"NOT_test\", None, 3], names=[\"m1\", \"m2\", \"m3\", \"m4\"]\n",
+    "        ))\n",
+    "except ValueError:\n",
+    "    print(\"ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.16"
+  },
+  "varInspector": {
+   "cols": {
+    "lenName": 16,
+    "lenType": 16,
+    "lenVar": 40
+   },
+   "kernels_config": {
+    "python": {
+     "delete_cmd_postfix": "",
+     "delete_cmd_prefix": "del ",
+     "library": "var_list.py",
+     "varRefreshCmd": "print(var_dic_list())"
+    },
+    "r": {
+     "delete_cmd_postfix": ") ",
+     "delete_cmd_prefix": "rm(",
+     "library": "var_list.r",
+     "varRefreshCmd": "cat(var_dic_list()) "
+    }
+   },
+   "types_to_exclude": [
+    "module",
+    "function",
+    "builtin_function_or_method",
+    "instance",
+    "_Feature"
+   ],
+   "window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

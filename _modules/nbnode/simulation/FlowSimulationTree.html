@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>nbnode.simulation.FlowSimulationTree &#8212; nbnode 0.0.post1.dev1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=233b9934" />
-    <script src="../../../_static/documentation_options.js?v=42336cb0"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=e577996c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -54,9 +55,7 @@
     <span class="n">dirichlet_installed</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="BaseFlowSimulationTree">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree">[docs]</a>
-<span class="k">class</span> <span class="nc">BaseFlowSimulationTree</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree">[docs]</a><span class="k">class</span> <span class="nc">BaseFlowSimulationTree</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for flow simulation.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -238,9 +237,7 @@
         <span class="c1"># 4. Set the initial seed such that .sample() gives consistent results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BaseFlowSimulationTree.estimate_cell_distributions">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.estimate_cell_distributions">[docs]</a>
-    <span class="k">def</span> <span class="nf">estimate_cell_distributions</span><span class="p">(</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.estimate_cell_distributions"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.estimate_cell_distributions">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_cell_distributions</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NBNode</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;mu&quot;</span><span class="p">,</span> <span class="s2">&quot;cov&quot;</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate the distribution of cells in each node.</span>
@@ -308,10 +305,7 @@
             <span class="n">nodes_info_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">node</span><span class="o">.</span><span class="n">get_name_full</span><span class="p">():</span> <span class="p">{</span><span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="n">mu</span><span class="p">,</span> <span class="s2">&quot;cov&quot;</span><span class="p">:</span> <span class="n">cov</span><span class="p">}})</span>
         <span class="k">return</span> <span class="n">nodes_info_dict</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.estimate_population_distribution">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.estimate_population_distribution">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.estimate_population_distribution"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.estimate_population_distribution">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">estimate_population_distribution</span><span class="p">(</span>
         <span class="n">node_percentages</span><span class="p">,</span>
@@ -361,10 +355,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.remove_population">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.remove_population">[docs]</a>
-    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.remove_population"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.remove_population">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">remove_population</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove a certain population from the simulation. Necessary if any population</span>
@@ -392,17 +383,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.reset_populations">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.reset_populations">[docs]</a>
-    <span class="k">def</span> <span class="nf">reset_populations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.reset_populations"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.reset_populations">[docs]</a>    <span class="k">def</span> <span class="nf">reset_populations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the population parameters to the initially estimated values.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">population_parameters</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__reset_pop_params</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.set_seed">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.set_seed">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.set_seed"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.set_seed">[docs]</a>    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the seed for the random number generator.</span>
 
 <span class="sd">        Args:</span>
@@ -410,10 +395,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.ncells_from_percentages">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.ncells_from_percentages">[docs]</a>
-    <span class="k">def</span> <span class="nf">ncells_from_percentages</span><span class="p">(</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.ncells_from_percentages"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.ncells_from_percentages">[docs]</a>    <span class="k">def</span> <span class="nf">ncells_from_percentages</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">percentages</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">n_cells</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;&#39;Sample&#39; the number of cells according to the random percentages</span>
@@ -445,10 +427,7 @@
                 <span class="n">onesample_ncells_perpop</span><span class="p">[</span><span class="n">cell_from_pop_i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">onesample_ncells_perpop</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.generate_populations">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.generate_populations">[docs]</a>
-    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.generate_populations"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.generate_populations">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">generate_populations</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">population_parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
@@ -500,10 +479,7 @@
 <span class="sd">            return onesample_ncells_perpop</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.sample_populations">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.sample_populations">[docs]</a>
-    <span class="k">def</span> <span class="nf">sample_populations</span><span class="p">(</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.sample_populations"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.sample_populations">[docs]</a>    <span class="k">def</span> <span class="nf">sample_populations</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
         <span class="o">**</span><span class="n">population_parameters</span><span class="p">,</span>
@@ -535,10 +511,7 @@
 
         <span class="k">return</span> <span class="n">tmp_allpops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># then it becomes a pd.Series, no pd.DataFrame</span></div>
 
-
-<div class="viewcode-block" id="BaseFlowSimulationTree.sample">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.sample">[docs]</a>
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span>
+<div class="viewcode-block" id="BaseFlowSimulationTree.sample"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
         <span class="n">return_sampled_cell_numbers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -600,14 +573,10 @@
                 <span class="n">onesample_ncells_perpop_df</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">sampled_cells</span></div>
-</div>
+            <span class="k">return</span> <span class="n">sampled_cells</span></div></div>
 
 
-
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet">[docs]</a>
-<span class="k">class</span> <span class="nc">FlowSimulationTreeDirichlet</span><span class="p">(</span><span class="n">BaseFlowSimulationTree</span><span class="p">):</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet">[docs]</a><span class="k">class</span> <span class="nc">FlowSimulationTreeDirichlet</span><span class="p">(</span><span class="n">BaseFlowSimulationTree</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulate a tree of cell populations using the Dirichlet distribution.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -641,9 +610,7 @@
             <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet.estimate_population_distribution">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.estimate_population_distribution">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet.estimate_population_distribution"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.estimate_population_distribution">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">estimate_population_distribution</span><span class="p">(</span><span class="n">node_percentages</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate the population distribution using the Dirichlet distribution.&quot;&quot;&quot;</span>
         <span class="c1"># From dirichlet package:</span>
@@ -691,10 +658,7 @@
             <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">alphas</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">node_percentages</span><span class="o">.</span><span class="n">index</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
         <span class="p">}</span></div>
 
-
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet.remove_population">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.remove_population">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_population</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet.remove_population"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.remove_population">[docs]</a>    <span class="k">def</span> <span class="nf">remove_population</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a population from the tree</span>
 
 <span class="sd">        Args:</span>
@@ -709,10 +673,7 @@
                 <span class="c1"># Then the population was already removed</span>
                 <span class="k">pass</span></div>
 
-
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet.generate_populations">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.generate_populations">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_populations</span><span class="p">(</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet.generate_populations"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.generate_populations">[docs]</a>    <span class="k">def</span> <span class="nf">generate_populations</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">population_parameters</span><span class="p">,</span> <span class="n">n_cells</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a population of cells using the Dirichlet distribution.</span>
@@ -738,7 +699,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncells_from_percentages</span><span class="p">(</span>
             <span class="n">percentages</span><span class="o">=</span><span class="n">onesample_ncells_perpop</span><span class="p">,</span> <span class="n">n_cells</span><span class="o">=</span><span class="n">n_cells</span>
         <span class="p">)</span></div>
-
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">precision</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -799,9 +759,7 @@
                 <span class="n">all_alphas</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">get_name_full</span><span class="p">()]</span> <span class="o">=</span> <span class="n">current_sum</span>
         <span class="k">return</span> <span class="n">all_alphas</span>
 
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet.pop_leafnode_names">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_leafnode_names">[docs]</a>
-    <span class="k">def</span> <span class="nf">pop_leafnode_names</span><span class="p">(</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet.pop_leafnode_names"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_leafnode_names">[docs]</a>    <span class="k">def</span> <span class="nf">pop_leafnode_names</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">population_node_full_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NBNode</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the names of the leaf nodes of any intermediate population</span>
@@ -829,10 +787,7 @@
                 <span class="n">leafnodes</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop_leafnode_names</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">leafnodes</span></div>
 
-
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet.pop_alpha">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_alpha">[docs]</a>
-    <span class="k">def</span> <span class="nf">pop_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_node_full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet.pop_alpha"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_alpha">[docs]</a>    <span class="k">def</span> <span class="nf">pop_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_node_full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the alpha parameter of the Dirichlet distribution for a given population</span>
 
 <span class="sd">        Args:</span>
@@ -855,20 +810,14 @@
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="n">sum_precisions</span></div>
 
-
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet.pop_mean">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_mean">[docs]</a>
-    <span class="k">def</span> <span class="nf">pop_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_node_full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet.pop_mean"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.pop_mean">[docs]</a>    <span class="k">def</span> <span class="nf">pop_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_node_full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the mean of the Dirichlet distribution for a given population&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pop_alpha</span><span class="p">(</span><span class="n">population_node_full_name</span><span class="o">=</span><span class="n">population_node_full_name</span><span class="p">)</span>
             <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">precision</span>
         <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="FlowSimulationTreeDirichlet.new_pop_mean">
-<a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.new_pop_mean">[docs]</a>
-    <span class="k">def</span> <span class="nf">new_pop_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_node_full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<div class="viewcode-block" id="FlowSimulationTreeDirichlet.new_pop_mean"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.FlowSimulationTreeDirichlet.new_pop_mean">[docs]</a>    <span class="k">def</span> <span class="nf">new_pop_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_node_full_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the new mean of the Dirichlet distribution for a given population</span>
 
 <span class="sd">        Args:</span>
@@ -910,9 +859,7 @@
             <span class="k">for</span> <span class="n">leaf_popname</span><span class="p">,</span> <span class="n">leaf_portion</span> <span class="ow">in</span> <span class="n">leaf_means_portion</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">population_parameters</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">][</span><span class="n">leaf_popname</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">newalpha</span> <span class="o">*</span> <span class="n">leaf_portion</span>
-                <span class="p">)</span></div>
-</div>
-
+                <span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -976,7 +923,7 @@
       &copy;2023, gunthergl.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>

@@ -1,0 +1,248 @@
+{
+ "cells": [
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Part predictions and unfitting data \n",
+    "\n",
+    "What if we want only part of the predictions, not the end-nodes?\n",
+    "\n",
+    "See Tutorial 1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "a (counter:0, decision_name:None, decision_value:None)\n",
+      "├── a0 (counter:0, decision_name:m1, decision_value:-1)\n",
+      "├── a1 (counter:0, decision_name:m1, decision_value:1)\n",
+      "│   └── a1a (counter:0, decision_name:m2, decision_value:test)\n",
+      "└── a2 (counter:0, decision_name:m3, decision_value:another)\n"
+     ]
+    }
+   ],
+   "source": [
+    "from nbnode.nbnode import NBNode\n",
+    "import nbnode.nbnode_trees as nbtree\n",
+    "simple_tree = nbtree.tree_simple()\n",
+    "simple_tree.pretty_print(\"__long__\")"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The following dictionary would usually have raised a ValueError after it does not reach an endnode: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.\n"
+     ]
+    }
+   ],
+   "source": [
+    "try: \n",
+    "    simple_tree.predict({\"m1\":1, \"m2\":0, \"m3\":0})\n",
+    "except ValueError: \n",
+    "    print(\"ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.\")"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "However, allowing for partial predictions enables a more flexible approach to the problem. \n",
+    "The previous example actually DOES identify a node (``a1``), however it does not find an endnode. \n",
+    "We can enable this by setting ``allow_part_predictions`` argument to True:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "NBNode('/a/a1', counter=0, decision_name='m1', decision_value=1)"
+      ]
+     },
+     "execution_count": 40,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "simple_tree.predict({\"m1\":1, \"m2\":0, \"m3\":0}, allow_part_predictions=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Note that this enables more complex results than just a single NBnode. In the following example, the data finds a matching part **and** endnode!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[NBNode('/a/a1', counter=0, decision_name='m1', decision_value=1),\n",
+       " NBNode('/a/a2', counter=0, decision_name='m3', decision_value='another')]"
+      ]
+     },
+     "execution_count": 41,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "simple_tree.predict({\"m1\":1, \"m2\":0, \"m3\":\"another\"}, allow_part_predictions=True)"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The following prediction fails because:\n",
+    "\n",
+    "    1.1 Check if m1=-1 (no)\n",
+    "    2.1 Check if m1=1 (yes)\n",
+    "    2.2 Check if m2='test' (no), no endnode!\n",
+    "      raise exception because in this path no proper endnode was able to be\n",
+    "      found with the given values\n",
+    "    3.1 Check if m3='another' (yes) -> return this node\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.\n"
+     ]
+    }
+   ],
+   "source": [
+    "try: \n",
+    "    simple_tree.predict(values={\"m1\": 1, \"m2\": -1, \"m3\": \"another\"})\n",
+    "except ValueError:\n",
+    "    print(\"ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.\")"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "With ``allow_unfitting_data=True``, the previously ValueError is not called and a proper endnode returned! \n",
+    "\n",
+    "    1.1 Check if m1=-1 (no)\n",
+    "    2.1 Check if m1=1 (yes)\n",
+    "    2.2 Check if m2='test' (no), no endnode!\n",
+    "      raise exception because in this path no proper endnode was able to be\n",
+    "      found with the given values\n",
+    "    3.1 Check if m3='another' (yes) -> return this node\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "NBNode('/a/a2', counter=0, decision_name='m3', decision_value='another')"
+      ]
+     },
+     "execution_count": 43,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "simple_tree.predict(\n",
+    "    values={\"m1\": 1, \"m2\": -1, \"m3\": \"another\"}, allow_unfitting_data=True\n",
+    ")\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.16"
+  },
+  "varInspector": {
+   "cols": {
+    "lenName": 16,
+    "lenType": 16,
+    "lenVar": 40
+   },
+   "kernels_config": {
+    "python": {
+     "delete_cmd_postfix": "",
+     "delete_cmd_prefix": "del ",
+     "library": "var_list.py",
+     "varRefreshCmd": "print(var_dic_list())"
+    },
+    "r": {
+     "delete_cmd_postfix": ") ",
+     "delete_cmd_prefix": "rm(",
+     "library": "var_list.r",
+     "varRefreshCmd": "cat(var_dic_list()) "
+    }
+   },
+   "types_to_exclude": [
+    "module",
+    "function",
+    "builtin_function_or_method",
+    "instance",
+    "_Feature"
+   ],
+   "window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Advanced predictions, data and plotting &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=233b9934" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=e577996c"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Flow cytometry simulation." href="nbnode-05_sim.html" />
+    <link rel="prev" title="Counting and math" href="nbnode-03.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="Advanced-predictions,-data-and-plotting">
+<h1>Advanced predictions, data and plotting<a class="headerlink" href="#Advanced-predictions,-data-and-plotting" title="Permalink to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">NBNode</span></code> can leverage its <code class="docutils literal notranslate"><span class="pre">.data</span></code> attribute for prediction and plotting.</p>
+<section id="Predict-based-on-node-names">
+<h2>Predict based on node names<a class="headerlink" href="#Predict-based-on-node-names" title="Permalink to this heading">¶</a></h2>
+<p>Sometimes it might be usefull to identify the node corresponding to its name. Usually, try to set your name such that it matches <code class="docutils literal notranslate"><span class="pre">NBNode.get_name_full()</span></code>, but it might be of convenience.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtree</span>
+<span class="n">mytree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_simple</span><span class="p">()</span>
+<span class="n">mytree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">prediction_str</span><span class="p">(</span><span class="s2">&quot;/a&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">prediction_str</span><span class="p">(</span><span class="s2">&quot;/a/a0&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">prediction_str</span><span class="p">(</span><span class="s2">&quot;/a/a1&quot;</span><span class="p">))</span>
+<span class="c1"># In this case, probably better:</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="p">[</span><span class="s2">&quot;/a&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="p">[</span><span class="s2">&quot;/a/a0&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="p">[</span><span class="s2">&quot;/a/a1&quot;</span><span class="p">])</span>
+
+
+<span class="c1"># It becomes interesting when the splits are different or the root node is missing:</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">prediction_str</span><span class="p">(</span><span class="s2">&quot;/a/a1/a1a&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="p">[</span><span class="s2">&quot;/a/a1/a1a&quot;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Missing root&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">prediction_str</span><span class="p">(</span><span class="s2">&quot;a/a1/a1a&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="p">[</span><span class="s2">&quot;a/a1/a1a&quot;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Different split&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">prediction_str</span><span class="p">(</span><span class="s2">&quot;:a:a1:a1a&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="p">[</span><span class="s2">&quot;:a:a1:a1a&quot;</span><span class="p">])</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<style type='text/css'>
+.datatable table.frame { margin-bottom: 0; }
+.datatable table.frame thead { border-bottom: none; }
+.datatable table.frame tr.coltypes td {  color: #FFFFFF;  line-height: 6px;  padding: 0 0.5em;}
+.datatable .bool    { background: #DDDD99; }
+.datatable .object  { background: #565656; }
+.datatable .int     { background: #5D9E5D; }
+.datatable .float   { background: #4040CC; }
+.datatable .str     { background: #CC4040; }
+.datatable .time    { background: #40CC40; }
+.datatable .row_index {  background: var(--jp-border-color3);  border-right: 1px solid var(--jp-border-color0);  color: var(--jp-ui-font-color3);  font-size: 9px;}
+.datatable .frame tbody td { text-align: left; }
+.datatable .frame tr.coltypes .row_index {  background: var(--jp-border-color0);}
+.datatable th:nth-child(2) { padding-left: 12px; }
+.datatable .hellipsis {  color: var(--jp-cell-editor-border-color);}
+.datatable .vellipsis {  background: var(--jp-layout-color0);  color: var(--jp-cell-editor-border-color);}
+.datatable .na {  color: var(--jp-cell-editor-border-color);  font-size: 80%;}
+.datatable .sp {  opacity: 0.25;}
+.datatable .footer { font-size: 9px; }
+.datatable .frame_dimensions {  background: var(--jp-border-color3);  border-top: 1px solid var(--jp-border-color0);  color: var(--jp-ui-font-color3);  display: inline-block;  opacity: 0.6;  padding: 1px 10px 1px 5px;}
+</style></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a (counter:0)
+├── a0 (counter:0)
+├── a1 (counter:0)
+│   └── a1a (counter:0)
+└── a2 (counter:0)
+NBNode(&#39;/a&#39;, counter=0, decision_name=None, decision_value=None)
+NBNode(&#39;/a/a0&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=-1)
+NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1)
+NBNode(&#39;/a&#39;, counter=0, decision_name=None, decision_value=None)
+NBNode(&#39;/a/a0&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=-1)
+NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1)
+NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_name=&#39;m2&#39;, decision_value=&#39;test&#39;)
+NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_name=&#39;m2&#39;, decision_value=&#39;test&#39;)
+
+Missing root
+NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_name=&#39;m2&#39;, decision_value=&#39;test&#39;)
+None
+
+Different split
+NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_name=&#39;m2&#39;, decision_value=&#39;test&#39;)
+None
+</pre></div></div>
+</div>
+</section>
+<section id="Usage-of-.data">
+<h2>Usage of .data<a class="headerlink" href="#Usage-of-.data" title="Permalink to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">.data</span></code> is quite powerfull for further predictions, math and plotting.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+<span class="n">cellmat</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span> <span class="s2">&quot;tests&quot;</span><span class="p">,</span> <span class="s2">&quot;testdata&quot;</span><span class="p">,</span> <span class="s2">&quot;flowcytometry&quot;</span><span class="p">,</span> <span class="s2">&quot;gated_cells&quot;</span><span class="p">,</span> <span class="s2">&quot;cellmat.csv&quot;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="c1"># FS TOF (against FS INT which is &quot;FS&quot;)</span>
+<span class="n">cellmat</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;FS_TOF&quot;</span><span class="p">:</span> <span class="s2">&quot;FS.0&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cellmat</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;_.*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cellmat</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cellmat</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+/home/gugl/clonedgit/ccc_verse/nbnode/docs/notebooks
+         FS  FS.0      SS  CD45RA  CCR7  CD28   PD1  CD27   CD4   CD8   CD3
+0    197657    94  186372    3.90  6.34  4.97 -1.98  7.51  5.87  3.55  5.83  \
+1    180716    92  135447    6.48  6.63  5.17  3.07  7.38  5.49  2.64  5.83
+2    134129    90  168268    5.92  6.53  5.39  2.60  7.57  5.70  2.54  5.74
+3    239241    94   79262    5.47  6.57  4.68  3.30  7.36  5.75  2.76  6.06
+4    246527    89   97635    6.12  6.26  5.22  3.05  7.40  5.70  2.66  6.29
+..      ...   ...     ...     ...   ...   ...   ...   ...   ...   ...   ...
+994  176236    90  149982    6.48 -1.11  2.85 -1.55  2.28  0.59  1.70  0.39
+995  191863    99  115406    6.30  5.19  3.01  2.07 -1.58  0.62  1.02  0.73
+996  217752    93  124675    6.35  4.75  0.42  1.89  2.02  0.52  1.48  0.53
+997  334174    97  210458    1.90  1.36  1.22  2.52 -0.72  0.59  1.03  0.75
+998  308089   103  219747    6.48 -0.42  1.23  2.64  7.07  0.57  1.82  1.72
+
+     CD57  CD45
+0    2.62  6.78
+1    2.39  6.76
+2    1.02  6.46
+3    1.14  6.59
+4    2.22  6.33
+..    ...   ...
+994  4.22  6.49
+995  2.69  6.22
+996  2.92  6.50
+997  2.98  5.38
+998  2.87  6.03
+
+[999 rows x 13 columns]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtree</span>
+
+<span class="n">cell_tree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_complete_aligned_trunk</span><span class="p">()</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">cellmat</span>
+<span class="c1"># When setting .data, we do not need to give the cellmat explicitely to .predict()</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">id_preds</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">())</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">use_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AllCells (counter:999)
+├── DN (counter:0)
+├── DP (counter:973)
+├── CD4-/CD8+ (counter:5)
+│   ├── naive (counter:5)
+│   ├── Tcm (counter:0)
+│   ├── Temra (counter:0)
+│   └── Tem (counter:0)
+└── CD4+/CD8- (counter:21)
+    ├── naive (counter:20)
+    ├── Tcm (counter:0)
+    ├── Temra (counter:1)
+    └── Tem (counter:0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+</pre></div></div>
+</div>
+<p>Accessing any node’s data is easy and is built on <code class="docutils literal notranslate"><span class="pre">rootnode._data</span></code> and <code class="docutils literal notranslate"><span class="pre">node.ids</span></code> such that every <code class="docutils literal notranslate"><span class="pre">node.data</span> <span class="pre">:=</span> <span class="pre">root._data.iloc[self.ids,</span> <span class="pre">:]</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="p">[</span><span class="s2">&quot;/AllCells/CD4+/CD8-&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="p">[</span><span class="s2">&quot;/AllCells/CD4+/CD8-&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+       FS  FS.0      SS  CD45RA  CCR7  CD28   PD1  CD27   CD4   CD8   CD3
+0  197657    94  186372    3.90  6.34  4.97 -1.98  7.51  5.87  3.55  5.83  \
+1  180716    92  135447    6.48  6.63  5.17  3.07  7.38  5.49  2.64  5.83
+2  134129    90  168268    5.92  6.53  5.39  2.60  7.57  5.70  2.54  5.74
+
+   CD57  CD45
+0  2.62  6.78
+1  2.39  6.76
+2  1.02  6.46
+(999, 13)
+        FS  FS.0      SS  CD45RA  CCR7  CD28   PD1  CD27   CD4   CD8   CD3
+17  184334   107  210764    2.88  6.38  6.11  4.13  7.91  6.00 -2.65  6.15  \
+25  173701   105  235028    1.81  5.53  6.40  3.83  7.28  6.01 -0.56  5.72
+45  224976   101  162302    1.50  1.36  6.21  3.49  3.56  6.17 -3.40  5.37
+
+    CD57  CD45
+17  2.51  6.82
+25  2.66  6.80
+45  1.90  6.30
+(21, 13)
+</pre></div></div>
+</div>
+<p>Now we can use the data and <code class="docutils literal notranslate"><span class="pre">apply</span></code> a function to it. Using it directly returns a dictionary of every node and the applied function: <code class="docutils literal notranslate"><span class="pre">Dict[NBNode,</span> <span class="pre">Any]</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate the sum of all cells per column</span>
+<span class="k">def</span> <span class="nf">col_sum</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="c1"># There are 13 nodes in that tree, therefore apply returns a DICTIONARY of 13 elements</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="n">col_sum</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="n">col_sum</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+13
+
+
+
+
+{NBNode(&#39;/AllCells&#39;, counter=999, decision_name=None, decision_value=None): FS        4.463310e+08
+FS.0      1.077770e+05
+SS        7.552312e+08
+CD45RA    2.627850e+03
+CCR7      2.423360e+03
+CD28      2.544160e+03
+PD1       2.563000e+03
+CD27      2.087390e+03
+CD4       1.559720e+03
+CD8       2.202570e+03
+CD3       1.274720e+03
+CD57      3.276380e+03
+CD45      5.539190e+03
+dtype: float64, NBNode(&#39;/AllCells/DN&#39;, counter=0, decision_name=[&#39;CD4&#39;, &#39;CD8&#39;], decision_value=[-1, -1]): FS        0
+FS.0      0
+SS        0
+CD45RA    0
+CCR7      0
+CD28      0
+PD1       0
+CD27      0
+CD4       0
+CD8       0
+CD3       0
+CD57      0
+CD45      0
+dtype: int64, NBNode(&#39;/AllCells/DP&#39;, counter=973, decision_name=[&#39;CD4&#39;, &#39;CD8&#39;], decision_value=[1, 1]): FS        4.381676e+08
+FS.0      1.050100e+05
+SS        7.451190e+08
+CD45RA    2.549230e+03
+CCR7      2.365810e+03
+CD28      2.479180e+03
+PD1       2.469230e+03
+CD27      2.012120e+03
+CD4       1.475720e+03
+CD8       2.203020e+03
+CD3       1.220460e+03
+CD57      3.175190e+03
+CD45      5.372880e+03
+dtype: float64, NBNode(&#39;/AllCells/CD4-/CD8+&#39;, counter=5, decision_name=[&#39;CD4&#39;, &#39;CD8&#39;], decision_value=[-1, 1]): FS        1675272.00
+FS.0          520.00
+SS        1620265.00
+CD45RA         21.41
+CCR7           10.15
+CD28            2.48
+PD1            15.34
+CD27           16.49
+CD4            -0.60
+CD8            32.84
+CD3            18.20
+CD57           27.75
+CD45           33.62
+dtype: float64, NBNode(&#39;/AllCells/CD4-/CD8+/naive&#39;, counter=5, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[1, 1]): FS        1675272.00
+FS.0          520.00
+SS        1620265.00
+CD45RA         21.41
+CCR7           10.15
+CD28            2.48
+PD1            15.34
+CD27           16.49
+CD4            -0.60
+CD8            32.84
+CD3            18.20
+CD57           27.75
+CD45           33.62
+dtype: float64, NBNode(&#39;/AllCells/CD4-/CD8+/Tcm&#39;, counter=0, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[1, -1]): FS        0
+FS.0      0
+SS        0
+CD45RA    0
+CCR7      0
+CD28      0
+PD1       0
+CD27      0
+CD4       0
+CD8       0
+CD3       0
+CD57      0
+CD45      0
+dtype: int64, NBNode(&#39;/AllCells/CD4-/CD8+/Temra&#39;, counter=0, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[-1, 1]): FS        0
+FS.0      0
+SS        0
+CD45RA    0
+CCR7      0
+CD28      0
+PD1       0
+CD27      0
+CD4       0
+CD8       0
+CD3       0
+CD57      0
+CD45      0
+dtype: int64, NBNode(&#39;/AllCells/CD4-/CD8+/Tem&#39;, counter=0, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[-1, -1]): FS        0
+FS.0      0
+SS        0
+CD45RA    0
+CCR7      0
+CD28      0
+PD1       0
+CD27      0
+CD4       0
+CD8       0
+CD3       0
+CD57      0
+CD45      0
+dtype: int64, NBNode(&#39;/AllCells/CD4+/CD8-&#39;, counter=21, decision_name=[&#39;CD4&#39;, &#39;CD8&#39;], decision_value=[1, -1]): FS        6488119.00
+FS.0         2247.00
+SS        8491889.00
+CD45RA         57.21
+CCR7           47.40
+CD28           62.50
+PD1            78.43
+CD27           58.78
+CD4            84.60
+CD8           -33.29
+CD3            36.06
+CD57           73.44
+CD45          132.69
+dtype: float64, NBNode(&#39;/AllCells/CD4+/CD8-/naive&#39;, counter=20, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[1, 1]): FS        6116150.00
+FS.0         2146.00
+SS        8234532.00
+CD45RA         51.22
+CCR7           47.44
+CD28           60.27
+PD1            79.05
+CD27           57.58
+CD4            81.01
+CD8           -32.36
+CD3            34.95
+CD57           69.94
+CD45          126.00
+dtype: float64, NBNode(&#39;/AllCells/CD4+/CD8-/Tcm&#39;, counter=0, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[1, -1]): FS        0
+FS.0      0
+SS        0
+CD45RA    0
+CCR7      0
+CD28      0
+PD1       0
+CD27      0
+CD4       0
+CD8       0
+CD3       0
+CD57      0
+CD45      0
+dtype: int64, NBNode(&#39;/AllCells/CD4+/CD8-/Temra&#39;, counter=1, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[-1, 1]): FS        371969.00
+FS.0         101.00
+SS        257357.00
+CD45RA         5.99
+CCR7          -0.04
+CD28           2.23
+PD1           -0.62
+CD27           1.20
+CD4            3.59
+CD8           -0.93
+CD3            1.11
+CD57           3.50
+CD45           6.69
+dtype: float64, NBNode(&#39;/AllCells/CD4+/CD8-/Tem&#39;, counter=0, decision_name=[&#39;CCR7&#39;, &#39;CD45RA&#39;], decision_value=[-1, -1]): FS        0
+FS.0      0
+SS        0
+CD45RA    0
+CCR7      0
+CD28      0
+PD1       0
+CD27      0
+CD4       0
+CD8       0
+CD3       0
+CD57      0
+CD45      0
+dtype: int64}
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+</pre></div></div>
+</div>
+<p>But it is probably often more useful to directly set a (new) attribute of each node to the result!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate the sum of all cells per column</span>
+<span class="k">def</span> <span class="nf">col_sum</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">cell_tree</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="n">col_sum</span><span class="p">,</span> <span class="n">result_attribute_name</span><span class="o">=</span><span class="s2">&quot;col_sum&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">col_sum</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+
+
+True
+FS        4.463310e+08
+FS.0      1.077770e+05
+SS        7.552312e+08
+CD45RA    2.627850e+03
+CCR7      2.423360e+03
+CD28      2.544160e+03
+PD1       2.563000e+03
+CD27      2.087390e+03
+CD4       1.559720e+03
+CD8       2.202570e+03
+CD3       1.274720e+03
+CD57      3.276380e+03
+CD45      5.539190e+03
+dtype: float64
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+</pre></div></div>
+</div>
+<p>We also introduce a convenience wrapper: <code class="docutils literal notranslate"><span class="pre">per_node_data_fun</span></code>. It first transforms the data as <code class="docutils literal notranslate"><span class="pre">datatable.Frame</span></code>, then potentially restricts the data to a subset of columns and finally applies attributes (functions!) of <a class="reference external" href="https://datatable.readthedocs.io/en/latest/api/frame.html">datatable.Frame</a>. Additionally we created a function to calculate the covariance matrix (based on datatable).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nbnode.nbnode_util</span> <span class="kn">import</span> <span class="n">per_node_data_fun</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">per_node_data_fun</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">fun_name</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+    <span class="n">result_attribute_name</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">per_node_data_fun</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">fun_name</span><span class="o">=</span><span class="s2">&quot;cov&quot;</span><span class="p">),</span>
+    <span class="n">result_attribute_name</span><span class="o">=</span><span class="s2">&quot;cov&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">cov</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+
+
+              FS        FS.0             SS   CD45RA      CCR7      CD28
+0  446777.783784  107.884885  755987.182182  2.63048  2.425786  2.546707  \
+
+        PD1      CD27       CD4       CD8       CD3     CD57      CD45
+0  2.565566  2.089479  1.561281  2.204775  1.275996  3.27966  5.544735
+
+
+
+
+
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FS</th>
+      <th>FS.0</th>
+      <th>SS</th>
+      <th>CD45RA</th>
+      <th>CCR7</th>
+      <th>CD28</th>
+      <th>PD1</th>
+      <th>CD27</th>
+      <th>CD4</th>
+      <th>CD8</th>
+      <th>CD3</th>
+      <th>CD57</th>
+      <th>CD45</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>FS</th>
+      <td>2.165583e+10</td>
+      <td>6.147502e+05</td>
+      <td>3.620725e+10</td>
+      <td>-39147.927371</td>
+      <td>-14758.007195</td>
+      <td>2558.966552</td>
+      <td>11245.428569</td>
+      <td>-82448.944161</td>
+      <td>-83005.474472</td>
+      <td>-33479.754087</td>
+      <td>-103486.452630</td>
+      <td>5706.132441</td>
+      <td>-26665.567051</td>
+    </tr>
+    <tr>
+      <th>FS.0</th>
+      <td>6.147502e+05</td>
+      <td>1.254948e+02</td>
+      <td>1.563292e+06</td>
+      <td>-0.995866</td>
+      <td>-0.464734</td>
+      <td>-0.241061</td>
+      <td>1.563517</td>
+      <td>-3.511773</td>
+      <td>-2.612908</td>
+      <td>-1.555762</td>
+      <td>-5.162145</td>
+      <td>0.418738</td>
+      <td>-0.143062</td>
+    </tr>
+    <tr>
+      <th>SS</th>
+      <td>3.620725e+10</td>
+      <td>1.563292e+06</td>
+      <td>1.060875e+11</td>
+      <td>-126466.386170</td>
+      <td>-36703.726977</td>
+      <td>10494.293897</td>
+      <td>20883.824316</td>
+      <td>-232079.856598</td>
+      <td>-223074.687248</td>
+      <td>-114591.527895</td>
+      <td>-284654.480683</td>
+      <td>-20623.042663</td>
+      <td>-101119.493078</td>
+    </tr>
+    <tr>
+      <th>CD45RA</th>
+      <td>-3.914793e+04</td>
+      <td>-9.958665e-01</td>
+      <td>-1.264664e+05</td>
+      <td>1.377467</td>
+      <td>0.424056</td>
+      <td>-0.225620</td>
+      <td>-0.058146</td>
+      <td>0.531804</td>
+      <td>0.254024</td>
+      <td>0.488336</td>
+      <td>0.467378</td>
+      <td>0.423125</td>
+      <td>0.483976</td>
+    </tr>
+    <tr>
+      <th>CCR7</th>
+      <td>-1.475801e+04</td>
+      <td>-4.647341e-01</td>
+      <td>-3.670373e+04</td>
+      <td>0.424056</td>
+      <td>1.235744</td>
+      <td>0.711549</td>
+      <td>0.153438</td>
+      <td>1.180837</td>
+      <td>0.571201</td>
+      <td>0.342640</td>
+      <td>0.772448</td>
+      <td>-0.124259</td>
+      <td>0.239509</td>
+    </tr>
+    <tr>
+      <th>CD28</th>
+      <td>2.558967e+03</td>
+      <td>-2.410609e-01</td>
+      <td>1.049429e+04</td>
+      <td>-0.225620</td>
+      <td>0.711549</td>
+      <td>1.896833</td>
+      <td>0.177192</td>
+      <td>1.152222</td>
+      <td>0.648468</td>
+      <td>0.054631</td>
+      <td>0.807809</td>
+      <td>-0.530344</td>
+      <td>0.117106</td>
+    </tr>
+    <tr>
+      <th>PD1</th>
+      <td>1.124543e+04</td>
+      <td>1.563517e+00</td>
+      <td>2.088382e+04</td>
+      <td>-0.058146</td>
+      <td>0.153438</td>
+      <td>0.177192</td>
+      <td>1.161104</td>
+      <td>0.027818</td>
+      <td>0.205716</td>
+      <td>-0.008117</td>
+      <td>0.141911</td>
+      <td>0.209764</td>
+      <td>0.143325</td>
+    </tr>
+    <tr>
+      <th>CD27</th>
+      <td>-8.244894e+04</td>
+      <td>-3.511773e+00</td>
+      <td>-2.320799e+05</td>
+      <td>0.531804</td>
+      <td>1.180837</td>
+      <td>1.152222</td>
+      <td>0.027818</td>
+      <td>3.862032</td>
+      <td>1.129160</td>
+      <td>1.014295</td>
+      <td>1.892278</td>
+      <td>-0.049220</td>
+      <td>0.553066</td>
+    </tr>
+    <tr>
+      <th>CD4</th>
+      <td>-8.300547e+04</td>
+      <td>-2.612908e+00</td>
+      <td>-2.230747e+05</td>
+      <td>0.254024</td>
+      <td>0.571201</td>
+      <td>0.648468</td>
+      <td>0.205716</td>
+      <td>1.129160</td>
+      <td>1.703458</td>
+      <td>-0.054002</td>
+      <td>1.091317</td>
+      <td>-0.102284</td>
+      <td>0.512471</td>
+    </tr>
+    <tr>
+      <th>CD8</th>
+      <td>-3.347975e+04</td>
+      <td>-1.555762e+00</td>
+      <td>-1.145915e+05</td>
+      <td>0.488336</td>
+      <td>0.342640</td>
+      <td>0.054631</td>
+      <td>-0.008117</td>
+      <td>1.014295</td>
+      <td>-0.054002</td>
+      <td>2.119584</td>
+      <td>1.205916</td>
+      <td>0.385426</td>
+      <td>0.343696</td>
+    </tr>
+    <tr>
+      <th>CD3</th>
+      <td>-1.034865e+05</td>
+      <td>-5.162145e+00</td>
+      <td>-2.846545e+05</td>
+      <td>0.467378</td>
+      <td>0.772448</td>
+      <td>0.807809</td>
+      <td>0.141911</td>
+      <td>1.892278</td>
+      <td>1.091317</td>
+      <td>1.205916</td>
+      <td>2.316320</td>
+      <td>0.125443</td>
+      <td>0.564875</td>
+    </tr>
+    <tr>
+      <th>CD57</th>
+      <td>5.706132e+03</td>
+      <td>4.187383e-01</td>
+      <td>-2.062304e+04</td>
+      <td>0.423125</td>
+      <td>-0.124259</td>
+      <td>-0.530344</td>
+      <td>0.209764</td>
+      <td>-0.049220</td>
+      <td>-0.102284</td>
+      <td>0.385426</td>
+      <td>0.125443</td>
+      <td>0.886665</td>
+      <td>0.296332</td>
+    </tr>
+    <tr>
+      <th>CD45</th>
+      <td>-2.666557e+04</td>
+      <td>-1.430616e-01</td>
+      <td>-1.011195e+05</td>
+      <td>0.483976</td>
+      <td>0.239509</td>
+      <td>0.117106</td>
+      <td>0.143325</td>
+      <td>0.553066</td>
+      <td>0.512471</td>
+      <td>0.343696</td>
+      <td>0.564875</td>
+      <td>0.296332</td>
+      <td>0.605821</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Importantly, the apply function is done on all nodes separately, therefore also the result_attribute_name is set for each node separately!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">cell_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span class="n">cell_tree</span><span class="p">[</span><span class="s2">&quot;/AllCells/CD4+/CD8-&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cov</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AllCells (counter:999)
+├── DN (counter:0)
+├── DP (counter:973)
+├── CD4-/CD8+ (counter:5)
+│   ├── naive (counter:5)
+│   ├── Tcm (counter:0)
+│   ├── Temra (counter:0)
+│   └── Tem (counter:0)
+└── CD4+/CD8- (counter:21)
+    ├── naive (counter:20)
+    ├── Tcm (counter:0)
+    ├── Temra (counter:1)
+    └── Tem (counter:0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FS</th>
+      <th>FS.0</th>
+      <th>SS</th>
+      <th>CD45RA</th>
+      <th>CCR7</th>
+      <th>CD28</th>
+      <th>PD1</th>
+      <th>CD27</th>
+      <th>CD4</th>
+      <th>CD8</th>
+      <th>CD3</th>
+      <th>CD57</th>
+      <th>CD45</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>FS</th>
+      <td>8.579379e+09</td>
+      <td>-70918.9500</td>
+      <td>1.983754e+10</td>
+      <td>55738.251286</td>
+      <td>-47391.339857</td>
+      <td>-70431.262810</td>
+      <td>62951.568762</td>
+      <td>-105445.765952</td>
+      <td>-108395.155929</td>
+      <td>-5903.629738</td>
+      <td>-168594.759857</td>
+      <td>76528.430143</td>
+      <td>-23592.250929</td>
+    </tr>
+    <tr>
+      <th>FS.0</th>
+      <td>-7.091895e+04</td>
+      <td>161.5000</td>
+      <td>6.775819e+05</td>
+      <td>4.836000</td>
+      <td>0.256000</td>
+      <td>-5.529000</td>
+      <td>5.402000</td>
+      <td>-13.373000</td>
+      <td>-2.360500</td>
+      <td>-0.549000</td>
+      <td>-8.939000</td>
+      <td>2.551000</td>
+      <td>0.333000</td>
+    </tr>
+    <tr>
+      <th>SS</th>
+      <td>1.983754e+10</td>
+      <td>677581.9500</td>
+      <td>7.257807e+10</td>
+      <td>78956.079500</td>
+      <td>7015.310000</td>
+      <td>-61653.769333</td>
+      <td>381992.605667</td>
+      <td>-65083.371833</td>
+      <td>-297815.850500</td>
+      <td>-87121.889333</td>
+      <td>-440940.419500</td>
+      <td>283685.350500</td>
+      <td>-83679.807500</td>
+    </tr>
+    <tr>
+      <th>CD45RA</th>
+      <td>5.573825e+04</td>
+      <td>4.8360</td>
+      <td>7.895608e+04</td>
+      <td>1.984566</td>
+      <td>-0.231057</td>
+      <td>-0.625068</td>
+      <td>0.014314</td>
+      <td>-1.343086</td>
+      <td>-0.634414</td>
+      <td>-0.121121</td>
+      <td>-1.264832</td>
+      <td>0.641103</td>
+      <td>0.006621</td>
+    </tr>
+    <tr>
+      <th>CCR7</th>
+      <td>-4.739134e+04</td>
+      <td>0.2560</td>
+      <td>7.015310e+03</td>
+      <td>-0.231057</td>
+      <td>2.119731</td>
+      <td>1.837819</td>
+      <td>1.227909</td>
+      <td>2.731482</td>
+      <td>0.721181</td>
+      <td>-0.526321</td>
+      <td>1.609736</td>
+      <td>0.085096</td>
+      <td>0.045586</td>
+    </tr>
+    <tr>
+      <th>CD28</th>
+      <td>-7.043126e+04</td>
+      <td>-5.5290</td>
+      <td>-6.165377e+04</td>
+      <td>-0.625068</td>
+      <td>1.837819</td>
+      <td>4.233845</td>
+      <td>1.408394</td>
+      <td>4.528386</td>
+      <td>1.430229</td>
+      <td>-1.169376</td>
+      <td>3.352144</td>
+      <td>-0.117211</td>
+      <td>-0.155401</td>
+    </tr>
+    <tr>
+      <th>PD1</th>
+      <td>6.295157e+04</td>
+      <td>5.4020</td>
+      <td>3.819926e+05</td>
+      <td>0.014314</td>
+      <td>1.227909</td>
+      <td>1.408394</td>
+      <td>4.538896</td>
+      <td>1.954455</td>
+      <td>-1.065938</td>
+      <td>-1.859649</td>
+      <td>-1.890051</td>
+      <td>2.319644</td>
+      <td>-0.639173</td>
+    </tr>
+    <tr>
+      <th>CD27</th>
+      <td>-1.054458e+05</td>
+      <td>-13.3730</td>
+      <td>-6.508337e+04</td>
+      <td>-1.343086</td>
+      <td>2.731482</td>
+      <td>4.528386</td>
+      <td>1.954455</td>
+      <td>8.181249</td>
+      <td>1.576484</td>
+      <td>-1.738945</td>
+      <td>3.635942</td>
+      <td>0.463187</td>
+      <td>-0.032486</td>
+    </tr>
+    <tr>
+      <th>CD4</th>
+      <td>-1.083952e+05</td>
+      <td>-2.3605</td>
+      <td>-2.978159e+05</td>
+      <td>-0.634414</td>
+      <td>0.721181</td>
+      <td>1.430229</td>
+      <td>-1.065938</td>
+      <td>1.576484</td>
+      <td>1.823103</td>
+      <td>0.092512</td>
+      <td>2.923721</td>
+      <td>-1.296814</td>
+      <td>0.386778</td>
+    </tr>
+    <tr>
+      <th>CD8</th>
+      <td>-5.903630e+03</td>
+      <td>-0.5490</td>
+      <td>-8.712189e+04</td>
+      <td>-0.121121</td>
+      <td>-0.526321</td>
+      <td>-1.169376</td>
+      <td>-1.859649</td>
+      <td>-1.738945</td>
+      <td>0.092512</td>
+      <td>1.651106</td>
+      <td>0.266684</td>
+      <td>-1.010761</td>
+      <td>0.280202</td>
+    </tr>
+    <tr>
+      <th>CD3</th>
+      <td>-1.685948e+05</td>
+      <td>-8.9390</td>
+      <td>-4.409404e+05</td>
+      <td>-1.264832</td>
+      <td>1.609736</td>
+      <td>3.352144</td>
+      <td>-1.890051</td>
+      <td>3.635942</td>
+      <td>2.923721</td>
+      <td>0.266684</td>
+      <td>5.852411</td>
+      <td>-2.329204</td>
+      <td>0.543411</td>
+    </tr>
+    <tr>
+      <th>CD57</th>
+      <td>7.652843e+04</td>
+      <td>2.5510</td>
+      <td>2.836854e+05</td>
+      <td>0.641103</td>
+      <td>0.085096</td>
+      <td>-0.117211</td>
+      <td>2.319644</td>
+      <td>0.463187</td>
+      <td>-1.296814</td>
+      <td>-1.010761</td>
+      <td>-2.329204</td>
+      <td>1.865231</td>
+      <td>-0.371314</td>
+    </tr>
+    <tr>
+      <th>CD45</th>
+      <td>-2.359225e+04</td>
+      <td>0.3330</td>
+      <td>-8.367981e+04</td>
+      <td>0.006621</td>
+      <td>0.045586</td>
+      <td>-0.155401</td>
+      <td>-0.639173</td>
+      <td>-0.032486</td>
+      <td>0.386778</td>
+      <td>0.280202</td>
+      <td>0.543411</td>
+      <td>-0.371314</td>
+      <td>0.261683</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">apply()</span></code> does not need to use <code class="docutils literal notranslate"><span class="pre">.data</span></code> but can use any attribute present on all nodes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtree</span>
+
+<span class="n">cell_tree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_complete_aligned_trunk</span><span class="p">()</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">cellmat</span>
+<span class="c1"># When setting .data, we do not need to give the cellmat explicitely to .predict()</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">id_preds</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">())</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">use_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cell_tree</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+name
+_NodeMixin__children
+decision_name
+decision_value
+decision_cutoff
+counter
+ids
+_data
+id_unique_dot_exporter
+math_node_attribute
+math_inplace
+_long_print_attributes
+
+
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">changed_decision_name</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AttributeError: &#39;NBNode&#39; object has no attribute &#39;changed_decision_name&#39;&quot;</span><span class="p">)</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;___this_is_a_change&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">x</span><span class="p">,</span> <span class="n">input_attribute_name</span><span class="o">=</span><span class="s2">&quot;decision_name&quot;</span><span class="p">,</span> <span class="n">result_attribute_name</span><span class="o">=</span><span class="s2">&quot;changed_decision_name&quot;</span><span class="p">)</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="n">print_attributes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;decision_name&quot;</span><span class="p">,</span> <span class="s2">&quot;changed_decision_name&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AttributeError: &#39;NBNode&#39; object has no attribute &#39;changed_decision_name&#39;
+AllCells (decision_name:None, changed_decision_name:None)
+├── DN (decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], changed_decision_name:CD4___this_is_a_change)
+├── DP (decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], changed_decision_name:CD4___this_is_a_change)
+├── CD4-/CD8+ (decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], changed_decision_name:CD4___this_is_a_change)
+│   ├── naive (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+│   ├── Tcm (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+│   ├── Temra (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+│   └── Tem (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+└── CD4+/CD8- (decision_name:[&#39;CD4&#39;, &#39;CD8&#39;], changed_decision_name:CD4___this_is_a_change)
+    ├── naive (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+    ├── Tcm (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+    ├── Temra (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+    └── Tem (decision_name:[&#39;CCR7&#39;, &#39;CD45RA&#39;], changed_decision_name:CCR7___this_is_a_change)
+</pre></div></div>
+</div>
+</section>
+<section id="Plotting">
+<h2>Plotting<a class="headerlink" href="#Plotting" title="Permalink to this heading">¶</a></h2>
+<p>For plotting we have two major steps:</p>
+<ol class="arabic simple">
+<li><p>Generate a <code class="docutils literal notranslate"><span class="pre">`.dot</span></code> &lt;<a class="reference external" href="https://graphviz.org/doc/info/lang.html">https://graphviz.org/doc/info/lang.html</a>&gt;`__ file with <a class="reference external" href="https://anytree.readthedocs.io/en/latest/exporter/dotexporter.html">anytree</a></p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">`graphviz</span></code> &lt;<a class="reference external" href="https://graphviz.org/download/">https://graphviz.org/download/</a>&gt;`__ as engine to make the plots</p></li>
+</ol>
+<p>Potentially you have to install graphviz.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtree</span>
+
+<span class="n">cell_tree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_complete_aligned_trunk</span><span class="p">()</span>
+<span class="n">exported_dot</span> <span class="o">=</span> <span class="n">cell_tree</span><span class="o">.</span><span class="n">export_dot</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">exported_dot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+digraph tree {
+    node [shape=box, style=&#34;filled&#34;, color=&#34;black&#34;];
+    &#34;0x7f6217352b80&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f628c31cfa0&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f628c31c9d0&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f628c31cb20&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352670&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352730&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352610&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352820&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352d00&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352190&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352850&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f62173528b0&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f62173528e0&#34; [label=&#34;None&#34;, fillcolor=&#34;white&#34;];
+    &#34;0x7f6217352b80&#34; -&gt; &#34;0x7f628c31cfa0&#34;;
+    &#34;0x7f6217352b80&#34; -&gt; &#34;0x7f628c31c9d0&#34;;
+    &#34;0x7f6217352b80&#34; -&gt; &#34;0x7f628c31cb20&#34;;
+    &#34;0x7f6217352b80&#34; -&gt; &#34;0x7f6217352d00&#34;;
+    &#34;0x7f628c31cb20&#34; -&gt; &#34;0x7f6217352670&#34;;
+    &#34;0x7f628c31cb20&#34; -&gt; &#34;0x7f6217352730&#34;;
+    &#34;0x7f628c31cb20&#34; -&gt; &#34;0x7f6217352610&#34;;
+    &#34;0x7f628c31cb20&#34; -&gt; &#34;0x7f6217352820&#34;;
+    &#34;0x7f6217352d00&#34; -&gt; &#34;0x7f6217352190&#34;;
+    &#34;0x7f6217352d00&#34; -&gt; &#34;0x7f6217352850&#34;;
+    &#34;0x7f6217352d00&#34; -&gt; &#34;0x7f62173528b0&#34;;
+    &#34;0x7f6217352d00&#34; -&gt; &#34;0x7f62173528e0&#34;;
+}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">())</span>
+
+
+<span class="kn">from</span> <span class="nn">nbnode.plot.utils</span> <span class="kn">import</span> <span class="n">plot_save_unified</span>
+<span class="n">plot_save_unified</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">(),</span> <span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cell_tree.pdf&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;pydotplus.graphviz.Dot object at 0x7f62141db820&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_21_1.png" src="../_images/notebooks_nbnode-04_21_1.png" />
+</div>
+</div>
+<p>Classically, the colors visualize the number of cells in each node (<code class="docutils literal notranslate"><span class="pre">counter</span></code>). Up to this point we did not count, so let’s do that.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">cell_tree</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">cellmat</span>
+<span class="c1"># When setting .data, we do not need to give the cellmat explicitely to .predict()</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">id_preds</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">())</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">use_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cell_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AllCells (counter:999)
+├── DN (counter:0)
+├── DP (counter:973)
+├── CD4-/CD8+ (counter:5)
+│   ├── naive (counter:5)
+│   ├── Tcm (counter:0)
+│   ├── Temra (counter:0)
+│   └── Tem (counter:0)
+└── CD4+/CD8- (counter:21)
+    ├── naive (counter:20)
+    ├── Tcm (counter:0)
+    ├── Temra (counter:1)
+    └── Tem (counter:0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/gugl/.conda_envs/nbnode_pyscaffold/lib/python3.8/site-packages/nbnode/nbnode.py:353: UserWarning: self.ids was an empty list, subset an empty dataframe. Did you call celltree.id_preds(predicted_nodes)? Can also be a node with no cells.
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_save_unified</span><span class="p">(</span><span class="n">cell_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">(),</span> <span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cell_tree.pdf&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_24_0.png" src="../_images/notebooks_nbnode-04_24_0.png" />
+</div>
+</div>
+<p>All cells are in the root node (<code class="docutils literal notranslate"><span class="pre">/AllCells</span></code>), therefore it is deep red. Also there are so many <code class="docutils literal notranslate"><span class="pre">DP</span></code> cells that all other nodes are essentially white. Let’s force maximum saturation (red) at value 50 and minimum saturation (white) at value 0!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cell_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span class="n">plot_save_unified</span><span class="p">(</span>
+    <span class="n">cell_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">(</span>
+        <span class="n">fillcolor_node_attribute</span><span class="o">=</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span>
+        <span class="n">custom_min_max_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+<span class="n">img</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AllCells (counter:999)
+├── DN (counter:0)
+├── DP (counter:973)
+├── CD4-/CD8+ (counter:5)
+│   ├── naive (counter:5)
+│   ├── Tcm (counter:0)
+│   ├── Temra (counter:0)
+│   └── Tem (counter:0)
+└── CD4+/CD8- (counter:21)
+    ├── naive (counter:20)
+    ├── Tcm (counter:0)
+    ├── Temra (counter:1)
+    └── Tem (counter:0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_26_1.png" src="../_images/notebooks_nbnode-04_26_1.png" />
+</div>
+</div>
+<p>We can also modify the text printed with the <code class="docutils literal notranslate"><span class="pre">node_text_attributes</span></code> argument. If only a list of elements is given, the result is always <code class="docutils literal notranslate"><span class="pre">value_name:value</span></code>. To make more sophisticated formatting you can supply a <code class="docutils literal notranslate"><span class="pre">Dict[str,</span> <span class="pre">str]</span></code> which contains the attribute name as key and the <code class="docutils literal notranslate"><span class="pre">`f-string</span></code> &lt;<a class="reference external" href="https://note.nkmk.me/en/python-f-strings/">https://note.nkmk.me/en/python-f-strings/</a>&gt;`__ as value.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cell_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span class="n">plot_save_unified</span><span class="p">(</span>
+    <span class="n">cell_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">(</span>
+    <span class="n">fillcolor_node_attribute</span><span class="o">=</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span>
+    <span class="n">custom_min_max_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+    <span class="n">node_text_attributes</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;counter&quot;</span><span class="p">],</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cell_tree.pdf&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AllCells (counter:999)
+├── DN (counter:0)
+├── DP (counter:973)
+├── CD4-/CD8+ (counter:5)
+│   ├── naive (counter:5)
+│   ├── Tcm (counter:0)
+│   ├── Temra (counter:0)
+│   └── Tem (counter:0)
+└── CD4+/CD8- (counter:21)
+    ├── naive (counter:20)
+    ├── Tcm (counter:0)
+    ├── Temra (counter:1)
+    └── Tem (counter:0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_28_1.png" src="../_images/notebooks_nbnode-04_28_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cell_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span class="n">plot_save_unified</span><span class="p">(</span>
+    <span class="n">cell_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">(</span>
+    <span class="n">fillcolor_node_attribute</span><span class="o">=</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span>
+    <span class="n">custom_min_max_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+    <span class="n">node_text_attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;new_format_left</span><span class="se">\n</span><span class="si">{:&lt;8}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;counter&quot;</span><span class="p">:</span><span class="s2">&quot;new_zerofilled</span><span class="se">\n</span><span class="si">{:04d}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cell_tree.pdf&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AllCells (counter:999)
+├── DN (counter:0)
+├── DP (counter:973)
+├── CD4-/CD8+ (counter:5)
+│   ├── naive (counter:5)
+│   ├── Tcm (counter:0)
+│   ├── Temra (counter:0)
+│   └── Tem (counter:0)
+└── CD4+/CD8- (counter:21)
+    ├── naive (counter:20)
+    ├── Tcm (counter:0)
+    ├── Temra (counter:1)
+    └── Tem (counter:0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_29_1.png" src="../_images/notebooks_nbnode-04_29_1.png" />
+</div>
+</div>
+<p>If you want to apply math to the nodes you have to do that outside.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_tree</span> <span class="o">=</span> <span class="p">(</span><span class="n">cell_tree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">new_tree</span><span class="o">.</span><span class="n">astype_math_node_attribute</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">new_tree</span> <span class="o">=</span> <span class="n">new_tree</span> <span class="o">*</span> <span class="mf">5.713223</span>
+
+<span class="n">new_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+<span class="n">plot_save_unified</span><span class="p">(</span>
+    <span class="n">new_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">(</span>
+    <span class="n">fillcolor_node_attribute</span><span class="o">=</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span>
+    <span class="n">custom_min_max_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+    <span class="n">node_text_attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;new_format_left</span><span class="se">\n</span><span class="si">{:&lt;8}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;counter&quot;</span><span class="p">:</span><span class="s2">&quot;new_zerofilled</span><span class="se">\n</span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="p">},</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cell_tree.pdf&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+AllCells (counter:5713.223)
+├── DN (counter:5.713223)
+├── DP (counter:5564.679202)
+├── CD4-/CD8+ (counter:34.279338)
+│   ├── naive (counter:34.279338)
+│   ├── Tcm (counter:5.713223)
+│   ├── Temra (counter:5.713223)
+│   └── Tem (counter:5.713223)
+└── CD4+/CD8- (counter:125.690906)
+    ├── naive (counter:119.977683)
+    ├── Tcm (counter:5.713223)
+    ├── Temra (counter:11.426446)
+    └── Tem (counter:5.713223)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_31_1.png" src="../_images/notebooks_nbnode-04_31_1.png" />
+</div>
+</div>
+<p>You can also change the color map also using matplotlibs color maps.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+
+<span class="n">plot_save_unified</span><span class="p">(</span>
+    <span class="n">new_tree</span><span class="o">.</span><span class="n">graph_from_dot</span><span class="p">(</span>
+        <span class="n">fillcolor_node_attribute</span><span class="o">=</span><span class="s2">&quot;counter&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;viridis&quot;</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+<span class="n">img</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_33_0.png" src="../_images/notebooks_nbnode-04_33_0.png" />
+</div>
+</div>
+<p>You can use usual <code class="docutils literal notranslate"><span class="pre">pydotplus</span></code> to make much more complex graphs:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydotplus</span>
+<span class="kn">import</span> <span class="nn">anytree.exporter</span> <span class="k">as</span> <span class="nn">a_exp</span>
+
+<span class="kn">from</span> <span class="nn">nbnode.plot.utils</span> <span class="kn">import</span> <span class="n">plot_save_unified</span>
+
+<span class="n">simpletree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_simple</span><span class="p">()</span>
+<span class="n">dot_data</span> <span class="o">=</span> <span class="n">a_exp</span><span class="o">.</span><span class="n">UniqueDotExporter</span><span class="p">(</span>
+    <span class="n">simpletree</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;node [shape=box, style=&quot;filled&quot;, color=&quot;black&quot;];&#39;</span><span class="p">],</span>
+    <span class="n">nodeattrfunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="s1">&#39;label=&quot;</span><span class="si">{}</span><span class="s1">&quot;, fillcolor=&quot;white&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">dotdata_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dot_data</span><span class="p">])</span>
+<span class="c1"># print(dotdata_str)</span>
+<span class="n">graph</span><span class="p">:</span> <span class="n">pydotplus</span><span class="o">.</span><span class="n">Dot</span> <span class="o">=</span> <span class="n">pydotplus</span><span class="o">.</span><span class="n">graph_from_dot_data</span><span class="p">(</span><span class="n">dotdata_str</span><span class="p">)</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_node_list</span><span class="p">()</span>
+
+<span class="n">plot_save_unified</span><span class="p">(</span>
+    <span class="n">any_plot</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;cell_tree.pdf&quot;</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cell_tree.pdf&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_35_0.png" src="../_images/notebooks_nbnode-04_35_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="s2">&quot;edge&quot;</span><span class="p">,</span> <span class="s2">&quot;plottitle&quot;</span><span class="p">):</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">set_fillcolor</span><span class="p">(</span><span class="s2">&quot;#ff5a00&quot;</span><span class="p">)</span>
+<span class="c1"># print(graph.to_string())</span>
+<span class="n">plot_save_unified</span><span class="p">(</span><span class="n">any_plot</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;cell_tree.pdf&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">WImage</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">WImage</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cell_tree.pdf&#39;</span><span class="p">)</span>
+<span class="n">img</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_nbnode-04_36_0.png" src="../_images/notebooks_nbnode-04_36_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../notebooks.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nbnode-01.html">Tutorial 1: NBNode basic,</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-02.html">Tutorial 2: Predictions I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-03.html">Tutorial 3: Counting and math</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial 4: Predictions II, data, plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-05_sim.html">Tutorial 5: Cytometry simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../notebooks.html">Tutorials</a><ul>
+      <li>Previous: <a href="nbnode-03.html" title="previous chapter">Counting and math</a></li>
+      <li>Next: <a href="nbnode-05_sim.html" title="next chapter">Flow cytometry simulation.</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/notebooks/nbnode-04.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Base Non-binary node functionality &#8212; nbnode 0.0.post1.dev1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=233b9934" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=e577996c"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Part predictions and unfitting data" href="nbnode-02.html" />
+    <link rel="prev" title="Tutorials" href="../notebooks.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="Base-Non-binary-node-functionality">
+<h1>Base Non-binary node functionality<a class="headerlink" href="#Base-Non-binary-node-functionality" title="Permalink to this heading">¶</a></h1>
+<p>Optional: Create a (conda) environment and activate it, install the package</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-y<span class="w"> </span>-n<span class="w"> </span>conda_nbnode<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
+conda<span class="w"> </span>activate<span class="w"> </span>conda_nbnode
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ggrlab/nbnode
+<span class="nb">cd</span><span class="w"> </span>nbnode
+pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Base-functionality of the package is to enable non-binary trees. The following creates a tree with a root node <code class="docutils literal notranslate"><span class="pre">a</span></code> and three children <code class="docutils literal notranslate"><span class="pre">a0</span></code>, <code class="docutils literal notranslate"><span class="pre">a1</span></code> and <code class="docutils literal notranslate"><span class="pre">a2</span></code>. <code class="docutils literal notranslate"><span class="pre">a1</span></code> is the only child with another child <code class="docutils literal notranslate"><span class="pre">a1a</span></code>.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>a
+├── a0
+├── a1
+│   └── a1a
+└── a2
+</pre></div>
+</div>
+<p>A basic non-binary node (<code class="docutils literal notranslate"><span class="pre">NBNode</span></code>) consists of four important attributes:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- ``name`` The name of the node. This is the only mandatory attribute.
+- ``parent`` The parent node of this node.
+- ``decision_name`` The name of the value leading to this node.
+- ``decision_value`` The value leading to this node.
+</pre></div>
+</div>
+<p>The name of the node must only be unique within all childs of the parent node. The <code class="docutils literal notranslate"><span class="pre">decision_name</span></code> and <code class="docutils literal notranslate"><span class="pre">decision_value</span></code> are the named values leading to this node. Note that <code class="docutils literal notranslate"><span class="pre">decision_name</span></code> must be a string, but <code class="docutils literal notranslate"><span class="pre">decision_value</span></code> can be anything, including strings, integers, floats, etc.</p>
+<p>To build the tree above, we can use the following code:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nbnode.nbnode</span> <span class="kn">import</span> <span class="n">NBNode</span>
+<span class="n">simple_tree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">simple_tree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">simple_tree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">simple_tree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;another&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m3&quot;</span><span class="p">)</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1a&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_name=&#39;m2&#39;, decision_value=&#39;test&#39;)
+</pre></div></div>
+</div>
+<p>We can check if the previous tree was built correctly:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simple_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a (counter:0)
+├── a0 (counter:0)
+├── a1 (counter:0)
+│   └── a1a (counter:0)
+└── a2 (counter:0)
+</pre></div></div>
+</div>
+<p>And we can show additional information about each node of the tree:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simple_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="s2">&quot;__long__&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+└── a2 (counter:0, decision_name:m3, decision_value:another)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Alternatively, we prepared the tree already for you:</span>
+<span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtree</span>
+<span class="n">simple_tree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_simple</span><span class="p">()</span>
+<span class="n">simple_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="s2">&quot;__long__&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Finally, we use the tree to predict the final node of a new data point. The following values, supplied as two lists <code class="docutils literal notranslate"><span class="pre">values</span></code> and <code class="docutils literal notranslate"><span class="pre">names</span></code> are used to predict the final node.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_prediction</span> <span class="o">=</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+        <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">single_prediction</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_name=&#39;m2&#39;, decision_value=&#39;test&#39;)
+</pre></div></div>
+</div>
+<p>This returns the identified NBnode object defined by the values. <code class="docutils literal notranslate"><span class="pre">NBNode</span></code> can additionally handle the following data types:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Dictionary&quot;</span><span class="p">)</span>
+<span class="n">value_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;m1&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value_dict</span><span class="p">)</span>
+<span class="n">pred_dict</span> <span class="o">=</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">value_dict</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Prediction: &quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pred_dict</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Dictionary
+{&#39;m1&#39;: 1, &#39;m2&#39;: &#39;test&#39;, &#39;m3&#39;: 2}
+Prediction:
+NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_name=&#39;m2&#39;, decision_value=&#39;test&#39;)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Pandas DataFrame&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">value_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">([</span><span class="n">value_dict</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value_df</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Prediction: &quot;</span><span class="p">)</span>
+<span class="n">pred_df</span> <span class="o">=</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">value_df</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pred_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Pandas DataFrame
+   m1    m2  m3
+0   1  test   2
+
+Prediction:
+0    (((NBNode(&#39;/a/a1/a1a&#39;, counter=0, decision_nam...
+dtype: object
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Numpy array: Only for numerical values&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">values_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">values_np</span><span class="p">)</span>
+<span class="n">pred_np</span> <span class="o">=</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">values_np</span><span class="p">,</span>  <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pred_np</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Numpy array: Only for numerical values
+[[-1  0  0]]
+0    (((NBNode(&#39;/a/a0&#39;, counter=0, decision_name=&#39;m...
+dtype: object
+</pre></div></div>
+</div>
+<section id="NBNode-basic-methods">
+<h2>NBNode basic methods<a class="headerlink" href="#NBNode-basic-methods" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">NBNode</span></code> has a large number of implemented basic methods:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nbnode.nbnode</span> <span class="kn">import</span> <span class="n">NBNode</span>
+<span class="kn">import</span> <span class="nn">nbnode.nbnode_trees</span> <span class="k">as</span> <span class="nn">nbtree</span>
+<span class="n">simple_tree</span> <span class="o">=</span> <span class="n">nbtree</span><span class="o">.</span><span class="n">tree_simple</span><span class="p">()</span>
+
+<span class="c1"># Print the tree</span>
+<span class="n">simple_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="s2">&quot;__long__&quot;</span><span class="p">)</span>
+<span class="c1"># Print specific attributes of the tree as list</span>
+<span class="n">simple_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">([</span><span class="s2">&quot;counter&quot;</span><span class="p">])</span>
+<span class="n">simple_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">([</span><span class="s2">&quot;decision_name&quot;</span><span class="p">,</span> <span class="s2">&quot;decision_value&quot;</span><span class="p">])</span>
+<span class="n">simple_tree</span><span class="o">.</span><span class="vm">__dict__</span>
+
+
+<span class="c1"># Access nodes</span>
+<span class="c1"># Access a child of any (here root) node</span>
+<span class="n">simple_tree</span><span class="o">.</span><span class="n">children</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">simple_tree</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+
+<span class="c1"># You can also access nodes by their _full_ name</span>
+<span class="c1"># full name is the path from root to the node, not the decision name, nor the node name</span>
+<span class="c1"># You can retrieve the full name of a node by</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a1</span><span class="o">.</span><span class="n">get_name_full</span><span class="p">())</span>
+<span class="c1"># Mind the &quot;/&quot; (&quot;root&quot;) at the beginning of the path</span>
+<span class="n">a1_by_name</span> <span class="o">=</span> <span class="n">simple_tree</span><span class="p">[</span><span class="s2">&quot;/a/a1&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a1_by_name</span><span class="p">)</span>
+
+<span class="c1"># We can compare nodes! Here we have the exact same node, so it is identical.</span>
+<span class="k">assert</span> <span class="n">a1_by_name</span> <span class="o">==</span> <span class="n">a1</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+└── a2 (counter:0, decision_name:m3, decision_value:another)
+a (counter:0)
+├── a0 (counter:0)
+├── a1 (counter:0)
+│   └── a1a (counter:0)
+└── a2 (counter:0)
+a (decision_name:None, decision_value:None)
+├── a0 (decision_name:m1, decision_value:-1)
+├── a1 (decision_name:m1, decision_value:1)
+│   └── a1a (decision_name:m2, decision_value:test)
+└── a2 (decision_name:m3, decision_value:another)
+NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1)
+/a/a1
+NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1)
+</pre></div></div>
+</div>
+</section>
+<section id="Decision-cutoffs">
+<h2>Decision cutoffs<a class="headerlink" href="#Decision-cutoffs" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">NBNode</span></code> can also be used to split and then decide on continuous features.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">continuous_tree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">continuous_tree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">,</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">continuous_tree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">,</span> <span class="n">decision_cutoff</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">continuous_tree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="s2">&quot;__long__&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:1)
+└── a1 (counter:0, decision_name:m1, decision_value:-1)
+</pre></div></div>
+</div>
+<p>The above <code class="docutils literal notranslate"><span class="pre">continuous_tree</span></code> contains two nodes, which both decide on the value of <code class="docutils literal notranslate"><span class="pre">m1</span></code> with either 1 or -1. Additionally, they have a decision cutoff. Until now, <code class="docutils literal notranslate"><span class="pre">NBNode</span></code> needed an <strong>exact</strong> match of the decision value. With <code class="docutils literal notranslate"><span class="pre">decision_cutoff</span></code>, the value in <code class="docutils literal notranslate"><span class="pre">decision_name</span></code> is first cut at the cutoff and returns:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kc">True</span> <span class="k">if</span> <span class="o">&gt;=</span> <span class="mf">0.5</span>
+<span class="kc">False</span> <span class="k">if</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">continuous_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">0.6</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">continuous_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">]))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">continuous_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">continuous_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">]))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">continuous_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">continuous_tree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+NBNode(&#39;/a/a0&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1)
+NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=-1)
+NBNode(&#39;/a/a0&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=1)
+NBNode(&#39;/a/a1&#39;, counter=0, decision_name=&#39;m1&#39;, decision_value=-1)
+</pre></div></div>
+</div>
+</section>
+<section id="Multiple-decision-values">
+<h2>Multiple decision values<a class="headerlink" href="#Multiple-decision-values" title="Permalink to this heading">¶</a></h2>
+<p>Some nodes need not only a single value to decide on the endnode but multiple. With NBNode, you can decide on any number of features.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[85]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nbnode.nbnode</span> <span class="kn">import</span> <span class="n">NBNode</span>
+
+<span class="n">mytree</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="c1"># a0 =</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m1&quot;</span><span class="p">)</span>
+<span class="c1"># a2 =</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;another&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m3&quot;</span><span class="p">)</span>
+<span class="c1"># a1a =</span>
+<span class="n">NBNode</span><span class="p">(</span><span class="s2">&quot;a1a&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">a1</span><span class="p">,</span> <span class="n">decision_value</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">decision_name</span><span class="o">=</span><span class="s2">&quot;m2&quot;</span><span class="p">)</span>
+<span class="n">NBNode</span><span class="p">(</span>
+    <span class="s2">&quot;a3&quot;</span><span class="p">,</span>
+    <span class="n">parent</span><span class="o">=</span><span class="n">mytree</span><span class="p">,</span>
+    <span class="n">decision_value</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">decision_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="s2">&quot;m4&quot;</span><span class="p">],</span>
+    <span class="n">decision_cutoff</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">mytree</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">(</span><span class="s2">&quot;__long__&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Predictions&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">,</span> <span class="s2">&quot;m4&quot;</span><span class="p">]))</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">mytree</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+        <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;NOT_test&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;m1&quot;</span><span class="p">,</span> <span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="s2">&quot;m3&quot;</span><span class="p">,</span> <span class="s2">&quot;m4&quot;</span><span class="p">]</span>
+        <span class="p">))</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+a (counter:0, decision_name:None, decision_value:None)
+├── a0 (counter:0, decision_name:m1, decision_value:-1)
+├── a1 (counter:0, decision_name:m1, decision_value:1)
+│   └── a1a (counter:0, decision_name:m2, decision_value:test)
+├── a2 (counter:0, decision_name:m3, decision_value:another)
+└── a3 (counter:0, decision_name:[&#39;m2&#39;, &#39;m4&#39;], decision_value:[&#39;test&#39;, 1])
+Predictions
+
+
+NBNode(&#39;/a/a3&#39;, counter=0, decision_name=[&#39;m2&#39;, &#39;m4&#39;], decision_value=[&#39;test&#39;, 1])
+ValueError: Could not find a fitting endnode for the data you gave. You also did not allow for part predictions.
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">nbnode</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../notebooks.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial 1: NBNode basic,</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-02.html">Tutorial 2: Predictions I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-03.html">Tutorial 3: Counting and math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-04.html">Tutorial 4: Predictions II, data, plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbnode-05_sim.html">Tutorial 5: Cytometry simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributions &amp; Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../notebooks.html">Tutorials</a><ul>
+      <li>Previous: <a href="../notebooks.html" title="previous chapter">Tutorials</a></li>
+      <li>Next: <a href="nbnode-02.html" title="next chapter">Part predictions and unfitting data</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, gunthergl.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/notebooks/nbnode-01.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

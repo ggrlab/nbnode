@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,12 +8,13 @@
     <title>Tutorials &#8212; nbnode 0.0.post1.dev1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=233b9934" />
-    <script src="_static/documentation_options.js?v=42336cb0"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e577996c"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="next" title="Base Non-binary node functionality" href="notebooks/nbnode-01.html" />
     <link rel="prev" title="NBNode" href="readme.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -32,8 +33,35 @@
           <div class="body" role="main">
             
   <section id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nbnode-01.html">Tutorial 1: NBNode basic,</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-01.html#NBNode-basic-methods">NBNode basic methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-01.html#Decision-cutoffs">Decision cutoffs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-01.html#Multiple-decision-values">Multiple decision values</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nbnode-02.html">Tutorial 2: Predictions I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nbnode-03.html">Tutorial 3: Counting and math</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-03.html#Counting">Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-03.html#Math-on-one-NBNode">Math on one NBNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-03.html#Math-with-multiple-NBNodes">Math with multiple NBNodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nbnode-04.html">Tutorial 4: Predictions II, data, plotting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-04.html#Predict-based-on-node-names">Predict based on node names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-04.html#Usage-of-.data">Usage of .data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-04.html#Plotting">Plotting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/nbnode-05_sim.html">Tutorial 5: Cytometry simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-05_sim.html#Synthetic-data-based-on-previous-samples">Synthetic data based on previous samples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-05_sim.html#Synthetic-data-with-effects">Synthetic data with effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-05_sim.html#FlowSimulationTree-methods-and-attributes">FlowSimulationTree methods and attributes</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </section>
 
@@ -56,7 +84,12 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Overview</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul class="simple">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-01.html">Tutorial 1: NBNode basic,</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-02.html">Tutorial 2: Predictions I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-03.html">Tutorial 3: Counting and math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-04.html">Tutorial 4: Predictions II, data, plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/nbnode-05_sim.html">Tutorial 5: Cytometry simulation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributions &amp; Help</a></li>
@@ -71,7 +104,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="readme.html" title="previous chapter">NBNode</a></li>
-      <li>Next: <a href="contributing.html" title="next chapter">Contributing</a></li>
+      <li>Next: <a href="notebooks/nbnode-01.html" title="next chapter">Base Non-binary node functionality</a></li>
   </ul></li>
 </ul>
 </div>
@@ -101,7 +134,7 @@
       &copy;2023, gunthergl.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
