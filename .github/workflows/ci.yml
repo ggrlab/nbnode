@@ -98,7 +98,7 @@ jobs:
       - prepare
       - download_big_testdata
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         python:
           - "3.8" # oldest Python supported by PSF
@@ -125,7 +125,7 @@ jobs:
         uses: actions/download-artifact@v3
         with: { name: example_data, path: example_data/ }
       - name: Run tests
-        continue-on-error: false
+        # continue-on-error: false
         run: >-
           pipx run --python '${{ steps.setup-python.outputs.python-path }}'
           tox -e coverage_githubCI --installpkg '${{ needs.prepare.outputs.wheel-distribution }}' -- -rFEx --durations 10 --color yes
