@@ -106,6 +106,7 @@ jobs:
           - ubuntu-latest
           # - macos-latest  # graphviz would not install (2023-12-08)
           - windows-latest
+      fail-fast: false  # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v3
