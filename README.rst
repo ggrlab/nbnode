@@ -65,6 +65,9 @@ Package setup
 This project has been set up using PyScaffold 4.4. For details and usage
 information on PyScaffold see https://pyscaffold.org/::
 
+
+.. code-block:: bash
+
     pip install pyscaffold
     putup nbnode
     cd nbnode
@@ -88,9 +91,16 @@ information on PyScaffold see https://pyscaffold.org/::
     pip install pre-commit
     pre-commit autoupdate
 
-Migration to github:
+    # Migration to github:
 
-    putup --update . --github
+        putup --update . --github
+
+    # pypi:
+    # login, then create a new token https://pypi.org/manage/account/token/
+    # re-comment (after I commented them out)
+    # .github/workflows/ci.yml:
+    #       publish: [...]
+
 
 
 
