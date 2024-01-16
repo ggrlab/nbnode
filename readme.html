@@ -61,42 +61,41 @@ pip<span class="w"> </span>install<span class="w"> </span>.
 <section id="package-setup">
 <h2>Package setup<a class="headerlink" href="#package-setup" title="Permalink to this heading">¶</a></h2>
 <p>This project has been set up using PyScaffold 4.4. For details and usage
-information on PyScaffold see <a class="reference external" href="https://pyscaffold.org/">https://pyscaffold.org/</a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">code</span><span class="o">-</span><span class="n">block</span><span class="p">::</span> <span class="n">bash</span>
+information on PyScaffold see <a class="reference external" href="https://pyscaffold.org/">https://pyscaffold.org/</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pyscaffold
+putup<span class="w"> </span>nbnode
+<span class="nb">cd</span><span class="w"> </span>nbnode
+<span class="c1"># Create nbnode within gitlab, without README</span>
+git<span class="w"> </span>branch<span class="w"> </span>-m<span class="w"> </span>master<span class="w"> </span>main
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@git.uni-regensburg.de:ccc_verse/nbnode.git
+git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>--all
+conda<span class="w"> </span>create<span class="w"> </span>-y<span class="w"> </span>-n<span class="w"> </span>conda_nbnode<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8
+conda<span class="w"> </span>activate<span class="w"> </span>conda_nbnode
+<span class="c1"># Select conda_nbnode as default python interpreter in VsCode</span>
+<span class="c1">#   select a single python file, then on the bottom right, the current python interpreter name</span>
+<span class="c1">#   pops up. Click on it and select the &quot;conda_nbnode&quot; interpreter.</span>
+<span class="c1"># Make sure that the correct pip is used:</span>
+<span class="c1">#   Something like: /home/gugl/.conda_envs/conda_nbnode/bin/pip</span>
+which<span class="w"> </span>pip
+pip<span class="w"> </span>install<span class="w"> </span>tox
+tox<span class="w"> </span>--help
+
+<span class="c1"># Have a clean git, then add gitlab-ci with pyscaffold</span>
+putup<span class="w"> </span>--update<span class="w"> </span>.<span class="w"> </span>--gitlab
+pip<span class="w"> </span>install<span class="w"> </span>pre-commit
+pre-commit<span class="w"> </span>autoupdate
+
+<span class="c1"># Migration to github:</span>
+
+<span class="w">    </span>putup<span class="w"> </span>--update<span class="w"> </span>.<span class="w"> </span>--github
+
+<span class="c1"># pypi:</span>
+<span class="c1"># login, then create a new token https://pypi.org/manage/account/token/</span>
+<span class="c1"># re-comment (after I commented them out)</span>
+<span class="c1"># .github/workflows/ci.yml:</span>
+<span class="c1">#       publish: [...]</span>
 </pre></div>
 </div>
-<blockquote>
-<div><p>pip install pyscaffold
-putup nbnode
-cd nbnode
-# Create nbnode within gitlab, without README
-git branch -m master main
-git remote add origin <a class="reference external" href="mailto:git&#37;&#52;&#48;git&#46;uni-regensburg&#46;de">git<span>&#64;</span>git<span>&#46;</span>uni-regensburg<span>&#46;</span>de</a>:ccc_verse/nbnode.git
-git push -u origin –all
-conda create -y -n conda_nbnode python=3.8
-conda activate conda_nbnode
-# Select conda_nbnode as default python interpreter in VsCode
-#   select a single python file, then on the bottom right, the current python interpreter name
-#   pops up. Click on it and select the “conda_nbnode” interpreter.
-# Make sure that the correct pip is used:
-#   Something like: /home/gugl/.conda_envs/conda_nbnode/bin/pip
-which pip
-pip install tox
-tox –help</p>
-<p># Have a clean git, then add gitlab-ci with pyscaffold
-putup –update . –gitlab
-pip install pre-commit
-pre-commit autoupdate</p>
-<p># Migration to github:</p>
-<blockquote>
-<div><p>putup –update . –github</p>
-</div></blockquote>
-<p># pypi:
-# login, then create a new token <a class="reference external" href="https://pypi.org/manage/account/token/">https://pypi.org/manage/account/token/</a>
-# re-comment (after I commented them out)
-# .github/workflows/ci.yml:
-#       publish: […]</p>
-</div></blockquote>
 </section>
 <section id="tests">
 <h2>Tests<a class="headerlink" href="#tests" title="Permalink to this heading">¶</a></h2>
