@@ -24,7 +24,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # https://docs.github.com/en/actions/using-jobs/setting-default-values-for-jobs
+  pre_job:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: "never"
+          skip_after_successful_duplicate: "true"
+          paths_ignore: '["**/README.md", "**/docs/**"]'
+          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
   prepare:
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     outputs:
       wheel-distribution: ${{ steps.wheel-distribution.outputs.path }}
@@ -53,6 +71,8 @@ jobs:
           retention-days: 1
 
   download_big_testdata:
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -68,11 +88,13 @@ jobs:
 
   # Starting point from: https://coderefinery.github.io/documentation/gh_workflow/
   docs:
+    needs:
+      - pre_job
+      - prepare
+    if: needs.pre_job.outputs.should_skip != 'true'
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    needs:
-      - prepare
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -94,8 +116,10 @@ jobs:
 
   test:
     needs:
+      - pre_job
       - prepare
       - download_big_testdata
+    if: needs.pre_job.outputs.should_skip != 'true'
     strategy:
       matrix:
         python:
@@ -138,7 +162,10 @@ jobs:
           parallel: true
 
   finalize:
-    needs: test
+    needs:
+      - pre_job
+      - test
+    if: needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Finalize coverage report
@@ -148,18 +175,20 @@ jobs:
           parallel-finished: true
 
   publish:
-    needs: finalize
-    if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }}
+    needs:
+      - pre_job
+      - finalize
+    if: ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags/') }} && needs.pre_job.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-        with: {python-version: "3.11"}
+        with: { python-version: "3.11" }
       - name: Retrieve pre-built distribution files
         uses: actions/download-artifact@v3
-        with: {name: python-distribution-files, path: dist/}
+        with: { name: python-distribution-files, path: dist/ }
       - name: Publish Package
         env:
           # TODO: Set your PYPI_TOKEN as a secret using GitHub UI
