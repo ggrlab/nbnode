@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Tuple
 import pandas as pd
 
 from nbnode.simulation.FlowSimulationTree import FlowSimulationTreeDirichlet
+from nbnode.simulation.save_sample import save_sample
 
 
 def sim_proportional(
@@ -15,6 +16,7 @@ def sim_proportional(
     use_only_diagonal_covmat=True,
     change_pop_mean_proportional={"/AllCells/CD4+/CD8-/Tem": 1},
     save_dir="sim/intraassay/sim00_baseline",
+    save_type: str = "csv",
     seed_sample_0=129873,
     verbose=False,
     only_return_sampled_cell_numbers=False,
@@ -122,10 +124,13 @@ def sim_proportional(
             generated_samples.append(sample_A)
 
             if save_dir is not None:
-                current_filepath = os.path.join(save_dir, f"sample_{sample_i}.csv")
-                sample_A.to_csv(current_filepath, index=False)
-                if verbose:
-                    print(f"Saved {current_filepath}")
+                save_sample(
+                    df=sample_A,
+                    save_dir=save_dir,
+                    save_type=save_type,
+                    sample_name=f"sample_{sample_i}",
+                    verbose=verbose,
+                )
 
         if ncells_A_df is None:
             ncells_A_df = pd.DataFrame(ncells_A)
