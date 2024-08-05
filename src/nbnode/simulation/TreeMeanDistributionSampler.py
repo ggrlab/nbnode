@@ -108,6 +108,7 @@ class TreeMeanDistributionSampler:
         verbose=False,
         seed_sample_0=129873,
         save_dir="sim/sim00_m0.sd1",
+        save_type: str = "csv",
         only_return_sampled_cell_numbers=False,
         save_changed_parameters=False,
         minimum_target_mean_proportion=1e-9,
@@ -186,6 +187,7 @@ class TreeMeanDistributionSampler:
         self.verbose = verbose
         self.seed_sample_0 = seed_sample_0
         self.save_dir = save_dir
+        self.save_type = save_type
 
         self.population_name_to_change = population_name_to_change
         self.original_mean = flowsim_tree.pop_mean(
@@ -209,6 +211,7 @@ class TreeMeanDistributionSampler:
         verbose=True,
         seed_sample_0=129873,
         save_dir="sim/sim00_pure_estimate",
+        save_type: str = "csv",
         _only_return_sampled_cell_numbers=False,
         save_changed_parameters=False,
         minimum_target_mean_proportion=1e-9,
@@ -273,6 +276,7 @@ class TreeMeanDistributionSampler:
                 use_only_diagonal_covmat=use_only_diagonal_covmat,
                 seed_sample_0=seed_sample_0 + sample_i,
                 save_dir=save_dir,
+                save_type=save_type,
                 sample_name=f"sample_{sample_i}",
                 only_return_sampled_cell_numbers=_only_return_sampled_cell_numbers,
                 save_changed_parameters=save_changed_parameters,
@@ -326,6 +330,7 @@ class TreeMeanDistributionSampler:
             verbose=self.verbose,
             seed_sample_0=self.seed_sample_0,
             save_dir=self.save_dir,
+            save_type=self.save_type,
             _only_return_sampled_cell_numbers=self._only_return_sampled_cell_numbers,
             save_changed_parameters=self.save_changed_parameters,
             minimum_target_mean_proportion=self.minimum_target_mean_proportion,
