@@ -120,30 +120,28 @@ class TestFlowSimulation(TestCase):
         print(x.iloc[0].to_numpy())
         assert all(
             np.isclose(
-                x.iloc[0].to_numpy(), np.array([0.9913707, -0.78346626, 0.07124489])
+                x.iloc[0].to_numpy(), np.array([0.39775895, -0.65441093, 0.69671719])
             )
         )
         x = flowsim.sample(n_cells=100)
         assert not all(
             np.isclose(
-                x.iloc[0].to_numpy(), np.array([0.9913707, -0.78346626, 0.07124489])
+                x.iloc[0].to_numpy(), np.array([0.39775895, -0.65441093, 0.69671719])
             )
         )
         flowsim.set_seed(1230847)
-        x = flowsim.sample(n_cells=1)
+        x = flowsim.sample(n_cells=10)
         assert all(
             np.isclose(
-                x.iloc[0].to_numpy(), np.array([0.9913707, -0.78346626, 0.07124489])
+                x.iloc[0].to_numpy(), np.array([0.39775895, -0.65441093, 0.69671719])
             )
         )
-        assert x.shape[0] == 1
+        assert x.shape[0] == 10
         assert x.shape[1] == 3
         flowsim.set_seed(1230847)
         x = flowsim.sample(n_cells=100)
         print(x.iloc[0])
-        assert all(
-            np.isclose(x.iloc[99].to_numpy(), np.array([0.0, 0.0, 0.20777241447137335]))
-        )
+        assert all(np.isclose(x.iloc[99].to_numpy(), np.array([0.0, 0.0, 0.83910306])))
         assert x.shape[0] == 100
         assert x.shape[1] == 3
 

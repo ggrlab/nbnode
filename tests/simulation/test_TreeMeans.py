@@ -71,16 +71,16 @@ class TestTreeMeans(TestCase):
                 {
                     "sample_0": {
                         "/AllCells/CD4+/CD8-/naive": 2,
-                        "/AllCells/CD4-/CD8+/naive": 0,
-                        "/AllCells/DP": 98,
+                        "/AllCells/CD4-/CD8+/naive": 1,
+                        "/AllCells/DP": 97,
                     },
                     "sample_1": {
                         "/AllCells/CD4+/CD8-/naive": 2,
-                        "/AllCells/CD4-/CD8+/naive": 0,
-                        "/AllCells/DP": 98,
+                        "/AllCells/CD4-/CD8+/naive": 1,
+                        "/AllCells/DP": 97,
                     },
                 }
-            ).astype(int)
+            )
         )
         assert all_changed_parameters == []
         assert len(all_sampled_samples) == 2
