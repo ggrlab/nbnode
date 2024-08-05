@@ -393,7 +393,8 @@
 <span class="sd">        Args:</span>
 <span class="sd">            seed (int): The seed for the random number generator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rng_multinomial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseFlowSimulationTree.ncells_from_percentages"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.ncells_from_percentages">[docs]</a>    <span class="k">def</span> <span class="nf">ncells_from_percentages</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">percentages</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">n_cells</span><span class="p">:</span> <span class="nb">int</span>
@@ -412,20 +413,7 @@
 <span class="sd">                A list with the number of cells per population. The sum of the</span>
 <span class="sd">                list is equal to `n_cells`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">onesample_ncells_perpop</span> <span class="o">=</span> <span class="n">percentages</span> <span class="o">*</span> <span class="n">n_cells</span>
-        <span class="n">onesample_ncells_perpop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">onesample_ncells_perpop</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">onesample_ncells_perpop</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n_cells</span><span class="p">:</span>
-            <span class="c1"># because of floor there are too little cells sampled</span>
-            <span class="n">remaining_cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">population_i</span> <span class="k">for</span> <span class="n">population_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">percentages</span><span class="p">))],</span>
-                <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n_cells</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">onesample_ncells_perpop</span><span class="p">)),</span>
-                <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">percentages</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">cell_from_pop_i</span> <span class="ow">in</span> <span class="n">remaining_cells</span><span class="p">:</span>
-                <span class="n">onesample_ncells_perpop</span><span class="p">[</span><span class="n">cell_from_pop_i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">onesample_ncells_perpop</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng_multinomial</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">n_cells</span><span class="p">,</span> <span class="n">percentages</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseFlowSimulationTree.generate_populations"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.FlowSimulationTree.BaseFlowSimulationTree.generate_populations">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">generate_populations</span><span class="p">(</span>

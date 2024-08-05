@@ -38,6 +38,7 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">nbnode.simulation.FlowSimulationTree</span> <span class="kn">import</span> <span class="n">FlowSimulationTreeDirichlet</span>
+<span class="kn">from</span> <span class="nn">nbnode.simulation.save_sample</span> <span class="kn">import</span> <span class="n">save_sample</span>
 
 
 <div class="viewcode-block" id="sim_target"><a class="viewcode-back" href="../../../api/nbnode.simulation.html#nbnode.simulation.sim_target.sim_target">[docs]</a><span class="k">def</span> <span class="nf">sim_target</span><span class="p">(</span>
@@ -48,6 +49,7 @@
     <span class="n">n_cells</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span>
     <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;sim/intraassay/sim00_target&quot;</span><span class="p">,</span>
+    <span class="n">save_type</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span>
     <span class="n">sample_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">seed_sample_0</span><span class="o">=</span><span class="mi">129873</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -173,10 +175,13 @@
             <span class="n">generated_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample_A</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">save_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">current_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="n">sample_name</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
-                <span class="n">sample_A</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">current_filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="n">current_filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">save_sample</span><span class="p">(</span>
+                    <span class="n">df</span><span class="o">=</span><span class="n">sample_A</span><span class="p">,</span>
+                    <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
+                    <span class="n">save_type</span><span class="o">=</span><span class="n">save_type</span><span class="p">,</span>
+                    <span class="n">sample_name</span><span class="o">=</span><span class="n">sample_name</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">ncells_A_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ncells_A_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ncells_A</span><span class="p">)</span>

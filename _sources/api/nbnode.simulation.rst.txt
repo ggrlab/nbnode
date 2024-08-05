@@ -28,6 +28,14 @@ nbnode.simulation.TreeMeanRelative module
    :undoc-members:
    :show-inheritance:
 
+nbnode.simulation.save\_sample module
+-------------------------------------
+
+.. automodule:: nbnode.simulation.save_sample
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 nbnode.simulation.sim\_proportional module
 ------------------------------------------
 

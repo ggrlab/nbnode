@@ -140,6 +140,7 @@
         <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">seed_sample_0</span><span class="o">=</span><span class="mi">129873</span><span class="p">,</span>
         <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;sim/sim00_m0.sd1&quot;</span><span class="p">,</span>
+        <span class="n">save_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;csv&quot;</span><span class="p">,</span>
         <span class="n">only_return_sampled_cell_numbers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">save_changed_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">minimum_target_mean_proportion</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span>
@@ -218,6 +219,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed_sample_0</span> <span class="o">=</span> <span class="n">seed_sample_0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span> <span class="o">=</span> <span class="n">save_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_type</span> <span class="o">=</span> <span class="n">save_type</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">population_name_to_change</span> <span class="o">=</span> <span class="n">population_name_to_change</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">original_mean</span> <span class="o">=</span> <span class="n">flowsim_tree</span><span class="o">.</span><span class="n">pop_mean</span><span class="p">(</span>
@@ -241,6 +243,7 @@
         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">seed_sample_0</span><span class="o">=</span><span class="mi">129873</span><span class="p">,</span>
         <span class="n">save_dir</span><span class="o">=</span><span class="s2">&quot;sim/sim00_pure_estimate&quot;</span><span class="p">,</span>
+        <span class="n">save_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;csv&quot;</span><span class="p">,</span>
         <span class="n">_only_return_sampled_cell_numbers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">save_changed_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">minimum_target_mean_proportion</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span>
@@ -305,6 +308,7 @@
                 <span class="n">use_only_diagonal_covmat</span><span class="o">=</span><span class="n">use_only_diagonal_covmat</span><span class="p">,</span>
                 <span class="n">seed_sample_0</span><span class="o">=</span><span class="n">seed_sample_0</span> <span class="o">+</span> <span class="n">sample_i</span><span class="p">,</span>
                 <span class="n">save_dir</span><span class="o">=</span><span class="n">save_dir</span><span class="p">,</span>
+                <span class="n">save_type</span><span class="o">=</span><span class="n">save_type</span><span class="p">,</span>
                 <span class="n">sample_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;sample_</span><span class="si">{</span><span class="n">sample_i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="n">only_return_sampled_cell_numbers</span><span class="o">=</span><span class="n">_only_return_sampled_cell_numbers</span><span class="p">,</span>
                 <span class="n">save_changed_parameters</span><span class="o">=</span><span class="n">save_changed_parameters</span><span class="p">,</span>
@@ -358,6 +362,7 @@
             <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
             <span class="n">seed_sample_0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed_sample_0</span><span class="p">,</span>
             <span class="n">save_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save_dir</span><span class="p">,</span>
+            <span class="n">save_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save_type</span><span class="p">,</span>
             <span class="n">_only_return_sampled_cell_numbers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_only_return_sampled_cell_numbers</span><span class="p">,</span>
             <span class="n">save_changed_parameters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save_changed_parameters</span><span class="p">,</span>
             <span class="n">minimum_target_mean_proportion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">minimum_target_mean_proportion</span><span class="p">,</span>
