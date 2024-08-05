@@ -362,6 +362,7 @@ class BaseFlowSimulationTree:
             seed (int): The seed for the random number generator.
         """
         self._rng = np.random.default_rng(seed)
+        self._rng_multinomial = np.random.default_rng(seed)
 
     def ncells_from_percentages(
         self, percentages: pd.DataFrame, n_cells: int
@@ -380,7 +381,7 @@ class BaseFlowSimulationTree:
                 A list with the number of cells per population. The sum of the
                 list is equal to `n_cells`.
         """
-        return self._rng.multinomial(n_cells, percentages)
+        return self._rng_multinomial.multinomial(n_cells, percentages)
 
     @abstractmethod
     def generate_populations(
