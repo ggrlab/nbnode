@@ -147,7 +147,7 @@ def sim_target(
                     df=sample_A,
                     save_dir=save_dir,
                     save_type=save_type,
-                    sample_name=f"sample_{sample_i}",
+                    sample_name=sample_name,
                     verbose=verbose,
                 )
 
