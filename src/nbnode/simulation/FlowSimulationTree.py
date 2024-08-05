@@ -380,20 +380,7 @@ class BaseFlowSimulationTree:
                 A list with the number of cells per population. The sum of the
                 list is equal to `n_cells`.
         """
-        onesample_ncells_perpop = percentages * n_cells
-        onesample_ncells_perpop = np.floor(onesample_ncells_perpop)
-
-        if sum(onesample_ncells_perpop) < n_cells:
-            # because of floor there are too little cells sampled
-            remaining_cells = self._rng.choice(
-                [population_i for population_i in range(len(percentages))],
-                size=int(n_cells - sum(onesample_ncells_perpop)),
-                replace=True,
-                p=percentages,
-            )
-            for cell_from_pop_i in remaining_cells:
-                onesample_ncells_perpop[cell_from_pop_i] += 1
-        return onesample_ncells_perpop
+        return self._rng.multinomial(n_cells, percentages)
 
     @abstractmethod
     def generate_populations(

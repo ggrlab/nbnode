@@ -45,7 +45,7 @@ Installation
 
 .. code-block:: bash
 
-    conda create -y -n conda_nbnode python=3.8
+    conda create -y -n conda_nbnode python=3.10
     conda activate conda_nbnode
     git clone https://git.uni-regensburg.de/ccc_verse/nbnode
     cd nbnode
